@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# unpack lame from archive
+cd 3rd
+tar -zxvf lame-398-2.tar.gz
+
+# configure it
+cd lame-398-2
+./configure
+
+# and make mpg library
+cd mpglib
+make
+
+# copy the library into our lib directory
+cp ./.libs/libmpgdecoder.a ../../libs
+
+# return to the 3rd dir
+cd ../../
+
+# remove lame sources
+rm -r lame-398-2

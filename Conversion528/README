@@ -1,0 +1,27 @@
+Audio conversion tool for 528Hz project.
+
+Contents
+   README - this file
+   conv.cbp - Code::Blocks project file
+   Makefile - GNU Make project file
+   conv.ini - sample configuration file
+
+Prerequisites:
+You will need following components to build this tool:
+  1) GNU Make
+  2) GCC 4.4.*
+  3) mysql++ 3.0 library
+  4) libmp3lame-dev (3.98)
+  5) libid3-3.8.3-dev
+  6) libfaad-dev (2.6.1)
+  7) libmp4v2-dev
+  8) libmpg123-dev 1.7.3
+
+Before building run prepare script. This have to be done only once.
+  $ ./prepare
+
+Building
+  $ make
+
+Run:
+  $ ./conv <id>
