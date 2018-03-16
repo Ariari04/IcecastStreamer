@@ -40,7 +40,7 @@ uint32 BufferedProducerBase::getSound(byte* pBuffer, uint32 nBufferSize)
 
     if (m_intBuffer.size())
     {
-        size_t copySize = std::min(nBufferSize, m_intBuffer.size());
+        size_t copySize = std::min(nBufferSize, static_cast<unsigned int>(m_intBuffer.size()));
 
         memcpy(pBuffer, &m_intBuffer.front(), copySize);
         pBuffer += copySize;

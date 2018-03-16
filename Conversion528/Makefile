@@ -3,10 +3,9 @@ CPP=g++
 DEFINES=-D_FILE_OFFSET_BITS=64 -DUSE_TAGGING
 
 # -O2 - optimize for speed
-CPPFLAGS=-Wall -O2 $(DEFINES)
+CPPFLAGS=-Wall -O2 $(DEFINES) 
 CFLAGS=$(CPPFLAGS)
-LDFLAGS=-L./3rd/libs -lmysqlpp -lmp3lame -lid3 -lfaad -lmp4v2 -lmpgdecoder
-
+LDFLAGS=-L./3rd/libs -l:libmpgdecoder.a -l:libmp3lame.a -lz -lmysqlpp -l:libid3.a -l:libfaad.a -lstdc++  -lm -l:libmp4v2.a
 EXECUTABLE=conv
 
 SOURCES_CPP=main.cpp \
@@ -38,7 +37,7 @@ SOURCES_C=ConvertUTF.c \
 	  3rd/mp4ff/mp4sample.c \
 	  3rd/mp4ff/mp4tagupdate.c \
 	  3rd/mp4ff/mp4util.c \
-	  3rd/faad/main.c
+	  3rd/faad/main.c 
 
 OBJECTS_CPP=$(SOURCES_CPP:.cpp=.o)
 OBJECTS_C=$(SOURCES_C:.c=.o)
@@ -46,7 +45,7 @@ OBJECTS_C=$(SOURCES_C:.c=.o)
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS_CPP) $(OBJECTS_C)
-	$(CC) -s $(LDFLAGS) $(OBJECTS_CPP) $(OBJECTS_C) -o $@
+	$(CC) -s $(OBJECTS_CPP) $(OBJECTS_C) $(LDFLAGS) -o $@
 
 clean:
 	rm -f *.o $(EXECUTABLE)
