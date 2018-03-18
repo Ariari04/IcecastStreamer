@@ -360,14 +360,16 @@ void ConverterApp::updateDb(State state, int progress, int errorCode, const std:
     {
         mysqlpp::Query query = m_connection.query();
 		
-		replace(string, "'", "-----");
+		std::string escapedErrorText = errorText;
+		
+		replace(escapedErrorText, "'", "-----");
 
         // FIXME: escape text
         query << "UPDATE " << m_settings.getSqlSettings().tableName << " SET " <<
             PROGRESS_FIELD_NAME << "=" << progress << ", " <<
             STATE_FIELD_NAME << "=" << (int)state << ", " <<
             ERROR_CODE_FIELD_NAME << "=" << errorCode << ", " <<
-            ERROR_FIELD_NAME << "=\'" << errorText << "\' " <<
+            ERROR_FIELD_NAME << "=\'" << escapedErrorText << "\' " <<
             "WHERE id=" << m_rowId;
 
         #ifdef DUMP_QUERIES
