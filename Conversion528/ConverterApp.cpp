@@ -36,6 +36,16 @@ const char* const TAG_COVER_ART_FIELD_NAME = "cover_file";
 
 const int CONVERSION_PART_PERCENTS = 95;
 
+
+bool replace(std::string& str, const std::string& from, const std::string& to) {
+    size_t start_pos = str.find(from);
+    if(start_pos == std::string::npos)
+        return false;
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
+
 // Enable this to see SQL queries in console
 // #define DUMP_QUERIES
 
@@ -349,6 +359,8 @@ void ConverterApp::updateDb(State state, int progress, int errorCode, const std:
     try
     {
         mysqlpp::Query query = m_connection.query();
+		
+		replace(string, "'", "-----");
 
         // FIXME: escape text
         query << "UPDATE " << m_settings.getSqlSettings().tableName << " SET " <<
