@@ -6,7 +6,7 @@ DEFINES=-D_FILE_OFFSET_BITS=64 -DUSE_TAGGING
 CPPFLAGS=-Wall -O2 $(DEFINES) 
 CFLAGS=$(CPPFLAGS)
 LDFLAGS=-L./../lame-3.100/mpglib/.libs \
--L./../faad2-2.8.0/libfaad/.libs \
+-L./../faad2-2.8.8/libfaad/.libs \
 -L./../id3lib-3.8.3/src/.libs \
 -L./../libmp4v2-1.5.0.1/Compile/.libs \
 -L./../lame-3.100/libmp3lame/.libs \

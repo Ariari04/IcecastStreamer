@@ -128,7 +128,7 @@
 /* #undef HAVE_NASM */
 
 /* Define to 1 if you have the <ncurses/termcap.h> header file. */
-/* #undef HAVE_NCURSES_TERMCAP_H */
+#define HAVE_NCURSES_TERMCAP_H 1
 
 /* Define to 1 if you have the `socket' function. */
 #define HAVE_SOCKET 1
@@ -161,10 +161,10 @@
 #define HAVE_SYS_TYPES_H 1
 
 /* have termcap */
-/* #undef HAVE_TERMCAP */
+#define HAVE_TERMCAP 1
 
 /* Define to 1 if you have the <termcap.h> header file. */
-/* #undef HAVE_TERMCAP_H */
+#define HAVE_TERMCAP_H 1
 
 /* add uint16_t type */
 #define HAVE_UINT16_T 1
@@ -207,7 +207,8 @@
 /* set to 1 if you have libsndfile */
 /* #undef LIBSNDFILE */
 
-/* Define to the sub-directory where libtool stores uninstalled libraries. */
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
 #define LT_OBJDIR ".libs/"
 
 /* use MMX version of choose_table */
