@@ -1,0 +1,974 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D74419F610D1C59300116965 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = D74419EF10D1C59300116965 /* config.h */; };
+		D74419F710D1C59300116965 /* endian.h in Headers */ = {isa = PBXBuildFile; fileRef = D74419F010D1C59300116965 /* endian.h */; };
+		D74419F810D1C59300116965 /* impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D74419F110D1C59300116965 /* impl.h */; };
+		D74419F910D1C59300116965 /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = D74419F210D1C59300116965 /* platform.h */; };
+		D74419FA10D1C59300116965 /* platform_base.h in Headers */ = {isa = PBXBuildFile; fileRef = D74419F310D1C59300116965 /* platform_base.h */; };
+		D74419FB10D1C59300116965 /* platform_posix.h in Headers */ = {isa = PBXBuildFile; fileRef = D74419F410D1C59300116965 /* platform_posix.h */; };
+		D74419FC10D1C59300116965 /* warning.h in Headers */ = {isa = PBXBuildFile; fileRef = D74419F510D1C59300116965 /* warning.h */; };
+		D750F00410D1C264009AA50B /* File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F00010D1C264009AA50B /* File.cpp */; };
+		D750F00510D1C264009AA50B /* File_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F00110D1C264009AA50B /* File_posix.cpp */; };
+		D750F00610D1C264009AA50B /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F00210D1C264009AA50B /* FileSystem.cpp */; };
+		D750F00710D1C264009AA50B /* FileSystem_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F00310D1C264009AA50B /* FileSystem_posix.cpp */; };
+		D750F00A10D1C280009AA50B /* random_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F00910D1C280009AA50B /* random_posix.cpp */; };
+		D750F00C10D1C28F009AA50B /* random.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F00B10D1C28F009AA50B /* random.h */; };
+		D750F01010D1C2AC009AA50B /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F00E10D1C2AC009AA50B /* FileSystem.h */; };
+		D750F01710D1C302009AA50B /* process.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F01510D1C302009AA50B /* process.h */; };
+		D750F01810D1C302009AA50B /* process_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F01610D1C302009AA50B /* process_posix.cpp */; };
+		D750F01B10D1C316009AA50B /* option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F01910D1C316009AA50B /* option.cpp */; };
+		D750F01C10D1C316009AA50B /* option.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F01A10D1C316009AA50B /* option.h */; };
+		D750F01F10D1C339009AA50B /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F01D10D1C339009AA50B /* error.cpp */; };
+		D750F02410D1C348009AA50B /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F02110D1C348009AA50B /* time.cpp */; };
+		D750F02610D1C348009AA50B /* time_posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F02310D1C348009AA50B /* time_posix.cpp */; };
+		D750F03510D1C375009AA50B /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F02710D1C375009AA50B /* crc.cpp */; };
+		D750F03610D1C375009AA50B /* crc.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F02810D1C375009AA50B /* crc.h */; };
+		D750F03710D1C375009AA50B /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F02910D1C375009AA50B /* Database.cpp */; };
+		D750F03810D1C375009AA50B /* Database.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F02A10D1C375009AA50B /* Database.h */; };
+		D750F03910D1C375009AA50B /* impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F02B10D1C375009AA50B /* impl.h */; };
+		D750F03A10D1C375009AA50B /* other.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F02C10D1C375009AA50B /* other.cpp */; };
+		D750F03B10D1C375009AA50B /* other.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F02D10D1C375009AA50B /* other.h */; };
+		D750F03C10D1C375009AA50B /* Timecode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F02E10D1C375009AA50B /* Timecode.cpp */; };
+		D750F03D10D1C375009AA50B /* Timecode.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F02F10D1C375009AA50B /* Timecode.h */; };
+		D750F03E10D1C375009AA50B /* TrackModifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F03010D1C375009AA50B /* TrackModifier.cpp */; };
+		D750F03F10D1C375009AA50B /* TrackModifier.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F03110D1C375009AA50B /* TrackModifier.h */; };
+		D750F04010D1C375009AA50B /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F03210D1C375009AA50B /* util.h */; };
+		D750F04110D1C375009AA50B /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F03310D1C375009AA50B /* Utility.cpp */; };
+		D750F04210D1C375009AA50B /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F03410D1C375009AA50B /* Utility.h */; };
+		D750F05A10D1C42B009AA50B /* chapter.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F04A10D1C42B009AA50B /* chapter.h */; };
+		D750F05B10D1C42B009AA50B /* file.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F04B10D1C42B009AA50B /* file.h */; };
+		D750F05C10D1C42B009AA50B /* file_prop.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F04C10D1C42B009AA50B /* file_prop.h */; };
+		D750F05D10D1C42B009AA50B /* general.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F04D10D1C42B009AA50B /* general.h */; };
+		D750F05E10D1C42B009AA50B /* isma.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F04E10D1C42B009AA50B /* isma.h */; };
+		D750F05F10D1C42B009AA50B /* itmf_generic.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F04F10D1C42B009AA50B /* itmf_generic.h */; };
+		D750F06010D1C42B009AA50B /* itmf_tags.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05010D1C42B009AA50B /* itmf_tags.h */; };
+		D750F06110D1C42B009AA50B /* meta.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05110D1C42B009AA50B /* meta.h */; };
+		D750F06210D1C42B009AA50B /* mp4v2.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05210D1C42B009AA50B /* mp4v2.h */; };
+		D750F06310D1C42B009AA50B /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05310D1C42B009AA50B /* platform.h */; };
+		D750F06410D1C42B009AA50B /* project.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05410D1C42B009AA50B /* project.h */; };
+		D750F06510D1C42B009AA50B /* sample.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05610D1C42B009AA50B /* sample.h */; };
+		D750F06610D1C42B009AA50B /* streaming.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05710D1C42B009AA50B /* streaming.h */; };
+		D750F06710D1C42B009AA50B /* track.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05810D1C42B009AA50B /* track.h */; };
+		D750F06810D1C42B009AA50B /* track_prop.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F05910D1C42B009AA50B /* track_prop.h */; };
+		D750F0CB10D1C4A8009AA50B /* 3gp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F06910D1C4A8009AA50B /* 3gp.cpp */; };
+		D750F0CC10D1C4A8009AA50B /* atom_ac3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F06A10D1C4A8009AA50B /* atom_ac3.cpp */; };
+		D750F0CD10D1C4A8009AA50B /* atom_amr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F06B10D1C4A8009AA50B /* atom_amr.cpp */; };
+		D750F0CE10D1C4A8009AA50B /* atom_avc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F06C10D1C4A8009AA50B /* atom_avc1.cpp */; };
+		D750F0CF10D1C4A8009AA50B /* atom_avcC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F06D10D1C4A8009AA50B /* atom_avcC.cpp */; };
+		D750F0D010D1C4A8009AA50B /* atom_chpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F06E10D1C4A8009AA50B /* atom_chpl.cpp */; };
+		D750F0D110D1C4A8009AA50B /* atom_colr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F06F10D1C4A8009AA50B /* atom_colr.cpp */; };
+		D750F0D210D1C4A8009AA50B /* atom_d263.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07010D1C4A8009AA50B /* atom_d263.cpp */; };
+		D750F0D310D1C4A8009AA50B /* atom_dac3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07110D1C4A8009AA50B /* atom_dac3.cpp */; };
+		D750F0D410D1C4A8009AA50B /* atom_damr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07210D1C4A8009AA50B /* atom_damr.cpp */; };
+		D750F0D510D1C4A8009AA50B /* atom_dref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07310D1C4A8009AA50B /* atom_dref.cpp */; };
+		D750F0D610D1C4A8009AA50B /* atom_elst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07410D1C4A8009AA50B /* atom_elst.cpp */; };
+		D750F0D710D1C4A8009AA50B /* atom_enca.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07510D1C4A8009AA50B /* atom_enca.cpp */; };
+		D750F0D810D1C4A8009AA50B /* atom_encv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07610D1C4A8009AA50B /* atom_encv.cpp */; };
+		D750F0D910D1C4A8009AA50B /* atom_free.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07710D1C4A8009AA50B /* atom_free.cpp */; };
+		D750F0DA10D1C4A8009AA50B /* atom_ftab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07810D1C4A8009AA50B /* atom_ftab.cpp */; };
+		D750F0DB10D1C4A8009AA50B /* atom_ftyp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07910D1C4A8009AA50B /* atom_ftyp.cpp */; };
+		D750F0DC10D1C4A8009AA50B /* atom_gmin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07A10D1C4A8009AA50B /* atom_gmin.cpp */; };
+		D750F0DD10D1C4A8009AA50B /* atom_hdlr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07B10D1C4A8009AA50B /* atom_hdlr.cpp */; };
+		D750F0DE10D1C4A8009AA50B /* atom_hinf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07C10D1C4A8009AA50B /* atom_hinf.cpp */; };
+		D750F0DF10D1C4A8009AA50B /* atom_hnti.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07D10D1C4A8009AA50B /* atom_hnti.cpp */; };
+		D750F0E010D1C4A8009AA50B /* atom_href.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07E10D1C4A8009AA50B /* atom_href.cpp */; };
+		D750F0E110D1C4A8009AA50B /* atom_mdat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F07F10D1C4A8009AA50B /* atom_mdat.cpp */; };
+		D750F0E210D1C4A8009AA50B /* atom_mdhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08010D1C4A8009AA50B /* atom_mdhd.cpp */; };
+		D750F0E310D1C4A8009AA50B /* atom_meta.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08110D1C4A8009AA50B /* atom_meta.cpp */; };
+		D750F0E410D1C4A8009AA50B /* atom_mp4s.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08210D1C4A8009AA50B /* atom_mp4s.cpp */; };
+		D750F0E510D1C4A8009AA50B /* atom_mp4v.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08310D1C4A8009AA50B /* atom_mp4v.cpp */; };
+		D750F0E610D1C4A8009AA50B /* atom_mvhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08410D1C4A8009AA50B /* atom_mvhd.cpp */; };
+		D750F0E710D1C4A8009AA50B /* atom_nmhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08510D1C4A8009AA50B /* atom_nmhd.cpp */; };
+		D750F0E810D1C4A8009AA50B /* atom_ohdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08610D1C4A8009AA50B /* atom_ohdr.cpp */; };
+		D750F0E910D1C4A8009AA50B /* atom_pasp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08710D1C4A8009AA50B /* atom_pasp.cpp */; };
+		D750F0EA10D1C4A8009AA50B /* atom_root.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08810D1C4A8009AA50B /* atom_root.cpp */; };
+		D750F0EB10D1C4A8009AA50B /* atom_rtp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08910D1C4A8009AA50B /* atom_rtp.cpp */; };
+		D750F0EC10D1C4A8009AA50B /* atom_s263.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08A10D1C4A8009AA50B /* atom_s263.cpp */; };
+		D750F0ED10D1C4A8009AA50B /* atom_sdp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08B10D1C4A8009AA50B /* atom_sdp.cpp */; };
+		D750F0EE10D1C4A8009AA50B /* atom_sdtp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08C10D1C4A8009AA50B /* atom_sdtp.cpp */; };
+		D750F0EF10D1C4A8009AA50B /* atom_smi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08D10D1C4A8009AA50B /* atom_smi.cpp */; };
+		D750F0F010D1C4A8009AA50B /* atom_sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08E10D1C4A8009AA50B /* atom_sound.cpp */; };
+		D750F0F110D1C4A8009AA50B /* atom_standard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F08F10D1C4A8009AA50B /* atom_standard.cpp */; };
+		D750F0F210D1C4A8009AA50B /* atom_stbl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09010D1C4A8009AA50B /* atom_stbl.cpp */; };
+		D750F0F310D1C4A8009AA50B /* atom_stdp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09110D1C4A8009AA50B /* atom_stdp.cpp */; };
+		D750F0F410D1C4A8009AA50B /* atom_stsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09210D1C4A8009AA50B /* atom_stsc.cpp */; };
+		D750F0F510D1C4A8009AA50B /* atom_stsd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09310D1C4A8009AA50B /* atom_stsd.cpp */; };
+		D750F0F610D1C4A8009AA50B /* atom_stsz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09410D1C4A8009AA50B /* atom_stsz.cpp */; };
+		D750F0F710D1C4A8009AA50B /* atom_stz2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09510D1C4A8009AA50B /* atom_stz2.cpp */; };
+		D750F0F810D1C4A8009AA50B /* atom_text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09610D1C4A8009AA50B /* atom_text.cpp */; };
+		D750F0F910D1C4A8009AA50B /* atom_tfhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09710D1C4A8009AA50B /* atom_tfhd.cpp */; };
+		D750F0FA10D1C4A8009AA50B /* atom_tkhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09810D1C4A8009AA50B /* atom_tkhd.cpp */; };
+		D750F0FB10D1C4A8009AA50B /* atom_treftype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09910D1C4A8009AA50B /* atom_treftype.cpp */; };
+		D750F0FC10D1C4A8009AA50B /* atom_trun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09A10D1C4A8009AA50B /* atom_trun.cpp */; };
+		D750F0FD10D1C4A8009AA50B /* atom_tx3g.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09B10D1C4A8009AA50B /* atom_tx3g.cpp */; };
+		D750F0FE10D1C4A8009AA50B /* atom_udta.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09C10D1C4A8009AA50B /* atom_udta.cpp */; };
+		D750F0FF10D1C4A8009AA50B /* atom_url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09D10D1C4A8009AA50B /* atom_url.cpp */; };
+		D750F10010D1C4A8009AA50B /* atom_urn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09E10D1C4A8009AA50B /* atom_urn.cpp */; };
+		D750F10110D1C4A8009AA50B /* atom_uuid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F09F10D1C4A8009AA50B /* atom_uuid.cpp */; };
+		D750F10210D1C4A8009AA50B /* atom_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0A010D1C4A8009AA50B /* atom_video.cpp */; };
+		D750F10310D1C4A8009AA50B /* atom_vmhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0A110D1C4A8009AA50B /* atom_vmhd.cpp */; };
+		D750F10410D1C4A8009AA50B /* atoms.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0A210D1C4A8009AA50B /* atoms.h */; };
+		D750F10510D1C4A8009AA50B /* cmeta.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0A310D1C4A8009AA50B /* cmeta.cpp */; };
+		D750F10610D1C4A8009AA50B /* descriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0A410D1C4A8009AA50B /* descriptors.cpp */; };
+		D750F10710D1C4A8009AA50B /* descriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0A510D1C4A8009AA50B /* descriptors.h */; };
+		D750F10810D1C4A8009AA50B /* enum.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0A610D1C4A8009AA50B /* enum.h */; };
+		D750F10910D1C4A8009AA50B /* exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0A710D1C4A8009AA50B /* exception.cpp */; };
+		D750F10A10D1C4A8009AA50B /* exception.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0A810D1C4A8009AA50B /* exception.h */; };
+		D750F10B10D1C4A8009AA50B /* impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0A910D1C4A8009AA50B /* impl.h */; };
+		D750F10C10D1C4A8009AA50B /* isma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0AA10D1C4A8009AA50B /* isma.cpp */; };
+		D750F10D10D1C4A8009AA50B /* mp4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0AB10D1C4A8009AA50B /* mp4.cpp */; };
+		D750F10E10D1C4A8009AA50B /* mp4array.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0AC10D1C4A8009AA50B /* mp4array.h */; };
+		D750F10F10D1C4A8009AA50B /* mp4atom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0AD10D1C4A8009AA50B /* mp4atom.cpp */; };
+		D750F11010D1C4A8009AA50B /* mp4atom.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0AE10D1C4A8009AA50B /* mp4atom.h */; };
+		D750F11110D1C4A8009AA50B /* mp4container.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0AF10D1C4A8009AA50B /* mp4container.cpp */; };
+		D750F11210D1C4A8009AA50B /* mp4container.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0B010D1C4A8009AA50B /* mp4container.h */; };
+		D750F11310D1C4A8009AA50B /* mp4descriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0B110D1C4A8009AA50B /* mp4descriptor.cpp */; };
+		D750F11410D1C4A8009AA50B /* mp4descriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0B210D1C4A8009AA50B /* mp4descriptor.h */; };
+		D750F11510D1C4A8009AA50B /* mp4error.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0B310D1C4A8009AA50B /* mp4error.h */; };
+		D750F11610D1C4A8009AA50B /* mp4file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0B410D1C4A8009AA50B /* mp4file.cpp */; };
+		D750F11710D1C4A8009AA50B /* mp4file.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0B510D1C4A8009AA50B /* mp4file.h */; };
+		D750F11810D1C4A8009AA50B /* mp4file_io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0B610D1C4A8009AA50B /* mp4file_io.cpp */; };
+		D750F11910D1C4A8009AA50B /* mp4info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0B710D1C4A8009AA50B /* mp4info.cpp */; };
+		D750F11A10D1C4A8009AA50B /* mp4meta.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0B810D1C4A8009AA50B /* mp4meta.cpp */; };
+		D750F11B10D1C4A8009AA50B /* mp4property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0B910D1C4A8009AA50B /* mp4property.cpp */; };
+		D750F11C10D1C4A8009AA50B /* mp4property.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0BA10D1C4A8009AA50B /* mp4property.h */; };
+		D750F11D10D1C4A8009AA50B /* mp4track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0BB10D1C4A8009AA50B /* mp4track.cpp */; };
+		D750F11E10D1C4A8009AA50B /* mp4track.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0BC10D1C4A8009AA50B /* mp4track.h */; };
+		D750F11F10D1C4A8009AA50B /* mp4util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0BD10D1C4A8009AA50B /* mp4util.cpp */; };
+		D750F12010D1C4A8009AA50B /* mp4util.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0BE10D1C4A8009AA50B /* mp4util.h */; };
+		D750F12110D1C4A8009AA50B /* ocidescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0BF10D1C4A8009AA50B /* ocidescriptors.cpp */; };
+		D750F12210D1C4A8009AA50B /* ocidescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0C010D1C4A8009AA50B /* ocidescriptors.h */; };
+		D750F12310D1C4A8009AA50B /* odcommands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0C110D1C4A8009AA50B /* odcommands.cpp */; };
+		D750F12410D1C4A8009AA50B /* odcommands.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0C210D1C4A8009AA50B /* odcommands.h */; };
+		D750F12510D1C4A8009AA50B /* qosqualifiers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0C310D1C4A8009AA50B /* qosqualifiers.cpp */; };
+		D750F12610D1C4A8009AA50B /* qosqualifiers.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0C410D1C4A8009AA50B /* qosqualifiers.h */; };
+		D750F12710D1C4A8009AA50B /* rtphint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0C510D1C4A8009AA50B /* rtphint.cpp */; };
+		D750F12810D1C4A8009AA50B /* rtphint.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0C610D1C4A8009AA50B /* rtphint.h */; };
+		D750F12910D1C4A8009AA50B /* src.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0C710D1C4A8009AA50B /* src.h */; };
+		D750F12A10D1C4A8009AA50B /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F0C810D1C4A8009AA50B /* text.cpp */; };
+		D750F12B10D1C4A8009AA50B /* text.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0C910D1C4A8009AA50B /* text.h */; };
+		D750F12C10D1C4A8009AA50B /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F0CA10D1C4A8009AA50B /* util.h */; };
+		D750F13110D1C4C1009AA50B /* bmff.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F12D10D1C4C1009AA50B /* bmff.h */; };
+		D750F13210D1C4C1009AA50B /* impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F12E10D1C4C1009AA50B /* impl.h */; };
+		D750F13310D1C4C1009AA50B /* typebmff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F12F10D1C4C1009AA50B /* typebmff.cpp */; };
+		D750F13410D1C4C1009AA50B /* typebmff.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F13010D1C4C1009AA50B /* typebmff.h */; };
+		D750F13F10D1C4DE009AA50B /* CoverArtBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F13510D1C4DE009AA50B /* CoverArtBox.cpp */; };
+		D750F14010D1C4DE009AA50B /* CoverArtBox.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F13610D1C4DE009AA50B /* CoverArtBox.h */; };
+		D750F14110D1C4DE009AA50B /* generic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F13710D1C4DE009AA50B /* generic.cpp */; };
+		D750F14210D1C4DE009AA50B /* generic.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F13810D1C4DE009AA50B /* generic.h */; };
+		D750F14310D1C4DE009AA50B /* impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F13910D1C4DE009AA50B /* impl.h */; };
+		D750F14410D1C4DE009AA50B /* itmf.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F13A10D1C4DE009AA50B /* itmf.h */; };
+		D750F14510D1C4DE009AA50B /* Tags.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F13B10D1C4DE009AA50B /* Tags.cpp */; };
+		D750F14610D1C4DE009AA50B /* Tags.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F13C10D1C4DE009AA50B /* Tags.h */; };
+		D750F14710D1C4DE009AA50B /* type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F13D10D1C4DE009AA50B /* type.cpp */; };
+		D750F14810D1C4DE009AA50B /* type.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F13E10D1C4DE009AA50B /* type.h */; };
+		D750F15110D1C4F5009AA50B /* coding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F14910D1C4F5009AA50B /* coding.cpp */; };
+		D750F15210D1C4F5009AA50B /* coding.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F14A10D1C4F5009AA50B /* coding.h */; };
+		D750F15310D1C4F5009AA50B /* ColorParameterBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F14B10D1C4F5009AA50B /* ColorParameterBox.cpp */; };
+		D750F15410D1C4F5009AA50B /* ColorParameterBox.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F14C10D1C4F5009AA50B /* ColorParameterBox.h */; };
+		D750F15510D1C4F5009AA50B /* impl.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F14D10D1C4F5009AA50B /* impl.h */; };
+		D750F15610D1C4F5009AA50B /* PictureAspectRatioBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D750F14E10D1C4F5009AA50B /* PictureAspectRatioBox.cpp */; };
+		D750F15710D1C4F5009AA50B /* PictureAspectRatioBox.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F14F10D1C4F5009AA50B /* PictureAspectRatioBox.h */; };
+		D750F15810D1C4F5009AA50B /* qtff.h in Headers */ = {isa = PBXBuildFile; fileRef = D750F15010D1C4F5009AA50B /* qtff.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B033B6950B2FAA7C00CEEEDA /* MacConfigExternalDebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = MacConfigExternalDebug.xcconfig; path = ../MacConfigExternalDebug.xcconfig; sourceTree = SOURCE_ROOT; };
+		B033B6960B2FAA7C00CEEEDA /* MacConfigExternalRelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = MacConfigExternalRelease.xcconfig; path = ../MacConfigExternalRelease.xcconfig; sourceTree = SOURCE_ROOT; };
+		D2AAC046055464E500DB518D /* libmp4v2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmp4v2.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D74419EF10D1C59300116965 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = libplatform/config.h; sourceTree = SOURCE_ROOT; };
+		D74419F010D1C59300116965 /* endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = endian.h; path = libplatform/endian.h; sourceTree = SOURCE_ROOT; };
+		D74419F110D1C59300116965 /* impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = impl.h; path = libplatform/impl.h; sourceTree = SOURCE_ROOT; };
+		D74419F210D1C59300116965 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform.h; path = libplatform/platform.h; sourceTree = SOURCE_ROOT; };
+		D74419F310D1C59300116965 /* platform_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform_base.h; path = libplatform/platform_base.h; sourceTree = SOURCE_ROOT; };
+		D74419F410D1C59300116965 /* platform_posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform_posix.h; path = libplatform/platform_posix.h; sourceTree = SOURCE_ROOT; };
+		D74419F510D1C59300116965 /* warning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = warning.h; path = libplatform/warning.h; sourceTree = SOURCE_ROOT; };
+		D750F00010D1C264009AA50B /* File.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = File.cpp; path = libplatform/io/File.cpp; sourceTree = SOURCE_ROOT; };
+		D750F00110D1C264009AA50B /* File_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = File_posix.cpp; path = libplatform/io/File_posix.cpp; sourceTree = SOURCE_ROOT; };
+		D750F00210D1C264009AA50B /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileSystem.cpp; path = libplatform/io/FileSystem.cpp; sourceTree = SOURCE_ROOT; };
+		D750F00310D1C264009AA50B /* FileSystem_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileSystem_posix.cpp; path = libplatform/io/FileSystem_posix.cpp; sourceTree = SOURCE_ROOT; };
+		D750F00910D1C280009AA50B /* random_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random_posix.cpp; path = libplatform/number/random_posix.cpp; sourceTree = SOURCE_ROOT; };
+		D750F00B10D1C28F009AA50B /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = random.h; path = libplatform/number/random.h; sourceTree = SOURCE_ROOT; };
+		D750F00E10D1C2AC009AA50B /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileSystem.h; path = libplatform/io/FileSystem.h; sourceTree = SOURCE_ROOT; };
+		D750F01510D1C302009AA50B /* process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = process.h; path = libplatform/process/process.h; sourceTree = SOURCE_ROOT; };
+		D750F01610D1C302009AA50B /* process_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = process_posix.cpp; path = libplatform/process/process_posix.cpp; sourceTree = SOURCE_ROOT; };
+		D750F01910D1C316009AA50B /* option.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = option.cpp; path = libplatform/prog/option.cpp; sourceTree = SOURCE_ROOT; };
+		D750F01A10D1C316009AA50B /* option.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = option.h; path = libplatform/prog/option.h; sourceTree = SOURCE_ROOT; };
+		D750F01D10D1C339009AA50B /* error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = error.cpp; path = libplatform/sys/error.cpp; sourceTree = SOURCE_ROOT; };
+		D750F02110D1C348009AA50B /* time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = libplatform/time/time.cpp; sourceTree = SOURCE_ROOT; };
+		D750F02310D1C348009AA50B /* time_posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = time_posix.cpp; path = libplatform/time/time_posix.cpp; sourceTree = SOURCE_ROOT; };
+		D750F02710D1C375009AA50B /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc.cpp; path = libutil/crc.cpp; sourceTree = SOURCE_ROOT; };
+		D750F02810D1C375009AA50B /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = libutil/crc.h; sourceTree = SOURCE_ROOT; };
+		D750F02910D1C375009AA50B /* Database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Database.cpp; path = libutil/Database.cpp; sourceTree = SOURCE_ROOT; };
+		D750F02A10D1C375009AA50B /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Database.h; path = libutil/Database.h; sourceTree = SOURCE_ROOT; };
+		D750F02B10D1C375009AA50B /* impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = impl.h; path = libutil/impl.h; sourceTree = SOURCE_ROOT; };
+		D750F02C10D1C375009AA50B /* other.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = other.cpp; path = libutil/other.cpp; sourceTree = SOURCE_ROOT; };
+		D750F02D10D1C375009AA50B /* other.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = other.h; path = libutil/other.h; sourceTree = SOURCE_ROOT; };
+		D750F02E10D1C375009AA50B /* Timecode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Timecode.cpp; path = libutil/Timecode.cpp; sourceTree = SOURCE_ROOT; };
+		D750F02F10D1C375009AA50B /* Timecode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timecode.h; path = libutil/Timecode.h; sourceTree = SOURCE_ROOT; };
+		D750F03010D1C375009AA50B /* TrackModifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TrackModifier.cpp; path = libutil/TrackModifier.cpp; sourceTree = SOURCE_ROOT; };
+		D750F03110D1C375009AA50B /* TrackModifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackModifier.h; path = libutil/TrackModifier.h; sourceTree = SOURCE_ROOT; };
+		D750F03210D1C375009AA50B /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = libutil/util.h; sourceTree = SOURCE_ROOT; };
+		D750F03310D1C375009AA50B /* Utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Utility.cpp; path = libutil/Utility.cpp; sourceTree = SOURCE_ROOT; };
+		D750F03410D1C375009AA50B /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = libutil/Utility.h; sourceTree = SOURCE_ROOT; };
+		D750F04A10D1C42B009AA50B /* chapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chapter.h; path = include/mp4v2/chapter.h; sourceTree = SOURCE_ROOT; };
+		D750F04B10D1C42B009AA50B /* file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file.h; path = include/mp4v2/file.h; sourceTree = SOURCE_ROOT; };
+		D750F04C10D1C42B009AA50B /* file_prop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file_prop.h; path = include/mp4v2/file_prop.h; sourceTree = SOURCE_ROOT; };
+		D750F04D10D1C42B009AA50B /* general.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = general.h; path = include/mp4v2/general.h; sourceTree = SOURCE_ROOT; };
+		D750F04E10D1C42B009AA50B /* isma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = isma.h; path = include/mp4v2/isma.h; sourceTree = SOURCE_ROOT; };
+		D750F04F10D1C42B009AA50B /* itmf_generic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = itmf_generic.h; path = include/mp4v2/itmf_generic.h; sourceTree = SOURCE_ROOT; };
+		D750F05010D1C42B009AA50B /* itmf_tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = itmf_tags.h; path = include/mp4v2/itmf_tags.h; sourceTree = SOURCE_ROOT; };
+		D750F05110D1C42B009AA50B /* meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = meta.h; path = include/mp4v2/meta.h; sourceTree = SOURCE_ROOT; };
+		D750F05210D1C42B009AA50B /* mp4v2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4v2.h; path = include/mp4v2/mp4v2.h; sourceTree = SOURCE_ROOT; };
+		D750F05310D1C42B009AA50B /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform.h; path = include/mp4v2/platform.h; sourceTree = SOURCE_ROOT; };
+		D750F05410D1C42B009AA50B /* project.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = project.h; path = include/mp4v2/project.h; sourceTree = SOURCE_ROOT; };
+		D750F05510D1C42B009AA50B /* project.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = project.h.in; path = include/mp4v2/project.h.in; sourceTree = SOURCE_ROOT; };
+		D750F05610D1C42B009AA50B /* sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sample.h; path = include/mp4v2/sample.h; sourceTree = SOURCE_ROOT; };
+		D750F05710D1C42B009AA50B /* streaming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = streaming.h; path = include/mp4v2/streaming.h; sourceTree = SOURCE_ROOT; };
+		D750F05810D1C42B009AA50B /* track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = track.h; path = include/mp4v2/track.h; sourceTree = SOURCE_ROOT; };
+		D750F05910D1C42B009AA50B /* track_prop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = track_prop.h; path = include/mp4v2/track_prop.h; sourceTree = SOURCE_ROOT; };
+		D750F06910D1C4A8009AA50B /* 3gp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = 3gp.cpp; path = src/3gp.cpp; sourceTree = SOURCE_ROOT; };
+		D750F06A10D1C4A8009AA50B /* atom_ac3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_ac3.cpp; path = src/atom_ac3.cpp; sourceTree = SOURCE_ROOT; };
+		D750F06B10D1C4A8009AA50B /* atom_amr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_amr.cpp; path = src/atom_amr.cpp; sourceTree = SOURCE_ROOT; };
+		D750F06C10D1C4A8009AA50B /* atom_avc1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_avc1.cpp; path = src/atom_avc1.cpp; sourceTree = SOURCE_ROOT; };
+		D750F06D10D1C4A8009AA50B /* atom_avcC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_avcC.cpp; path = src/atom_avcC.cpp; sourceTree = SOURCE_ROOT; };
+		D750F06E10D1C4A8009AA50B /* atom_chpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_chpl.cpp; path = src/atom_chpl.cpp; sourceTree = SOURCE_ROOT; };
+		D750F06F10D1C4A8009AA50B /* atom_colr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_colr.cpp; path = src/atom_colr.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07010D1C4A8009AA50B /* atom_d263.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_d263.cpp; path = src/atom_d263.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07110D1C4A8009AA50B /* atom_dac3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_dac3.cpp; path = src/atom_dac3.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07210D1C4A8009AA50B /* atom_damr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_damr.cpp; path = src/atom_damr.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07310D1C4A8009AA50B /* atom_dref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_dref.cpp; path = src/atom_dref.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07410D1C4A8009AA50B /* atom_elst.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_elst.cpp; path = src/atom_elst.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07510D1C4A8009AA50B /* atom_enca.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_enca.cpp; path = src/atom_enca.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07610D1C4A8009AA50B /* atom_encv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_encv.cpp; path = src/atom_encv.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07710D1C4A8009AA50B /* atom_free.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_free.cpp; path = src/atom_free.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07810D1C4A8009AA50B /* atom_ftab.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_ftab.cpp; path = src/atom_ftab.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07910D1C4A8009AA50B /* atom_ftyp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_ftyp.cpp; path = src/atom_ftyp.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07A10D1C4A8009AA50B /* atom_gmin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_gmin.cpp; path = src/atom_gmin.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07B10D1C4A8009AA50B /* atom_hdlr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_hdlr.cpp; path = src/atom_hdlr.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07C10D1C4A8009AA50B /* atom_hinf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_hinf.cpp; path = src/atom_hinf.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07D10D1C4A8009AA50B /* atom_hnti.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_hnti.cpp; path = src/atom_hnti.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07E10D1C4A8009AA50B /* atom_href.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_href.cpp; path = src/atom_href.cpp; sourceTree = SOURCE_ROOT; };
+		D750F07F10D1C4A8009AA50B /* atom_mdat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_mdat.cpp; path = src/atom_mdat.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08010D1C4A8009AA50B /* atom_mdhd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_mdhd.cpp; path = src/atom_mdhd.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08110D1C4A8009AA50B /* atom_meta.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_meta.cpp; path = src/atom_meta.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08210D1C4A8009AA50B /* atom_mp4s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_mp4s.cpp; path = src/atom_mp4s.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08310D1C4A8009AA50B /* atom_mp4v.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_mp4v.cpp; path = src/atom_mp4v.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08410D1C4A8009AA50B /* atom_mvhd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_mvhd.cpp; path = src/atom_mvhd.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08510D1C4A8009AA50B /* atom_nmhd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_nmhd.cpp; path = src/atom_nmhd.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08610D1C4A8009AA50B /* atom_ohdr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_ohdr.cpp; path = src/atom_ohdr.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08710D1C4A8009AA50B /* atom_pasp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_pasp.cpp; path = src/atom_pasp.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08810D1C4A8009AA50B /* atom_root.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_root.cpp; path = src/atom_root.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08910D1C4A8009AA50B /* atom_rtp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_rtp.cpp; path = src/atom_rtp.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08A10D1C4A8009AA50B /* atom_s263.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_s263.cpp; path = src/atom_s263.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08B10D1C4A8009AA50B /* atom_sdp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_sdp.cpp; path = src/atom_sdp.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08C10D1C4A8009AA50B /* atom_sdtp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_sdtp.cpp; path = src/atom_sdtp.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08D10D1C4A8009AA50B /* atom_smi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_smi.cpp; path = src/atom_smi.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08E10D1C4A8009AA50B /* atom_sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_sound.cpp; path = src/atom_sound.cpp; sourceTree = SOURCE_ROOT; };
+		D750F08F10D1C4A8009AA50B /* atom_standard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_standard.cpp; path = src/atom_standard.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09010D1C4A8009AA50B /* atom_stbl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_stbl.cpp; path = src/atom_stbl.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09110D1C4A8009AA50B /* atom_stdp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_stdp.cpp; path = src/atom_stdp.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09210D1C4A8009AA50B /* atom_stsc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_stsc.cpp; path = src/atom_stsc.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09310D1C4A8009AA50B /* atom_stsd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_stsd.cpp; path = src/atom_stsd.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09410D1C4A8009AA50B /* atom_stsz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_stsz.cpp; path = src/atom_stsz.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09510D1C4A8009AA50B /* atom_stz2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_stz2.cpp; path = src/atom_stz2.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09610D1C4A8009AA50B /* atom_text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_text.cpp; path = src/atom_text.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09710D1C4A8009AA50B /* atom_tfhd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_tfhd.cpp; path = src/atom_tfhd.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09810D1C4A8009AA50B /* atom_tkhd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_tkhd.cpp; path = src/atom_tkhd.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09910D1C4A8009AA50B /* atom_treftype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_treftype.cpp; path = src/atom_treftype.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09A10D1C4A8009AA50B /* atom_trun.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_trun.cpp; path = src/atom_trun.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09B10D1C4A8009AA50B /* atom_tx3g.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_tx3g.cpp; path = src/atom_tx3g.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09C10D1C4A8009AA50B /* atom_udta.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_udta.cpp; path = src/atom_udta.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09D10D1C4A8009AA50B /* atom_url.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_url.cpp; path = src/atom_url.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09E10D1C4A8009AA50B /* atom_urn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_urn.cpp; path = src/atom_urn.cpp; sourceTree = SOURCE_ROOT; };
+		D750F09F10D1C4A8009AA50B /* atom_uuid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_uuid.cpp; path = src/atom_uuid.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0A010D1C4A8009AA50B /* atom_video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_video.cpp; path = src/atom_video.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0A110D1C4A8009AA50B /* atom_vmhd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = atom_vmhd.cpp; path = src/atom_vmhd.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0A210D1C4A8009AA50B /* atoms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = atoms.h; path = src/atoms.h; sourceTree = SOURCE_ROOT; };
+		D750F0A310D1C4A8009AA50B /* cmeta.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cmeta.cpp; path = src/cmeta.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0A410D1C4A8009AA50B /* descriptors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = descriptors.cpp; path = src/descriptors.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0A510D1C4A8009AA50B /* descriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = descriptors.h; path = src/descriptors.h; sourceTree = SOURCE_ROOT; };
+		D750F0A610D1C4A8009AA50B /* enum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enum.h; path = src/enum.h; sourceTree = SOURCE_ROOT; };
+		D750F0A710D1C4A8009AA50B /* exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exception.cpp; path = src/exception.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0A810D1C4A8009AA50B /* exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exception.h; path = src/exception.h; sourceTree = SOURCE_ROOT; };
+		D750F0A910D1C4A8009AA50B /* impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = impl.h; path = src/impl.h; sourceTree = SOURCE_ROOT; };
+		D750F0AA10D1C4A8009AA50B /* isma.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = isma.cpp; path = src/isma.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0AB10D1C4A8009AA50B /* mp4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4.cpp; path = src/mp4.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0AC10D1C4A8009AA50B /* mp4array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4array.h; path = src/mp4array.h; sourceTree = SOURCE_ROOT; };
+		D750F0AD10D1C4A8009AA50B /* mp4atom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4atom.cpp; path = src/mp4atom.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0AE10D1C4A8009AA50B /* mp4atom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4atom.h; path = src/mp4atom.h; sourceTree = SOURCE_ROOT; };
+		D750F0AF10D1C4A8009AA50B /* mp4container.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4container.cpp; path = src/mp4container.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0B010D1C4A8009AA50B /* mp4container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4container.h; path = src/mp4container.h; sourceTree = SOURCE_ROOT; };
+		D750F0B110D1C4A8009AA50B /* mp4descriptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4descriptor.cpp; path = src/mp4descriptor.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0B210D1C4A8009AA50B /* mp4descriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4descriptor.h; path = src/mp4descriptor.h; sourceTree = SOURCE_ROOT; };
+		D750F0B310D1C4A8009AA50B /* mp4error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4error.h; path = src/mp4error.h; sourceTree = SOURCE_ROOT; };
+		D750F0B410D1C4A8009AA50B /* mp4file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4file.cpp; path = src/mp4file.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0B510D1C4A8009AA50B /* mp4file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4file.h; path = src/mp4file.h; sourceTree = SOURCE_ROOT; };
+		D750F0B610D1C4A8009AA50B /* mp4file_io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4file_io.cpp; path = src/mp4file_io.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0B710D1C4A8009AA50B /* mp4info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4info.cpp; path = src/mp4info.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0B810D1C4A8009AA50B /* mp4meta.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4meta.cpp; path = src/mp4meta.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0B910D1C4A8009AA50B /* mp4property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4property.cpp; path = src/mp4property.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0BA10D1C4A8009AA50B /* mp4property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4property.h; path = src/mp4property.h; sourceTree = SOURCE_ROOT; };
+		D750F0BB10D1C4A8009AA50B /* mp4track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4track.cpp; path = src/mp4track.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0BC10D1C4A8009AA50B /* mp4track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4track.h; path = src/mp4track.h; sourceTree = SOURCE_ROOT; };
+		D750F0BD10D1C4A8009AA50B /* mp4util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mp4util.cpp; path = src/mp4util.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0BE10D1C4A8009AA50B /* mp4util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mp4util.h; path = src/mp4util.h; sourceTree = SOURCE_ROOT; };
+		D750F0BF10D1C4A8009AA50B /* ocidescriptors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ocidescriptors.cpp; path = src/ocidescriptors.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0C010D1C4A8009AA50B /* ocidescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocidescriptors.h; path = src/ocidescriptors.h; sourceTree = SOURCE_ROOT; };
+		D750F0C110D1C4A8009AA50B /* odcommands.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = odcommands.cpp; path = src/odcommands.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0C210D1C4A8009AA50B /* odcommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = odcommands.h; path = src/odcommands.h; sourceTree = SOURCE_ROOT; };
+		D750F0C310D1C4A8009AA50B /* qosqualifiers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qosqualifiers.cpp; path = src/qosqualifiers.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0C410D1C4A8009AA50B /* qosqualifiers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qosqualifiers.h; path = src/qosqualifiers.h; sourceTree = SOURCE_ROOT; };
+		D750F0C510D1C4A8009AA50B /* rtphint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rtphint.cpp; path = src/rtphint.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0C610D1C4A8009AA50B /* rtphint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rtphint.h; path = src/rtphint.h; sourceTree = SOURCE_ROOT; };
+		D750F0C710D1C4A8009AA50B /* src.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = src.h; path = src/src.h; sourceTree = SOURCE_ROOT; };
+		D750F0C810D1C4A8009AA50B /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = text.cpp; path = src/text.cpp; sourceTree = SOURCE_ROOT; };
+		D750F0C910D1C4A8009AA50B /* text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = text.h; path = src/text.h; sourceTree = SOURCE_ROOT; };
+		D750F0CA10D1C4A8009AA50B /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = src/util.h; sourceTree = SOURCE_ROOT; };
+		D750F12D10D1C4C1009AA50B /* bmff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bmff.h; path = src/bmff/bmff.h; sourceTree = SOURCE_ROOT; };
+		D750F12E10D1C4C1009AA50B /* impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = impl.h; path = src/bmff/impl.h; sourceTree = SOURCE_ROOT; };
+		D750F12F10D1C4C1009AA50B /* typebmff.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = typebmff.cpp; path = src/bmff/typebmff.cpp; sourceTree = SOURCE_ROOT; };
+		D750F13010D1C4C1009AA50B /* typebmff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = typebmff.h; path = src/bmff/typebmff.h; sourceTree = SOURCE_ROOT; };
+		D750F13510D1C4DE009AA50B /* CoverArtBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoverArtBox.cpp; path = src/itmf/CoverArtBox.cpp; sourceTree = SOURCE_ROOT; };
+		D750F13610D1C4DE009AA50B /* CoverArtBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoverArtBox.h; path = src/itmf/CoverArtBox.h; sourceTree = SOURCE_ROOT; };
+		D750F13710D1C4DE009AA50B /* generic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = generic.cpp; path = src/itmf/generic.cpp; sourceTree = SOURCE_ROOT; };
+		D750F13810D1C4DE009AA50B /* generic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = generic.h; path = src/itmf/generic.h; sourceTree = SOURCE_ROOT; };
+		D750F13910D1C4DE009AA50B /* impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = impl.h; path = src/itmf/impl.h; sourceTree = SOURCE_ROOT; };
+		D750F13A10D1C4DE009AA50B /* itmf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = itmf.h; path = src/itmf/itmf.h; sourceTree = SOURCE_ROOT; };
+		D750F13B10D1C4DE009AA50B /* Tags.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tags.cpp; path = src/itmf/Tags.cpp; sourceTree = SOURCE_ROOT; };
+		D750F13C10D1C4DE009AA50B /* Tags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tags.h; path = src/itmf/Tags.h; sourceTree = SOURCE_ROOT; };
+		D750F13D10D1C4DE009AA50B /* type.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = type.cpp; path = src/itmf/type.cpp; sourceTree = SOURCE_ROOT; };
+		D750F13E10D1C4DE009AA50B /* type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = type.h; path = src/itmf/type.h; sourceTree = SOURCE_ROOT; };
+		D750F14910D1C4F5009AA50B /* coding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = coding.cpp; path = src/qtff/coding.cpp; sourceTree = SOURCE_ROOT; };
+		D750F14A10D1C4F5009AA50B /* coding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = coding.h; path = src/qtff/coding.h; sourceTree = SOURCE_ROOT; };
+		D750F14B10D1C4F5009AA50B /* ColorParameterBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorParameterBox.cpp; path = src/qtff/ColorParameterBox.cpp; sourceTree = SOURCE_ROOT; };
+		D750F14C10D1C4F5009AA50B /* ColorParameterBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorParameterBox.h; path = src/qtff/ColorParameterBox.h; sourceTree = SOURCE_ROOT; };
+		D750F14D10D1C4F5009AA50B /* impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = impl.h; path = src/qtff/impl.h; sourceTree = SOURCE_ROOT; };
+		D750F14E10D1C4F5009AA50B /* PictureAspectRatioBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PictureAspectRatioBox.cpp; path = src/qtff/PictureAspectRatioBox.cpp; sourceTree = SOURCE_ROOT; };
+		D750F14F10D1C4F5009AA50B /* PictureAspectRatioBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PictureAspectRatioBox.h; path = src/qtff/PictureAspectRatioBox.h; sourceTree = SOURCE_ROOT; };
+		D750F15010D1C4F5009AA50B /* qtff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtff.h; path = src/qtff/qtff.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D289987405E68DCB004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* mp4v2 */ = {
+			isa = PBXGroup;
+			children = (
+				B033B6950B2FAA7C00CEEEDA /* MacConfigExternalDebug.xcconfig */,
+				B033B6960B2FAA7C00CEEEDA /* MacConfigExternalRelease.xcconfig */,
+				D750F04810D1C42B009AA50B /* include */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = mp4v2;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D750EFFD10D1C212009AA50B /* libplatform */,
+				D750EFFE10D1C21B009AA50B /* libutil */,
+				D750EFFB10D1C1F0009AA50B /* src */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC046055464E500DB518D /* libmp4v2.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D750EFFB10D1C1F0009AA50B /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D750F06910D1C4A8009AA50B /* 3gp.cpp */,
+				D750F06A10D1C4A8009AA50B /* atom_ac3.cpp */,
+				D750F06B10D1C4A8009AA50B /* atom_amr.cpp */,
+				D750F06C10D1C4A8009AA50B /* atom_avc1.cpp */,
+				D750F06D10D1C4A8009AA50B /* atom_avcC.cpp */,
+				D750F06E10D1C4A8009AA50B /* atom_chpl.cpp */,
+				D750F06F10D1C4A8009AA50B /* atom_colr.cpp */,
+				D750F07010D1C4A8009AA50B /* atom_d263.cpp */,
+				D750F07110D1C4A8009AA50B /* atom_dac3.cpp */,
+				D750F07210D1C4A8009AA50B /* atom_damr.cpp */,
+				D750F07310D1C4A8009AA50B /* atom_dref.cpp */,
+				D750F07410D1C4A8009AA50B /* atom_elst.cpp */,
+				D750F07510D1C4A8009AA50B /* atom_enca.cpp */,
+				D750F07610D1C4A8009AA50B /* atom_encv.cpp */,
+				D750F07710D1C4A8009AA50B /* atom_free.cpp */,
+				D750F07810D1C4A8009AA50B /* atom_ftab.cpp */,
+				D750F07910D1C4A8009AA50B /* atom_ftyp.cpp */,
+				D750F07A10D1C4A8009AA50B /* atom_gmin.cpp */,
+				D750F07B10D1C4A8009AA50B /* atom_hdlr.cpp */,
+				D750F07C10D1C4A8009AA50B /* atom_hinf.cpp */,
+				D750F07D10D1C4A8009AA50B /* atom_hnti.cpp */,
+				D750F07E10D1C4A8009AA50B /* atom_href.cpp */,
+				D750F07F10D1C4A8009AA50B /* atom_mdat.cpp */,
+				D750F08010D1C4A8009AA50B /* atom_mdhd.cpp */,
+				D750F08110D1C4A8009AA50B /* atom_meta.cpp */,
+				D750F08210D1C4A8009AA50B /* atom_mp4s.cpp */,
+				D750F08310D1C4A8009AA50B /* atom_mp4v.cpp */,
+				D750F08410D1C4A8009AA50B /* atom_mvhd.cpp */,
+				D750F08510D1C4A8009AA50B /* atom_nmhd.cpp */,
+				D750F08610D1C4A8009AA50B /* atom_ohdr.cpp */,
+				D750F08710D1C4A8009AA50B /* atom_pasp.cpp */,
+				D750F08810D1C4A8009AA50B /* atom_root.cpp */,
+				D750F08910D1C4A8009AA50B /* atom_rtp.cpp */,
+				D750F08A10D1C4A8009AA50B /* atom_s263.cpp */,
+				D750F08B10D1C4A8009AA50B /* atom_sdp.cpp */,
+				D750F08C10D1C4A8009AA50B /* atom_sdtp.cpp */,
+				D750F08D10D1C4A8009AA50B /* atom_smi.cpp */,
+				D750F08E10D1C4A8009AA50B /* atom_sound.cpp */,
+				D750F08F10D1C4A8009AA50B /* atom_standard.cpp */,
+				D750F09010D1C4A8009AA50B /* atom_stbl.cpp */,
+				D750F09110D1C4A8009AA50B /* atom_stdp.cpp */,
+				D750F09210D1C4A8009AA50B /* atom_stsc.cpp */,
+				D750F09310D1C4A8009AA50B /* atom_stsd.cpp */,
+				D750F09410D1C4A8009AA50B /* atom_stsz.cpp */,
+				D750F09510D1C4A8009AA50B /* atom_stz2.cpp */,
+				D750F09610D1C4A8009AA50B /* atom_text.cpp */,
+				D750F09710D1C4A8009AA50B /* atom_tfhd.cpp */,
+				D750F09810D1C4A8009AA50B /* atom_tkhd.cpp */,
+				D750F09910D1C4A8009AA50B /* atom_treftype.cpp */,
+				D750F09A10D1C4A8009AA50B /* atom_trun.cpp */,
+				D750F09B10D1C4A8009AA50B /* atom_tx3g.cpp */,
+				D750F09C10D1C4A8009AA50B /* atom_udta.cpp */,
+				D750F09D10D1C4A8009AA50B /* atom_url.cpp */,
+				D750F09E10D1C4A8009AA50B /* atom_urn.cpp */,
+				D750F09F10D1C4A8009AA50B /* atom_uuid.cpp */,
+				D750F0A010D1C4A8009AA50B /* atom_video.cpp */,
+				D750F0A110D1C4A8009AA50B /* atom_vmhd.cpp */,
+				D750F0A210D1C4A8009AA50B /* atoms.h */,
+				D750F0A310D1C4A8009AA50B /* cmeta.cpp */,
+				D750F0A410D1C4A8009AA50B /* descriptors.cpp */,
+				D750F0A510D1C4A8009AA50B /* descriptors.h */,
+				D750F0A610D1C4A8009AA50B /* enum.h */,
+				D750F0A710D1C4A8009AA50B /* exception.cpp */,
+				D750F0A810D1C4A8009AA50B /* exception.h */,
+				D750F0A910D1C4A8009AA50B /* impl.h */,
+				D750F0AA10D1C4A8009AA50B /* isma.cpp */,
+				D750F0AB10D1C4A8009AA50B /* mp4.cpp */,
+				D750F0AC10D1C4A8009AA50B /* mp4array.h */,
+				D750F0AD10D1C4A8009AA50B /* mp4atom.cpp */,
+				D750F0AE10D1C4A8009AA50B /* mp4atom.h */,
+				D750F0AF10D1C4A8009AA50B /* mp4container.cpp */,
+				D750F0B010D1C4A8009AA50B /* mp4container.h */,
+				D750F0B110D1C4A8009AA50B /* mp4descriptor.cpp */,
+				D750F0B210D1C4A8009AA50B /* mp4descriptor.h */,
+				D750F0B310D1C4A8009AA50B /* mp4error.h */,
+				D750F0B410D1C4A8009AA50B /* mp4file.cpp */,
+				D750F0B510D1C4A8009AA50B /* mp4file.h */,
+				D750F0B610D1C4A8009AA50B /* mp4file_io.cpp */,
+				D750F0B710D1C4A8009AA50B /* mp4info.cpp */,
+				D750F0B810D1C4A8009AA50B /* mp4meta.cpp */,
+				D750F0B910D1C4A8009AA50B /* mp4property.cpp */,
+				D750F0BA10D1C4A8009AA50B /* mp4property.h */,
+				D750F0BB10D1C4A8009AA50B /* mp4track.cpp */,
+				D750F0BC10D1C4A8009AA50B /* mp4track.h */,
+				D750F0BD10D1C4A8009AA50B /* mp4util.cpp */,
+				D750F0BE10D1C4A8009AA50B /* mp4util.h */,
+				D750F0BF10D1C4A8009AA50B /* ocidescriptors.cpp */,
+				D750F0C010D1C4A8009AA50B /* ocidescriptors.h */,
+				D750F0C110D1C4A8009AA50B /* odcommands.cpp */,
+				D750F0C210D1C4A8009AA50B /* odcommands.h */,
+				D750F0C310D1C4A8009AA50B /* qosqualifiers.cpp */,
+				D750F0C410D1C4A8009AA50B /* qosqualifiers.h */,
+				D750F0C510D1C4A8009AA50B /* rtphint.cpp */,
+				D750F0C610D1C4A8009AA50B /* rtphint.h */,
+				D750F0C710D1C4A8009AA50B /* src.h */,
+				D750F0C810D1C4A8009AA50B /* text.cpp */,
+				D750F0C910D1C4A8009AA50B /* text.h */,
+				D750F0CA10D1C4A8009AA50B /* util.h */,
+				D750F04310D1C38C009AA50B /* bmff */,
+				D750F04410D1C396009AA50B /* itmf */,
+				D750F04510D1C3A4009AA50B /* qtff */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		D750EFFD10D1C212009AA50B /* libplatform */ = {
+			isa = PBXGroup;
+			children = (
+				D74419EF10D1C59300116965 /* config.h */,
+				D74419F010D1C59300116965 /* endian.h */,
+				D74419F110D1C59300116965 /* impl.h */,
+				D74419F210D1C59300116965 /* platform.h */,
+				D74419F310D1C59300116965 /* platform_base.h */,
+				D74419F410D1C59300116965 /* platform_posix.h */,
+				D74419F510D1C59300116965 /* warning.h */,
+				D750EFFF10D1C238009AA50B /* io */,
+				D750F00810D1C26A009AA50B /* number */,
+				D750F01110D1C2B4009AA50B /* process */,
+				D750F01210D1C2BE009AA50B /* prog */,
+				D750F01310D1C2CB009AA50B /* sys */,
+				D750F01410D1C2D6009AA50B /* time */,
+			);
+			name = libplatform;
+			sourceTree = "<group>";
+		};
+		D750EFFE10D1C21B009AA50B /* libutil */ = {
+			isa = PBXGroup;
+			children = (
+				D750F02710D1C375009AA50B /* crc.cpp */,
+				D750F02810D1C375009AA50B /* crc.h */,
+				D750F02910D1C375009AA50B /* Database.cpp */,
+				D750F02A10D1C375009AA50B /* Database.h */,
+				D750F02B10D1C375009AA50B /* impl.h */,
+				D750F02C10D1C375009AA50B /* other.cpp */,
+				D750F02D10D1C375009AA50B /* other.h */,
+				D750F02E10D1C375009AA50B /* Timecode.cpp */,
+				D750F02F10D1C375009AA50B /* Timecode.h */,
+				D750F03010D1C375009AA50B /* TrackModifier.cpp */,
+				D750F03110D1C375009AA50B /* TrackModifier.h */,
+				D750F03210D1C375009AA50B /* util.h */,
+				D750F03310D1C375009AA50B /* Utility.cpp */,
+				D750F03410D1C375009AA50B /* Utility.h */,
+			);
+			name = libutil;
+			sourceTree = "<group>";
+		};
+		D750EFFF10D1C238009AA50B /* io */ = {
+			isa = PBXGroup;
+			children = (
+				D750F00E10D1C2AC009AA50B /* FileSystem.h */,
+				D750F00010D1C264009AA50B /* File.cpp */,
+				D750F00110D1C264009AA50B /* File_posix.cpp */,
+				D750F00210D1C264009AA50B /* FileSystem.cpp */,
+				D750F00310D1C264009AA50B /* FileSystem_posix.cpp */,
+			);
+			name = io;
+			sourceTree = "<group>";
+		};
+		D750F00810D1C26A009AA50B /* number */ = {
+			isa = PBXGroup;
+			children = (
+				D750F00B10D1C28F009AA50B /* random.h */,
+				D750F00910D1C280009AA50B /* random_posix.cpp */,
+			);
+			name = number;
+			sourceTree = "<group>";
+		};
+		D750F01110D1C2B4009AA50B /* process */ = {
+			isa = PBXGroup;
+			children = (
+				D750F01510D1C302009AA50B /* process.h */,
+				D750F01610D1C302009AA50B /* process_posix.cpp */,
+			);
+			name = process;
+			sourceTree = "<group>";
+		};
+		D750F01210D1C2BE009AA50B /* prog */ = {
+			isa = PBXGroup;
+			children = (
+				D750F01910D1C316009AA50B /* option.cpp */,
+				D750F01A10D1C316009AA50B /* option.h */,
+			);
+			name = prog;
+			sourceTree = "<group>";
+		};
+		D750F01310D1C2CB009AA50B /* sys */ = {
+			isa = PBXGroup;
+			children = (
+				D750F01D10D1C339009AA50B /* error.cpp */,
+			);
+			name = sys;
+			sourceTree = "<group>";
+		};
+		D750F01410D1C2D6009AA50B /* time */ = {
+			isa = PBXGroup;
+			children = (
+				D750F02110D1C348009AA50B /* time.cpp */,
+				D750F02310D1C348009AA50B /* time_posix.cpp */,
+			);
+			name = time;
+			sourceTree = "<group>";
+		};
+		D750F04310D1C38C009AA50B /* bmff */ = {
+			isa = PBXGroup;
+			children = (
+				D750F12D10D1C4C1009AA50B /* bmff.h */,
+				D750F12E10D1C4C1009AA50B /* impl.h */,
+				D750F12F10D1C4C1009AA50B /* typebmff.cpp */,
+				D750F13010D1C4C1009AA50B /* typebmff.h */,
+			);
+			name = bmff;
+			sourceTree = "<group>";
+		};
+		D750F04410D1C396009AA50B /* itmf */ = {
+			isa = PBXGroup;
+			children = (
+				D750F13510D1C4DE009AA50B /* CoverArtBox.cpp */,
+				D750F13610D1C4DE009AA50B /* CoverArtBox.h */,
+				D750F13710D1C4DE009AA50B /* generic.cpp */,
+				D750F13810D1C4DE009AA50B /* generic.h */,
+				D750F13910D1C4DE009AA50B /* impl.h */,
+				D750F13A10D1C4DE009AA50B /* itmf.h */,
+				D750F13B10D1C4DE009AA50B /* Tags.cpp */,
+				D750F13C10D1C4DE009AA50B /* Tags.h */,
+				D750F13D10D1C4DE009AA50B /* type.cpp */,
+				D750F13E10D1C4DE009AA50B /* type.h */,
+			);
+			name = itmf;
+			sourceTree = "<group>";
+		};
+		D750F04510D1C3A4009AA50B /* qtff */ = {
+			isa = PBXGroup;
+			children = (
+				D750F14910D1C4F5009AA50B /* coding.cpp */,
+				D750F14A10D1C4F5009AA50B /* coding.h */,
+				D750F14B10D1C4F5009AA50B /* ColorParameterBox.cpp */,
+				D750F14C10D1C4F5009AA50B /* ColorParameterBox.h */,
+				D750F14D10D1C4F5009AA50B /* impl.h */,
+				D750F14E10D1C4F5009AA50B /* PictureAspectRatioBox.cpp */,
+				D750F14F10D1C4F5009AA50B /* PictureAspectRatioBox.h */,
+				D750F15010D1C4F5009AA50B /* qtff.h */,
+			);
+			name = qtff;
+			sourceTree = "<group>";
+		};
+		D750F04810D1C42B009AA50B /* include */ = {
+			isa = PBXGroup;
+			children = (
+				D750F04910D1C42B009AA50B /* mp4v2 */,
+			);
+			path = include;
+			sourceTree = SOURCE_ROOT;
+		};
+		D750F04910D1C42B009AA50B /* mp4v2 */ = {
+			isa = PBXGroup;
+			children = (
+				D750F04A10D1C42B009AA50B /* chapter.h */,
+				D750F04B10D1C42B009AA50B /* file.h */,
+				D750F04C10D1C42B009AA50B /* file_prop.h */,
+				D750F04D10D1C42B009AA50B /* general.h */,
+				D750F04E10D1C42B009AA50B /* isma.h */,
+				D750F04F10D1C42B009AA50B /* itmf_generic.h */,
+				D750F05010D1C42B009AA50B /* itmf_tags.h */,
+				D750F05110D1C42B009AA50B /* meta.h */,
+				D750F05210D1C42B009AA50B /* mp4v2.h */,
+				D750F05310D1C42B009AA50B /* platform.h */,
+				D750F05410D1C42B009AA50B /* project.h */,
+				D750F05510D1C42B009AA50B /* project.h.in */,
+				D750F05610D1C42B009AA50B /* sample.h */,
+				D750F05710D1C42B009AA50B /* streaming.h */,
+				D750F05810D1C42B009AA50B /* track.h */,
+				D750F05910D1C42B009AA50B /* track_prop.h */,
+			);
+			name = mp4v2;
+			path = include/mp4v2;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC043055464E500DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D750F00C10D1C28F009AA50B /* random.h in Headers */,
+				D750F01010D1C2AC009AA50B /* FileSystem.h in Headers */,
+				D750F01710D1C302009AA50B /* process.h in Headers */,
+				D750F01C10D1C316009AA50B /* option.h in Headers */,
+				D750F03610D1C375009AA50B /* crc.h in Headers */,
+				D750F03810D1C375009AA50B /* Database.h in Headers */,
+				D750F03910D1C375009AA50B /* impl.h in Headers */,
+				D750F03B10D1C375009AA50B /* other.h in Headers */,
+				D750F03D10D1C375009AA50B /* Timecode.h in Headers */,
+				D750F03F10D1C375009AA50B /* TrackModifier.h in Headers */,
+				D750F04010D1C375009AA50B /* util.h in Headers */,
+				D750F04210D1C375009AA50B /* Utility.h in Headers */,
+				D750F05A10D1C42B009AA50B /* chapter.h in Headers */,
+				D750F05B10D1C42B009AA50B /* file.h in Headers */,
+				D750F05C10D1C42B009AA50B /* file_prop.h in Headers */,
+				D750F05D10D1C42B009AA50B /* general.h in Headers */,
+				D750F05E10D1C42B009AA50B /* isma.h in Headers */,
+				D750F05F10D1C42B009AA50B /* itmf_generic.h in Headers */,
+				D750F06010D1C42B009AA50B /* itmf_tags.h in Headers */,
+				D750F06110D1C42B009AA50B /* meta.h in Headers */,
+				D750F06210D1C42B009AA50B /* mp4v2.h in Headers */,
+				D750F06310D1C42B009AA50B /* platform.h in Headers */,
+				D750F06410D1C42B009AA50B /* project.h in Headers */,
+				D750F06510D1C42B009AA50B /* sample.h in Headers */,
+				D750F06610D1C42B009AA50B /* streaming.h in Headers */,
+				D750F06710D1C42B009AA50B /* track.h in Headers */,
+				D750F06810D1C42B009AA50B /* track_prop.h in Headers */,
+				D750F10410D1C4A8009AA50B /* atoms.h in Headers */,
+				D750F10710D1C4A8009AA50B /* descriptors.h in Headers */,
+				D750F10810D1C4A8009AA50B /* enum.h in Headers */,
+				D750F10A10D1C4A8009AA50B /* exception.h in Headers */,
+				D750F10B10D1C4A8009AA50B /* impl.h in Headers */,
+				D750F10E10D1C4A8009AA50B /* mp4array.h in Headers */,
+				D750F11010D1C4A8009AA50B /* mp4atom.h in Headers */,
+				D750F11210D1C4A8009AA50B /* mp4container.h in Headers */,
+				D750F11410D1C4A8009AA50B /* mp4descriptor.h in Headers */,
+				D750F11510D1C4A8009AA50B /* mp4error.h in Headers */,
+				D750F11710D1C4A8009AA50B /* mp4file.h in Headers */,
+				D750F11C10D1C4A8009AA50B /* mp4property.h in Headers */,
+				D750F11E10D1C4A8009AA50B /* mp4track.h in Headers */,
+				D750F12010D1C4A8009AA50B /* mp4util.h in Headers */,
+				D750F12210D1C4A8009AA50B /* ocidescriptors.h in Headers */,
+				D750F12410D1C4A8009AA50B /* odcommands.h in Headers */,
+				D750F12610D1C4A8009AA50B /* qosqualifiers.h in Headers */,
+				D750F12810D1C4A8009AA50B /* rtphint.h in Headers */,
+				D750F12910D1C4A8009AA50B /* src.h in Headers */,
+				D750F12B10D1C4A8009AA50B /* text.h in Headers */,
+				D750F12C10D1C4A8009AA50B /* util.h in Headers */,
+				D750F13110D1C4C1009AA50B /* bmff.h in Headers */,
+				D750F13210D1C4C1009AA50B /* impl.h in Headers */,
+				D750F13410D1C4C1009AA50B /* typebmff.h in Headers */,
+				D750F14010D1C4DE009AA50B /* CoverArtBox.h in Headers */,
+				D750F14210D1C4DE009AA50B /* generic.h in Headers */,
+				D750F14310D1C4DE009AA50B /* impl.h in Headers */,
+				D750F14410D1C4DE009AA50B /* itmf.h in Headers */,
+				D750F14610D1C4DE009AA50B /* Tags.h in Headers */,
+				D750F14810D1C4DE009AA50B /* type.h in Headers */,
+				D750F15210D1C4F5009AA50B /* coding.h in Headers */,
+				D750F15410D1C4F5009AA50B /* ColorParameterBox.h in Headers */,
+				D750F15510D1C4F5009AA50B /* impl.h in Headers */,
+				D750F15710D1C4F5009AA50B /* PictureAspectRatioBox.h in Headers */,
+				D750F15810D1C4F5009AA50B /* qtff.h in Headers */,
+				D74419F610D1C59300116965 /* config.h in Headers */,
+				D74419F710D1C59300116965 /* endian.h in Headers */,
+				D74419F810D1C59300116965 /* impl.h in Headers */,
+				D74419F910D1C59300116965 /* platform.h in Headers */,
+				D74419FA10D1C59300116965 /* platform_base.h in Headers */,
+				D74419FB10D1C59300116965 /* platform_posix.h in Headers */,
+				D74419FC10D1C59300116965 /* warning.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC045055464E500DB518D /* mp4v2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "mp4v2" */;
+			buildPhases = (
+				D2AAC043055464E500DB518D /* Headers */,
+				D2AAC044055464E500DB518D /* Sources */,
+				D289987405E68DCB004EDB86 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mp4v2;
+			productName = mp4v2;
+			productReference = D2AAC046055464E500DB518D /* libmp4v2.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "mp4v2" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* mp4v2 */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC045055464E500DB518D /* mp4v2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC044055464E500DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D750F00410D1C264009AA50B /* File.cpp in Sources */,
+				D750F00510D1C264009AA50B /* File_posix.cpp in Sources */,
+				D750F00610D1C264009AA50B /* FileSystem.cpp in Sources */,
+				D750F00710D1C264009AA50B /* FileSystem_posix.cpp in Sources */,
+				D750F00A10D1C280009AA50B /* random_posix.cpp in Sources */,
+				D750F01810D1C302009AA50B /* process_posix.cpp in Sources */,
+				D750F01B10D1C316009AA50B /* option.cpp in Sources */,
+				D750F01F10D1C339009AA50B /* error.cpp in Sources */,
+				D750F02410D1C348009AA50B /* time.cpp in Sources */,
+				D750F02610D1C348009AA50B /* time_posix.cpp in Sources */,
+				D750F03510D1C375009AA50B /* crc.cpp in Sources */,
+				D750F03710D1C375009AA50B /* Database.cpp in Sources */,
+				D750F03A10D1C375009AA50B /* other.cpp in Sources */,
+				D750F03C10D1C375009AA50B /* Timecode.cpp in Sources */,
+				D750F03E10D1C375009AA50B /* TrackModifier.cpp in Sources */,
+				D750F04110D1C375009AA50B /* Utility.cpp in Sources */,
+				D750F0CB10D1C4A8009AA50B /* 3gp.cpp in Sources */,
+				D750F0CC10D1C4A8009AA50B /* atom_ac3.cpp in Sources */,
+				D750F0CD10D1C4A8009AA50B /* atom_amr.cpp in Sources */,
+				D750F0CE10D1C4A8009AA50B /* atom_avc1.cpp in Sources */,
+				D750F0CF10D1C4A8009AA50B /* atom_avcC.cpp in Sources */,
+				D750F0D010D1C4A8009AA50B /* atom_chpl.cpp in Sources */,
+				D750F0D110D1C4A8009AA50B /* atom_colr.cpp in Sources */,
+				D750F0D210D1C4A8009AA50B /* atom_d263.cpp in Sources */,
+				D750F0D310D1C4A8009AA50B /* atom_dac3.cpp in Sources */,
+				D750F0D410D1C4A8009AA50B /* atom_damr.cpp in Sources */,
+				D750F0D510D1C4A8009AA50B /* atom_dref.cpp in Sources */,
+				D750F0D610D1C4A8009AA50B /* atom_elst.cpp in Sources */,
+				D750F0D710D1C4A8009AA50B /* atom_enca.cpp in Sources */,
+				D750F0D810D1C4A8009AA50B /* atom_encv.cpp in Sources */,
+				D750F0D910D1C4A8009AA50B /* atom_free.cpp in Sources */,
+				D750F0DA10D1C4A8009AA50B /* atom_ftab.cpp in Sources */,
+				D750F0DB10D1C4A8009AA50B /* atom_ftyp.cpp in Sources */,
+				D750F0DC10D1C4A8009AA50B /* atom_gmin.cpp in Sources */,
+				D750F0DD10D1C4A8009AA50B /* atom_hdlr.cpp in Sources */,
+				D750F0DE10D1C4A8009AA50B /* atom_hinf.cpp in Sources */,
+				D750F0DF10D1C4A8009AA50B /* atom_hnti.cpp in Sources */,
+				D750F0E010D1C4A8009AA50B /* atom_href.cpp in Sources */,
+				D750F0E110D1C4A8009AA50B /* atom_mdat.cpp in Sources */,
+				D750F0E210D1C4A8009AA50B /* atom_mdhd.cpp in Sources */,
+				D750F0E310D1C4A8009AA50B /* atom_meta.cpp in Sources */,
+				D750F0E410D1C4A8009AA50B /* atom_mp4s.cpp in Sources */,
+				D750F0E510D1C4A8009AA50B /* atom_mp4v.cpp in Sources */,
+				D750F0E610D1C4A8009AA50B /* atom_mvhd.cpp in Sources */,
+				D750F0E710D1C4A8009AA50B /* atom_nmhd.cpp in Sources */,
+				D750F0E810D1C4A8009AA50B /* atom_ohdr.cpp in Sources */,
+				D750F0E910D1C4A8009AA50B /* atom_pasp.cpp in Sources */,
+				D750F0EA10D1C4A8009AA50B /* atom_root.cpp in Sources */,
+				D750F0EB10D1C4A8009AA50B /* atom_rtp.cpp in Sources */,
+				D750F0EC10D1C4A8009AA50B /* atom_s263.cpp in Sources */,
+				D750F0ED10D1C4A8009AA50B /* atom_sdp.cpp in Sources */,
+				D750F0EE10D1C4A8009AA50B /* atom_sdtp.cpp in Sources */,
+				D750F0EF10D1C4A8009AA50B /* atom_smi.cpp in Sources */,
+				D750F0F010D1C4A8009AA50B /* atom_sound.cpp in Sources */,
+				D750F0F110D1C4A8009AA50B /* atom_standard.cpp in Sources */,
+				D750F0F210D1C4A8009AA50B /* atom_stbl.cpp in Sources */,
+				D750F0F310D1C4A8009AA50B /* atom_stdp.cpp in Sources */,
+				D750F0F410D1C4A8009AA50B /* atom_stsc.cpp in Sources */,
+				D750F0F510D1C4A8009AA50B /* atom_stsd.cpp in Sources */,
+				D750F0F610D1C4A8009AA50B /* atom_stsz.cpp in Sources */,
+				D750F0F710D1C4A8009AA50B /* atom_stz2.cpp in Sources */,
+				D750F0F810D1C4A8009AA50B /* atom_text.cpp in Sources */,
+				D750F0F910D1C4A8009AA50B /* atom_tfhd.cpp in Sources */,
+				D750F0FA10D1C4A8009AA50B /* atom_tkhd.cpp in Sources */,
+				D750F0FB10D1C4A8009AA50B /* atom_treftype.cpp in Sources */,
+				D750F0FC10D1C4A8009AA50B /* atom_trun.cpp in Sources */,
+				D750F0FD10D1C4A8009AA50B /* atom_tx3g.cpp in Sources */,
+				D750F0FE10D1C4A8009AA50B /* atom_udta.cpp in Sources */,
+				D750F0FF10D1C4A8009AA50B /* atom_url.cpp in Sources */,
+				D750F10010D1C4A8009AA50B /* atom_urn.cpp in Sources */,
+				D750F10110D1C4A8009AA50B /* atom_uuid.cpp in Sources */,
+				D750F10210D1C4A8009AA50B /* atom_video.cpp in Sources */,
+				D750F10310D1C4A8009AA50B /* atom_vmhd.cpp in Sources */,
+				D750F10510D1C4A8009AA50B /* cmeta.cpp in Sources */,
+				D750F10610D1C4A8009AA50B /* descriptors.cpp in Sources */,
+				D750F10910D1C4A8009AA50B /* exception.cpp in Sources */,
+				D750F10C10D1C4A8009AA50B /* isma.cpp in Sources */,
+				D750F10D10D1C4A8009AA50B /* mp4.cpp in Sources */,
+				D750F10F10D1C4A8009AA50B /* mp4atom.cpp in Sources */,
+				D750F11110D1C4A8009AA50B /* mp4container.cpp in Sources */,
+				D750F11310D1C4A8009AA50B /* mp4descriptor.cpp in Sources */,
+				D750F11610D1C4A8009AA50B /* mp4file.cpp in Sources */,
+				D750F11810D1C4A8009AA50B /* mp4file_io.cpp in Sources */,
+				D750F11910D1C4A8009AA50B /* mp4info.cpp in Sources */,
+				D750F11A10D1C4A8009AA50B /* mp4meta.cpp in Sources */,
+				D750F11B10D1C4A8009AA50B /* mp4property.cpp in Sources */,
+				D750F11D10D1C4A8009AA50B /* mp4track.cpp in Sources */,
+				D750F11F10D1C4A8009AA50B /* mp4util.cpp in Sources */,
+				D750F12110D1C4A8009AA50B /* ocidescriptors.cpp in Sources */,
+				D750F12310D1C4A8009AA50B /* odcommands.cpp in Sources */,
+				D750F12510D1C4A8009AA50B /* qosqualifiers.cpp in Sources */,
+				D750F12710D1C4A8009AA50B /* rtphint.cpp in Sources */,
+				D750F12A10D1C4A8009AA50B /* text.cpp in Sources */,
+				D750F13310D1C4C1009AA50B /* typebmff.cpp in Sources */,
+				D750F13F10D1C4DE009AA50B /* CoverArtBox.cpp in Sources */,
+				D750F14110D1C4DE009AA50B /* generic.cpp in Sources */,
+				D750F14510D1C4DE009AA50B /* Tags.cpp in Sources */,
+				D750F14710D1C4DE009AA50B /* type.cpp in Sources */,
+				D750F15110D1C4F5009AA50B /* coding.cpp in Sources */,
+				D750F15310D1C4F5009AA50B /* ColorParameterBox.cpp in Sources */,
+				D750F15610D1C4F5009AA50B /* PictureAspectRatioBox.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91EC08733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = mp4v2;
+			};
+			name = Debug;
+		};
+		1DEB91ED08733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = mp4v2;
+			};
+			name = Release;
+		};
+		1DEB91F008733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B033B6950B2FAA7C00CEEEDA /* MacConfigExternalDebug.xcconfig */;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DHAVE_CONFIG_H",
+				);
+				USER_HEADER_SEARCH_PATHS = "/usr/include . ./include";
+				WARNING_CFLAGS = "-w";
+			};
+			name = Debug;
+		};
+		1DEB91F108733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B033B6960B2FAA7C00CEEEDA /* MacConfigExternalRelease.xcconfig */;
+			buildSettings = {
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DHAVE_CONFIG_H",
+				);
+				USER_HEADER_SEARCH_PATHS = "/usr/include . ./include";
+				WARNING_CFLAGS = "-w";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "mp4v2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91EC08733DB70010E9CD /* Debug */,
+				1DEB91ED08733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "mp4v2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91F008733DB70010E9CD /* Debug */,
+				1DEB91F108733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
