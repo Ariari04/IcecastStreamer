@@ -5,7 +5,13 @@ DEFINES=-D_FILE_OFFSET_BITS=64 -DUSE_TAGGING
 # -O2 - optimize for speed
 CPPFLAGS=-Wall -O2 $(DEFINES) 
 CFLAGS=$(CPPFLAGS)
-LDFLAGS=-L./3rd/libs -l:libmpgdecoder.a -l:libmp3lame.a -lz -lmysqlpp -l:libid3.a -l:libfaad.a -lstdc++  -lm -l:libmp4v2.a
+LDFLAGS=-L./../lame-3.100/mpglib/.libs \
+-L./../faad2-2.8.0/libfaad/.libs \
+-L./../id3lib-3.8.3/src/.libs \
+-L./../libmp4v2-1.5.0.1/Compile/.libs \
+-L./../lame-3.100/libmp3lame/.libs \
+-L./3rd/libs -l:libmpgdecoder.a -l:libmp3lame.a -lz -lmysqlpp -l:libid3.a -l:libfaad.a -lstdc++  -lm -l:libmp4v2.a
+
 EXECUTABLE=conv
 
 SOURCES_CPP=main.cpp \

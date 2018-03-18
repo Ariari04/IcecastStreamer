@@ -1,0 +1,8 @@
+uncompr.lo: uncompr.c /usr/include/stdc-predef.h ../include/zlib.h \
+ ../include/zconf.h
+
+/usr/include/stdc-predef.h:
+
+../include/zlib.h:
+
+../include/zconf.h:
