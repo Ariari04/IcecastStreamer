@@ -18,17 +18,19 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 	uint16 nBytesPerSample = nBitsPerSample / 8;
 
 	uint16 nNumberOfChannels = producer.getSoundFormatInfo().nNumberOfChannels;
-	if(nNumberOfChannels != 2)
+	
+	/*if(nNumberOfChannels != 2)
 	{
 		return CRNotAStereoSound;
-	}
+	}*/
 
 	uint32 nSampleRate = producer.getSoundFormatInfo().nSampleRate;
 
+	/*
 	if(!(nSampleRate == 44100 || nSampleRate == 48000 || nSampleRate == 96000))
 	{
 		return CRUnsupportedSampleRate;
-	}
+	}*/
 
 	// Now input format is checked
 
@@ -41,7 +43,8 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 	const uint32 nOutputDozeSize = converter.getOutputDozeSize();
 
 	// Subject to changes after format additions.
-	const uint32 nDozesInAFragment = 1000;
+	//const uint32 nDozesInAFragment = 1000;
+	const uint32 nDozesInAFragment = 1;
 
 	//Int means Interleaved
 	const uint32 nIntSampleSizeInBytes = nBytesPerSample * nNumberOfChannels;
@@ -76,22 +79,27 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
         {
             memset(pInput + nReaded, 0, nToRead - nReaded);
             finished = true;
+			
         }
 
-		// Size in number of samples here.
-		if (!MyConversionFunc(pInput, nReadedDozes * nInputDozeSize,
-			pOutput, nReadedDozes * nOutputDozeSize))
-		{
-			return CRCoreConversionError;
-		}
 
-		nToWrite = nReadedDozes * nOutputDozeSize * nIntSampleSizeInBytes;
+			// Size in number of samples here.
+			if (!MyConversionFunc(pInput, nReadedDozes * nInputDozeSize,
+				pOutput, nReadedDozes * nOutputDozeSize))
+			{
+				return CRCoreConversionError;
+			}
 
-		if (nToWrite != consumer.putSound(pOutput, nToWrite))
-		{
-			return CRConsumerError;
-		}
+			nToWrite = nReadedDozes * nOutputDozeSize * nIntSampleSizeInBytes;
+
+			if (nToWrite != consumer.putSound(pOutput, nToWrite))
+			{
+				return CRConsumerError;
+			}
+		
 	}
+
+	consumer.writeHeader();
 
 	return CROk;
 }

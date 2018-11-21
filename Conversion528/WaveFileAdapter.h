@@ -24,6 +24,7 @@ namespace WaveFile
 		~WaveConsumer();
 		virtual bool setSoundFormatInfo(const Conversion::SoundFormatInfo& sInfo);
 		virtual uint32 putSound(const byte* pBuffer, uint32 nBufferSize);
+		virtual bool writeHeader();
 	private:
 		WaveFileWriter& m_cWriter;
 		uint32          m_soundSize;

@@ -7,6 +7,10 @@
 #include <memory.h>
 #include "WaveFileAdapter.h"
 
+#include "Converter528.h"
+#include "FlatConverter.h"
+#include "ExperimentalConverter.h"
+
 #define _WRITE_ERROR_DESCR_
 #ifdef _WRITE_ERROR_DESCR_
 
@@ -18,7 +22,13 @@
 int main(int argc, char* argv[])
 {
 	WaveFile::WaveFileReader reader;
-	if(!reader.open("input.wav"))
+
+	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\Track5.wav";
+
+	const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\usp_unsil-1.wav";
+
+
+	if(!reader.open(fileName))
 	{
 		#ifdef _WRITE_ERROR_DESCR_
 			std::ofstream ofs("result.txt");
@@ -34,6 +44,10 @@ int main(int argc, char* argv[])
 
 	WaveFile::WaveFileWriter writer;
 
+	//const 
+
+	//writer.setWaveFileHeader()
+
 	if(!writer.open("output.wav"))
 	{
 		reader.close();
@@ -43,8 +57,10 @@ int main(int argc, char* argv[])
 	WaveFile::WaveProducer producer(reader);
 	WaveFile::WaveConsumer consumer(writer);
 
-	Conversion528::ConversionResult res =
-		Conversion528::ConversionProdCons(consumer, producer);
+	std::unique_ptr<Conversion::ISoundConverter> converter = std::make_unique<Conversion::ExperimentalConverter>();
+
+	Conversion::ConversionResult res =
+		Conversion::ConversionProdCons(*converter, consumer, producer);
 
 	#ifdef _WRITE_ERROR_DESCR_
 		std::ofstream ofs("result.txt");

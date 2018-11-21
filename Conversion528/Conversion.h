@@ -71,6 +71,7 @@ namespace Conversion
 	public:
 		virtual bool setSoundFormatInfo(const SoundFormatInfo& sInfo) = 0;
 		virtual uint32 putSound(const byte* pBuffer, uint32 nBufferSize) = 0;
+		virtual bool writeHeader() { return true; }
 	};
 
 	enum ConversionResult

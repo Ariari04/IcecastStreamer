@@ -51,3 +51,11 @@ uint32 WaveFile::WaveConsumer::putSound(const byte* pBuffer, uint32 nBufferSize)
     m_soundSize += nBufferSize;
 	return (uint32)m_cWriter.MusicFwrite(pBuffer, 1, nBufferSize);
 }
+
+bool WaveFile::WaveConsumer::writeHeader()
+{
+	m_cWriter.getWaveFileHeader().setSoundSizeInBytes(m_soundSize);
+	m_cWriter.writeHeader();
+	
+	return true;
+}
