@@ -1,4 +1,5 @@
-/* Copyright Zaurmann Software 2010 */
+#define _USE_MATH_DEFINES
+
 #include "Conversion.h"
 #include <vector>
 #include <cstring>
@@ -11,7 +12,15 @@
 using namespace Conversion;
 
 
-extern std::vector<std::vector<float>> outputDataArr;
+std::vector<std::vector<float>> outputDataArr;
+
+void hamming(int windowLength, std::vector<float>& buffer) {
+
+	for (int i = 0; i < windowLength; i++) {
+		buffer[i] = 0.54 - (0.46 * cos(2 * M_PI * (i / ((windowLength - 1) * 1.0))));
+	}
+
+}
 
 ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 									ISoundConsumer& consumer,
@@ -47,8 +56,8 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 		return CRConsumerDoesNotSupportOutputFormat;
 	}
 
-	const uint32 nInputDozeSize = converter.getInputDozeSize();
-	const uint32 nOutputDozeSize = converter.getOutputDozeSize();
+	const uint32 nInputDozeSize = 128;
+	const uint32 nOutputDozeSize = 128;
 
 	// Subject to changes after format additions.
 	//const uint32 nDozesInAFragment = 1000;
@@ -77,6 +86,22 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 
 	bool finished = false;
 
+
+
+
+	std::vector<float> timeData;
+	timeData.resize(nInputDozeSize);
+
+	Eigen::FFT<float> fft;
+
+	std::vector<float> hammingWindow;
+	hammingWindow.resize(nInputDozeSize);
+
+	std::vector<std::complex<float> > freqvec;
+
+	hamming(nInputDozeSize, hammingWindow);
+
+
 	while(!finished)
 	{
 	    const uint32 nReaded = producer.getSound(pInput, nToRead);
@@ -89,27 +114,45 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
             finished = true;
 			
         }
+		
+		for (size_t i = 0; i < nInputDozeSize; i++)
+		{
+			pOutput[i] = pInput[i] * hammingWindow[i];
+			//pOutput[i] = pInput[i];
+		}
+
+		for (size_t i = 0; i < nInputDozeSize; i++)
+		{
+			timeData[i] = pOutput[i];
+		}
+
+		fft.fwd(freqvec, timeData);
+
+		std::vector<float> outputData;
+		outputData.resize(freqvec.size());
+
+		for (size_t i = 0; i < freqvec.size(); i++)
+		{
+			outputData[i] = log(sqrt(freqvec[i].real()*freqvec[i].real() + freqvec[i].imag()*freqvec[i].imag()));
+		}
+
+		outputDataArr.push_back(outputData);
 
 
-			// Size in number of samples here.
-			if (!MyConversionFunc(pInput, nReadedDozes * nInputDozeSize,
-				pOutput, nReadedDozes * nOutputDozeSize))
-			{
-				return CRCoreConversionError;
-			}
 
-			nToWrite = nReadedDozes * nOutputDozeSize * nIntSampleSizeInBytes;
+		nToWrite = nReadedDozes * nOutputDozeSize * nIntSampleSizeInBytes;
 
-			if (nToWrite != consumer.putSound(pOutput, nToWrite))
-			{
-				return CRConsumerError;
-			}
+		if (nToWrite != consumer.putSound(pOutput, nToWrite))
+		{
+			return CRConsumerError;
+		}
 		
 	}
 
 	using namespace cv;
 
-	cv::Mat m(2048, outputDataArr.size(), CV_8UC3);
+	
+	cv::Mat m(nInputDozeSize, outputDataArr.size(), CV_8UC3);
 
 
 	for (size_t k = 0; k < outputDataArr.size(); k++)
@@ -119,9 +162,10 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 
 		
 			
-		for (size_t i = 0; i < 2048; i++)
+		for (size_t i = 0; i < nInputDozeSize; i++)
 		{
-			float val = (2.0 + outputData[i]) * 50;
+			//float val = (2.0 + outputData[i]) * 50;
+			float val = (outputData[i]) * 50;
 
 			val = min(255.0f, val);
 			val = max(0.0f, val);
