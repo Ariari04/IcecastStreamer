@@ -114,7 +114,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../eigen;../../../opencv/build/install/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../boost_1_67_0;../../eigen;../../../opencv/build/install/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencv_core341d.lib;opencv_imgproc341d.lib;opencv_imgcodecs341d.lib;kernel32.lib</AdditionalDependencies>
@@ -123,7 +123,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>../../../opencv/build/install/x64/vc14/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../../opencv/build/install/x64/vc14/lib;../../boost_1_67_0/stage/lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,10 +156,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../eigen;../../../opencv/build/install/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../boost_1_67_0;../../eigen;../../../opencv/build/install/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core341.lib;opencv_imgproc341.lib;opencv_imgcodecs341.lib;kernel32.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -167,6 +167,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
+      <AdditionalLibraryDirectories>../../../opencv/build/install/x64/vc14/lib;../../boost_1_67_0/stage/lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -175,7 +176,6 @@
     <ClCompile Include="Conversion528.cpp" />
     <ClCompile Include="Converter528.cpp" />
     <ClCompile Include="ExperimentalConverter.cpp" />
-    <ClCompile Include="fft.cpp" />
     <ClCompile Include="FlatConverter.cpp" />
     <ClCompile Include="KString.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -187,7 +187,6 @@
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="Converter528.h" />
     <ClInclude Include="ExperimentalConverter.h" />
-    <ClInclude Include="fft.h" />
     <ClInclude Include="FlatConverter.h" />
     <ClInclude Include="IntegerTypes.h" />
     <ClInclude Include="KString.h" />

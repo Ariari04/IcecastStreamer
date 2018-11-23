@@ -1,10 +1,10 @@
 #ifndef _MY_528HZ_CONVERSION_H_
 #define _MY_528HZ_CONVERSION_H_
 
-/* Copyright Zaurmann Software 2010 */
 #include <cstdlib>
 #include "StaticAssertion.h"
 #include "IntegerTypes.h"
+#include <string>
 
 namespace Conversion
 {
@@ -88,6 +88,8 @@ namespace Conversion
 	};
 
 	ConversionResult ConversionProdCons(ISoundConverter& converter, ISoundConsumer& consumer, ISoundProducer& producer);
+
+	ConversionResult ConversionOnlySpectral(ISoundProducer& producer, const std::string& outputFileName);
 }
 
 #endif
