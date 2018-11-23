@@ -3,7 +3,15 @@
 #include <vector>
 #include <cstring>
 
+
+#include <unsupported/Eigen/FFT>
+
+#include <opencv2/opencv.hpp>
+
 using namespace Conversion;
+
+
+extern std::vector<std::vector<float>> outputDataArr;
 
 ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 									ISoundConsumer& consumer,
@@ -98,6 +106,37 @@ ConversionResult Conversion::ConversionProdCons(ISoundConverter& converter,
 			}
 		
 	}
+
+	using namespace cv;
+
+	cv::Mat m(2048, outputDataArr.size(), CV_8UC3);
+
+
+	for (size_t k = 0; k < outputDataArr.size(); k++)
+	{
+
+		auto& outputData = outputDataArr[k];
+
+		
+			
+		for (size_t i = 0; i < 2048; i++)
+		{
+			float val = (2.0 + outputData[i]) * 50;
+
+			val = min(255.0f, val);
+			val = max(0.0f, val);
+
+			Vec3b & color = m.at<Vec3b>(i, k);
+
+			color(0) = val;
+
+			color(1) = val;
+			color(2) = val;
+		}
+
+	}
+
+	imwrite("mat.png", m);
 
 	consumer.writeHeader();
 

@@ -25,7 +25,8 @@ int main(int argc, char* argv[])
 
 	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\Track5.wav";
 
-	const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\usp_unsil-1.wav";
+	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\usp_unsil-1.wav";
+	const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\vip.wav";
 
 
 	if(!reader.open(fileName))

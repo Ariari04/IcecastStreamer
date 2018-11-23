@@ -323,3 +323,5 @@ ASALocalRun/
 *.a
 *.o
 *.wav
+*.dll
+*.png
