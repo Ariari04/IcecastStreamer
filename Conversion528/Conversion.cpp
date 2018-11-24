@@ -12,13 +12,11 @@
 using namespace Conversion;
 
 
-std::vector<std::vector<float>> outputDataArr;
-
-Eigen::FFT<float> fft;
-
-void RealFFT(size_t windowLength, std::vector<float>& in, float* outReal, float* outImaginary)
+void RealFFT(size_t windowLength, std::vector<double>& in, double* outReal, double* outImaginary)
 {
-	std::vector<std::complex<float> > freqvec;
+	Eigen::FFT<double> fft;
+
+	std::vector<std::complex<double> > freqvec;
 
 	fft.fwd(freqvec, in);
 
@@ -27,6 +25,17 @@ void RealFFT(size_t windowLength, std::vector<float>& in, float* outReal, float*
 		outReal[i] = freqvec[i].real();
 		outImaginary[i] = freqvec[i].imag();
 	}
+
+	std::vector<double> rvec;
+	rvec.resize(freqvec.size());
+
+	for (size_t i = 0; i < freqvec.size(); i++)
+	{
+		rvec[i] = sqrt(freqvec[i].real()*freqvec[i].real() + freqvec[i].imag()*freqvec[i].imag());
+	}
+
+
+	std::vector<double> rvecx;
 
 	
 }
@@ -43,29 +52,53 @@ void RealFFT(size_t windowLength, std::vector<float>& in, float* outReal, float*
  * of its code.
  */
 
-void PowerSpectrum(size_t windowLength, std::vector<float>& in, float* out)
+void PowerSpectrum(size_t windowLength, std::vector<double>& in, double* out)
 {
-	std::vector<std::complex<float> > freqvec;
+	Eigen::FFT<double> fft;
+
+	std::vector<std::complex<double> > freqvec;
 
 	fft.fwd(freqvec, in);
+
+
+	std::vector<double> rvec;
+	rvec.resize(freqvec.size());
 
 	for (size_t i = 0; i < freqvec.size(); i++)
 	{
 		out[i] = sqrt(freqvec[i].imag()*freqvec[i].imag() + freqvec[i].real()*freqvec[i].real());
+		rvec[i] = out[i];
 	}
+
+	std::vector<double> rvecx;
+
+
 }
 
 
 
 
 
-void hamming(size_t windowLength, std::vector<float>& buffer) {
+void hamming(size_t windowLength, std::vector<double>& buffer) {
 
+	std::vector<float> bufx;
+	bufx.resize(windowLength);
 	for (size_t i = 0; i < windowLength; i++) {
-		buffer[i] = buffer[i]*(0.54 - (0.46 * cos(2 * M_PI * (i / ((windowLength - 1) * 1.0)))));
+		bufx[i] = (0.54 - (0.46 * cos(2 * M_PI * (i / ((windowLength - 1) * 1.0)))));
+		buffer[i] = buffer[i] * bufx[i];
 	}
-
 }
+
+void hanning(size_t windowLength, std::vector<double>& buffer) {
+
+	std::vector<float> bufx;
+	bufx.resize(windowLength);
+	for (size_t i = 0; i < windowLength; i++) {
+		bufx[i] = 0.5 * (1 - cos(2 * M_PI*i / (windowLength-1)));
+		buffer[i] = buffer[i] * bufx[i];
+	}
+}
+
 
 /*
   This function computes the power (mean square amplitude) as
@@ -75,8 +108,8 @@ void hamming(size_t windowLength, std::vector<float>& buffer) {
   calculates windowSize/2 frequency samples
 */
 
-bool ComputeSpectrum(const float * data, size_t width, size_t windowSize,
-	double rate, float *output, bool autocorrelation,
+bool ComputeSpectrum(const double * data, size_t width, size_t windowSize,
+	double rate, double *output, bool autocorrelation,
 	int windowFunc)
 {
 	if (width < windowSize)
@@ -85,29 +118,29 @@ bool ComputeSpectrum(const float * data, size_t width, size_t windowSize,
 	if (!data || !output)
 		return true;
 
-	std::vector<float> processed;
+	std::vector<double> processed;
 
 	processed.resize(windowSize);
 
 	for (size_t i = 0; i < windowSize; i++)
 	{
-		processed[i] = float(0.0);
+		processed[i] = double(0.0);
 	}
 
 	auto half = windowSize / 2;
 
 
 
-	std::vector<float> in;
+	std::vector<double> in;
 
 	in.resize(windowSize);
 
-	std::vector<float> out;
+	std::vector<double> out;
 
 	out.resize(windowSize);
 
 
-	std::vector<float> out2;
+	std::vector<double> out2;
 
 	out2.resize(windowSize);
 
@@ -118,7 +151,8 @@ bool ComputeSpectrum(const float * data, size_t width, size_t windowSize,
 		for (size_t i = 0; i < windowSize; i++)
 			in[i] = data[start + i];
 
-		hamming(windowSize, in);
+		//hamming(windowSize, in);
+		//hanning(windowSize, in);
 
 		if (autocorrelation) {
 			// Take FFT
@@ -230,8 +264,8 @@ ConversionResult Conversion::ConversionOnlySpectral(ISoundProducer& producer, co
 	// Now input format is checked
 
 
-	const uint32 nInputDozeSize = 128;
-	const uint32 nOutputDozeSize = 128;
+	const uint32 nInputDozeSize = 256;
+	const uint32 nOutputDozeSize = 256;
 
 	// Subject to changes after format additions.
 	//const uint32 nDozesInAFragment = 1000;
@@ -258,7 +292,7 @@ ConversionResult Conversion::ConversionOnlySpectral(ISoundProducer& producer, co
 
 
 
-	std::vector<float> timeData;
+	std::vector<double> timeData;
 	//timeData.resize(nInputDozeSize);
 	
 
@@ -266,7 +300,7 @@ ConversionResult Conversion::ConversionOnlySpectral(ISoundProducer& producer, co
 	{
 		//ind++;
 		const uint32 nReaded = producer.getSound(pInput, nToRead);
-		const uint32 nReadedSamples = nReaded / nIntSampleSizeInBytes;
+		const uint32 nReadedSamples = nReaded;
 		const uint32 nReadedDozes = (nReadedSamples + 1) / nInputDozeSize;
 
 		if (nReaded < nToRead)
@@ -276,10 +310,13 @@ ConversionResult Conversion::ConversionOnlySpectral(ISoundProducer& producer, co
 
 		}
 
-		for (size_t i = 0; i < nInputDozeSize; i++)
+		for (size_t i = 0; i < nInputDozeSize/2; i++)
 		{
-			//timeData.push_back(pInput[i]);
-			timeData.push_back(pInput[i] / 256.0);
+			uint16_t x = uint16_t(pInput[2 * i+1]) * 256 + pInput[2 * i];
+			//timeData.push_back(int(int16_t(x)) / 32768.0);
+			timeData.push_back(int(int16_t(x)));
+
+			
 		}
 
 
@@ -291,18 +328,24 @@ ConversionResult Conversion::ConversionOnlySpectral(ISoundProducer& producer, co
 
 
 	
-	size_t windowWidth = 4096;
+	size_t windowWidth = 256;
 
-	std::vector<float> outputData;
+	std::vector<double> outputData;
 	outputData.resize(windowWidth);
 
-	size_t stepSize = 1024;
-	size_t partWidth = windowWidth*2;
+	size_t stepSize = 256;
+	size_t partWidth = windowWidth;
 
-	size_t count = timeData.size()/stepSize - partWidth;
+	size_t count = 1;
 
-	//size_t count = 100;
+	//size_t count = timeData.size() / stepSize - partWidth/ stepSize;
 
+	/*for (size_t i = 0; i < 256; i++)
+	{
+		std::cout << "(" << timeData[i] << ", 0)" << std::endl;
+	}*/
+
+	timeData.resize(256);
 
 	cv::Mat m(windowWidth/2, count, CV_8UC3);
 
@@ -315,7 +358,8 @@ ConversionResult Conversion::ConversionOnlySpectral(ISoundProducer& producer, co
 		for (size_t i = 0; i < windowWidth/2; i++)
 		{
 
-			float val = (outputData[i])*100;
+			//float val = (outputData[i])*100;
+			float val = (outputData[i]);
 			//float val = (2 + log10(outputData[i]))*50;
 
 			val = min(255.0f, val);

@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\tone.wav";
 	const char* fileName = "D:\\IHearVoicesData\\Audio\\device1_channel1_20181012124210.wav";
 
-	const char* folderName = "D:\\IHearVoicesData\\Audio";
+	const char* folderName = "D:\\IHearVoicesData\\Audio\\test";
 
 
 	auto fileNames = getFileNamesInFolder(folderName);
