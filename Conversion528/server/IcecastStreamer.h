@@ -38,6 +38,7 @@ public:
 	IcecastStreamer(boost::asio::io_service& ioService, std::string addres, std::string port);
 
 	void streamFile(const std::string& fileName);
+	void saveWaveSound(const std::string& binarySoundFile, const std::string& waveFile);
 
 private:
 

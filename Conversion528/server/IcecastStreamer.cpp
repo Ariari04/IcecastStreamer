@@ -94,14 +94,6 @@ bool IcecastStreamer::streamFile(std::shared_ptr<boost::asio::ip::tcp::socket> h
 template<typename T>
 bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 {
-	WaveFile::WaveFileReader reader;
-	
-	if (!reader.open(uploading.fileName.c_str()))
-	{
-		std::cout << "Streamer: couldn't open the file to be streamed";
-		return false;
-	}
-
 	const std::string NEWLINE = "\r\n";
 
 	boost::asio::streambuf request;
@@ -110,7 +102,6 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	boost::asio::streambuf response;
 
 	{
-
 		request_stream << "PUT /test HTTP/1.1" << NEWLINE;
 		request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
 		request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
@@ -127,7 +118,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 		try
 		{
-			socket->write_some(buffer(request.data()));
+			socket->send(buffer(request.data(), request.size()));
 
 			read_until(*socket, response, "\r\n");
 
@@ -141,35 +132,61 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		}
 		catch (std::exception &e)
 		{
-			std::cout << "UPLOADER: connection issues, retry..." << std::endl;
+			std::cout << "IcecastStreamer: connection issues, retry..." << std::endl;
 			return false;
 		}
 	}
 
+	const int BUFFER_SIZE = 102400;
+	char dataBuffer[BUFFER_SIZE];
+
+	WaveFile::WaveFileReader reader;
+
+	if (!reader.open(uploading.fileName.c_str()))
+	{
+		std::cout << "IcecastStreamer: couldn't open the file to be streamed";
+		return false;
+	}
+
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+
 	while (!reader.MusicFeof())
 	{
-		//const int BUFFER_SIZE = 102400;
-		//unsigned char bufferX[BUFFER_SIZE];
-		//reader.MusicFread(&bufferX[0], 1, BUFFER_SIZE);
-
-		request.consume(request.size());
-		request_stream << "HELLO" << std::endl;
-		std::cout << request.size() << std::endl;
-		std::cout << "HELLO" << std::endl;
+		int byteCount = reader.MusicFread(dataBuffer, 1, BUFFER_SIZE);
+		auto asioBuffer = boost::asio::buffer(dataBuffer, byteCount);
 
 		try
 		{
-			//socket->write_some(boost::asio::buffer(bufferX, BUFFER_SIZE));
-			socket->write_some(buffer(request.data()));
+			socket->send(asioBuffer);
 		}
 		catch (std::exception &e)
 		{
-			std::cout << "UPLOADER: connection issues, retry..." << std::endl;
+			std::cout << "IcecastStreamer: connection issues, retry..." << std::endl;
 			return false;
 		}
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
+	std::cout << "IcecastStreamer: uploaded" << std::endl;
+
 	return true;
+}
+
+void IcecastStreamer::saveWaveSound(const std::string& binarySoundFile, const std::string& waveFile)
+{
+	const int BUFFER_SIZE = 102400;
+	char binarySound[BUFFER_SIZE];
+
+	std::ifstream ifs{ binarySoundFile, std::ios::binary };
+
+	WaveFile::WaveFileWriter writer(waveFile.c_str());
+	writer.writeHeader();
+
+	while (!ifs.eof())
+	{
+		ifs.read(binarySound, BUFFER_SIZE);
+		int byteCount = ifs.gcount();
+		writer.MusicFwrite(binarySound, 1, byteCount);
+	}
 }

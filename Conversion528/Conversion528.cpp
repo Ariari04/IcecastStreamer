@@ -1,6 +1,7 @@
 // Conversion528.cpp : Defines the entry point for the console application.
 //
 
+#include <conio.h>
 #include "stdafx.h"
 #include "WaveFile.h"
 #include "Conversion.h"
@@ -59,36 +60,76 @@ std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 
 void streamFile(const std::string& fileName)
 {
-	ioService.post([fileName]()
+	std::function<void()> func{ [fileName]() { streamer.streamFile(fileName); } };
+
+	auto task = std::make_shared<std::packaged_task<void()>>(func);
+	//auto fut = task->get_future();
+
+	ioService.post([task]()
 	{
-		streamer.streamFile(fileName);
+		(*task)();
 	});
+
+	//fut.wait();
 }
 
-void ProcessFileName(const std::string& fileName)
+void StreamFile()
 {
-	streamFile(fileName);
+	std::cout << "Choose a file:" << std::endl;
+	std::cout << "1) test/original.wav" << std::endl;
+
+	char key = _getch();
+	_getch();
+	switch (key)
+	{
+	case '1': streamFile("test/original.wav"); break;
+	}
+}
+
+void WrapFile()
+{
+	std::cout << "Choose a file:" << std::endl;
+	std::cout << "1) test/streamed.wav -> test/wrapped.wav" << std::endl;
+
+	char key = _getch();
+	_getch();
+	switch (key)
+	{
+	case '1': streamer.saveWaveSound("test/streamed.wav", "test/wrapped.wav"); break;
+	}
 }
 
 int main(int argc, char* argv[])
 {
-	
-	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\Track5.wav";
-
-	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\usp_unsil-1.wav";
-	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\vip.wav";
-	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\tone.wav";
-	//const char* fileName = "test/record.wav";
-
-	//http::server::server server(ioService, "127.0.0.1", "8000");
-	auto f = []() {
+	auto f = []()
+	{
 		ioService.run();
 	};
+
 	serverThreadPool.create_thread(f);
 
-	ProcessFileName("test/record.wav");
+	char key;
+	do
+	{
+		std::cout << "Choose an action:" << std::endl;
+		std::cout << "1) stream sound from a file" << std::endl;
+		std::cout << "2) wrap downloaded streamed sound into a file" << std::endl;
 
-	std::this_thread::sleep_for(std::chrono::seconds(100000));
+		key = _getch();
+		_getch();
+
+		switch (key)
+		{
+		case '1':
+			StreamFile();
+			break;
+
+		case '2':
+			WrapFile();
+			break;
+		}
+
+	} while (true);
 
 	ioService.stop();
 	serverThreadPool.join_all();
