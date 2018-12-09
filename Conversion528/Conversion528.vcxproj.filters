@@ -19,6 +19,9 @@
     <Filter Include="Header Files\audacity">
       <UniqueIdentifier>{86d71b53-895b-4b4c-a903-40f781a06518}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{0d882948-1e90-4cc3-8969-c26df0744029}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleHelpers.cpp">
@@ -50,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="ExperimentalConverter.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="server\IcecastStreamer.cpp">
+      <Filter>Server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="ExperimentalConverter.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="server\IcecastStreamer.h">
+      <Filter>Server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

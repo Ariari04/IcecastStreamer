@@ -107,14 +107,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../boost_1_67_0;../../eigen;../../../opencv/build/install/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencv_core341d.lib;opencv_imgproc341d.lib;opencv_imgcodecs341d.lib;kernel32.lib</AdditionalDependencies>
@@ -123,7 +123,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>../../../opencv/build/install/x64/vc14/lib;../../boost_1_67_0/stage/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../opencv/build/install/x64/vc14/lib;../../../opencv/build/install/x64/vc14/lib;../../boost_1_68_0/stage/lib;../../boost_1_68_0/stage/x64/lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,7 +156,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../boost_1_67_0;../../eigen;../../../opencv/build/install/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencv_core341.lib;opencv_imgproc341.lib;opencv_imgcodecs341.lib;kernel32.lib</AdditionalDependencies>
@@ -167,7 +167,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>../../../opencv/build/install/x64/vc14/lib;../../boost_1_67_0/stage/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../opencv/build/install/x64/vc14/lib;../../../opencv/build/install/x64/vc14/lib;../../boost_1_68_0/stage/lib;../../boost_1_68_0/stage/x64/lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -178,6 +178,7 @@
     <ClCompile Include="ExperimentalConverter.cpp" />
     <ClCompile Include="FlatConverter.cpp" />
     <ClCompile Include="KString.cpp" />
+    <ClCompile Include="server\IcecastStreamer.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileAdapter.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="FlatConverter.h" />
     <ClInclude Include="IntegerTypes.h" />
     <ClInclude Include="KString.h" />
+    <ClInclude Include="server\IcecastStreamer.h" />
     <ClInclude Include="StaticAssertion.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="WaveFile.h" />

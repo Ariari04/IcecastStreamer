@@ -336,16 +336,16 @@ ConversionResult Conversion::ConversionOnlySpectral(ISoundProducer& producer, co
 	size_t stepSize = 256;
 	size_t partWidth = windowWidth;
 
-	size_t count = 1;
+	//size_t count = 1;
 
-	//size_t count = timeData.size() / stepSize - partWidth/ stepSize;
+	size_t count = timeData.size() / stepSize - partWidth/ stepSize;
 
 	/*for (size_t i = 0; i < 256; i++)
 	{
 		std::cout << "(" << timeData[i] << ", 0)" << std::endl;
 	}*/
 
-	timeData.resize(256);
+	//timeData.resize(256);
 
 	cv::Mat m(windowWidth/2, count, CV_8UC3);
 

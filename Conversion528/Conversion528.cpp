@@ -20,8 +20,16 @@
 #endif
 
 #include "boost/filesystem.hpp"
+#include <boost/thread/thread.hpp>
+#include "boost/asio.hpp"
 
+#include <server/IcecastStreamer.h>
 
+boost::asio::io_service ioService;
+boost::asio::io_service::work work(ioService);
+boost::thread_group serverThreadPool;
+
+IcecastStreamer streamer{ ioService, "127.0.0.1", "8000" };
 
 std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 {
@@ -49,42 +57,17 @@ std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 	return result;
 }
 
+void streamFile(const std::string& fileName)
+{
+	ioService.post([fileName]()
+	{
+		streamer.streamFile(fileName);
+	});
+}
+
 void ProcessFileName(const std::string& fileName)
 {
-	WaveFile::WaveFileReader reader;
-
-
-	if (!reader.open(fileName.c_str()))
-	{
-#ifdef _WRITE_ERROR_DESCR_
-		std::ofstream ofs("result.txt");
-		KString str;
-		str.Format("Input was not opened (%d): ", reader.getLastError());
-		str += WFREToString(reader.getLastError());
-		ofs << (const char*)str;
-		ofs.close();
-#endif
-
-		return;
-	}
-
-
-	WaveFile::WaveProducer producer(reader);
-
-	std::string outputFileName(fileName.begin(), fileName.begin() + fileName.size() - 4);
-	outputFileName += ".png";
-	
-
-	Conversion::ConversionResult res = Conversion::ConversionOnlySpectral(producer, outputFileName);
-
-#ifdef _WRITE_ERROR_DESCR_
-	std::ofstream ofs("result.txt");
-	ofs << (const char*)ConversionResultToString(res);
-	ofs.close();
-#endif
-
-	reader.close();
-
+	streamFile(fileName);
 }
 
 int main(int argc, char* argv[])
@@ -95,22 +78,20 @@ int main(int argc, char* argv[])
 	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\usp_unsil-1.wav";
 	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\vip.wav";
 	//const char* fileName = "D:\\Work\\TorchProjects\\converter\\Conversion528\\tone.wav";
-	const char* fileName = "D:\\IHearVoicesData\\Audio\\device1_channel1_20181012124210.wav";
+	//const char* fileName = "test/record.wav";
 
-	const char* folderName = "D:\\IHearVoicesData\\Audio\\test";
+	//http::server::server server(ioService, "127.0.0.1", "8000");
+	auto f = []() {
+		ioService.run();
+	};
+	serverThreadPool.create_thread(f);
 
+	ProcessFileName("test/record.wav");
 
-	auto fileNames = getFileNamesInFolder(folderName);
+	std::this_thread::sleep_for(std::chrono::seconds(100000));
 
-	for (size_t i = 0; i < fileNames.size(); i++)
-	{
-		std::string fileName = fileNames[i];
-		std::string substr = fileName.substr(fileName.size() - 4, 4);
-		if (substr == ".wav" /*&& fileName == "D:\\IHearVoicesData\\Audio\\bad_audio\\device1_channel1_20181023090834.wav"*/)
-		{
-			ProcessFileName(fileName);
-		}
-	}
+	ioService.stop();
+	serverThreadPool.join_all();
 
 	return 0;
 }
