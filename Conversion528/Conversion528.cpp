@@ -60,17 +60,14 @@ std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 
 void streamFile(const std::string& fileName)
 {
-	std::function<void()> func{ [fileName]() { streamer.streamFile(fileName); } };
+	auto promise = std::make_shared<std::promise<void>>();
 
-	auto task = std::make_shared<std::packaged_task<void()>>(func);
-	//auto fut = task->get_future();
-
-	ioService.post([task]()
+	ioService.post([fileName, promise]()
 	{
-		(*task)();
+		streamer.streamFile(fileName, promise);
 	});
 
-	//fut.wait();
+	promise->get_future().wait();
 }
 
 void StreamFile()

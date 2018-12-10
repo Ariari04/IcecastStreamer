@@ -26,70 +26,63 @@ IcecastStreamer::IcecastStreamer(boost::asio::io_service& ioService, std::string
 }
 
 
-void IcecastStreamer::streamFile(const std::string& fileName)
+void IcecastStreamer::streamFile(const std::string& fileName, std::shared_ptr<std::promise<void>> promise)
 {
 	boost::asio::ip::tcp::resolver resolver(io_service);
-
 	boost::asio::ip::tcp::resolver::query query(addres, port);
-	boost::asio::ip::tcp::resolver::iterator iter;
+	
+	boost::system::error_code errcode;
+	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query, errcode);
 
-	try
-	{
-		iter = resolver.resolve(query);
-	}
-	catch (std::exception& e)
+	if (errcode)
 	{
 		std::cout << "IcecastStreamer::postUploadFileHttp: couldn't resolve addres, retry..." << std::endl;
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		io_service.post([fileName, this]() { streamFile(fileName); });
+		io_service.post([fileName, promise, this]() { streamFile(fileName, promise); });
 		return;
 	}
 
-	auto ep = std::make_shared<boost::asio::ip::tcp::endpoint>(*iter);
-
-	io_service.post([ep, fileName, this]()
+	io_service.post([endpoint, fileName, promise, this]()
 	{
-		streamFile(ep, fileName);
+		streamFile(endpoint, fileName, promise);
 	});
 }
-
-void IcecastStreamer::streamFile(std::shared_ptr<boost::asio::ip::tcp::endpoint> ep, const std::string& fileName)
-{
-	std::shared_ptr<boost::asio::ip::tcp::socket> httpSocket = std::make_shared<boost::asio::ip::tcp::socket>(io_service);
-
-	try
-	{
-		httpSocket->connect(*ep);
-	}
-	catch (std::exception& e)
-	{
-		std::cout << "IcecastStreamer::streamFile: couldn't connect to the server, retry..." << std::endl;
-		httpSocket->lowest_layer().close();
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-		io_service.post([ep, fileName, this]() { streamFile(ep, fileName); });
-		return;
-	}
-
-	if (!streamFile(httpSocket, fileName))
-	{
-		httpSocket->lowest_layer().close();
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-		io_service.post([ep, fileName, this]() { streamFile(ep, fileName); });
-	}
-};
 
 template<typename T>
 bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading);
 
-bool IcecastStreamer::streamFile(std::shared_ptr<boost::asio::ip::tcp::socket> httpSocket, const std::string& fileName)
+void IcecastStreamer::streamFile(boost::asio::ip::tcp::endpoint endpoint, const std::string& fileName, std::shared_ptr<std::promise<void>> promise)
 {
+	std::shared_ptr<boost::asio::ip::tcp::socket> httpSocket = std::make_shared<boost::asio::ip::tcp::socket>(io_service);
+
+	boost::system::error_code errcode;
+	httpSocket->connect(endpoint, errcode);
+	
+	if (errcode)
+	{
+		std::cout << "IcecastStreamer::streamFile: couldn't connect to the server, retry..." << std::endl;
+		httpSocket->lowest_layer().close();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		io_service.post([endpoint, fileName, promise, this]() { streamFile(endpoint, fileName, promise); });
+		return;
+	}
+
 	Uploading uploading;
 	uploading.addres = addres;
 	uploading.port = port;
 	uploading.fileName = fileName;
 
-	return streamFileInner(httpSocket, uploading);
-}
+	if (!streamFileInner(httpSocket, uploading))
+	{
+		httpSocket->lowest_layer().close();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		io_service.post([endpoint, fileName, promise, this]() { streamFile(endpoint, fileName, promise); });
+	}
+	else
+	{
+		promise->set_value();
+	}
+};
 
 template<typename T>
 bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
@@ -100,6 +93,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	std::ostream request_stream(&request);
 
 	boost::asio::streambuf response;
+	std::istream response_stream(&response);
 
 	{
 		request_stream << "PUT /test HTTP/1.1" << NEWLINE;
@@ -120,12 +114,14 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		{
 			socket->send(buffer(request.data(), request.size()));
 
-			read_until(*socket, response, "\r\n");
+			int byteCount = boost::asio::read_until(*socket, response, '\r') - 1;
 
-			std::string strResponse(boost::asio::buffer_cast<const char*>(response.data()), response.size());
-			std::cout << strResponse << std::endl;
+			std::string responseCode(byteCount, ' ');
+			response_stream.read(&responseCode[0], byteCount);
 
-			if (strResponse.find("100 Continue") == std::string::npos)
+			std::cout << "Icecast Server Response: " << responseCode << std::endl;
+
+			if (responseCode.find("100 Continue") == std::string::npos)
 			{
 				return false;
 			}
@@ -148,7 +144,11 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		return false;
 	}
 
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	for (int i = 0; i < 5; ++i)
+	{
+		std::cout << "IcecastStreamer: start stream in " << 5 - i << " seconds" << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
 
 	while (!reader.MusicFeof())
 	{
@@ -158,6 +158,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		try
 		{
 			socket->send(asioBuffer);
+			std::cout << "IcecastStreamer: streaming..." << std::endl;
 		}
 		catch (std::exception &e)
 		{
@@ -168,7 +169,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
-	std::cout << "IcecastStreamer: uploaded" << std::endl;
+	std::cout << "IcecastStreamer: stream is finished" << std::endl;
 
 	return true;
 }

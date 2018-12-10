@@ -37,13 +37,10 @@ public:
 
 	IcecastStreamer(boost::asio::io_service& ioService, std::string addres, std::string port);
 
-	void streamFile(const std::string& fileName);
+	void streamFile(const std::string& fileName, std::shared_ptr<std::promise<void>> promise);
+	void streamFile(boost::asio::ip::tcp::endpoint endpoint, const std::string& fileName, std::shared_ptr<std::promise<void>> promise);
+
 	void saveWaveSound(const std::string& binarySoundFile, const std::string& waveFile);
-
-private:
-
-	void streamFile(std::shared_ptr<boost::asio::ip::tcp::endpoint> ep, const std::string& fileName);
-	bool streamFile(std::shared_ptr<boost::asio::ip::tcp::socket> httpSocket, const std::string& fileName);
 };
 
 #endif
