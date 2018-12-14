@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <string>
 #include "EncoderAdapter.h"
-#include "3rd/blade/BladeMP3Enc.h"
+#include <BladeMP3Enc.h>
 
 namespace Encoding
 {

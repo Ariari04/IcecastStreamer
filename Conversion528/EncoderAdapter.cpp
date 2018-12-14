@@ -5,6 +5,7 @@
 #include <memory>
 #include <cassert>
 #include <cstring>
+#include <algorithm>
 
 namespace Encoding
 {
@@ -27,7 +28,7 @@ EncoderConsumerBase* EncoderConsumerBase::create(const char* fileName, const Enc
 
     std::string strExt = PathOperations::GetExtension(fileName);
 
-    if (strcasecmp(strExt.c_str(), "mp3") == 0)
+    if (stricmp(strExt.c_str(), "mp3") == 0)
     {
 		consumer.reset(new Mp3EncoderConsumer);
     }

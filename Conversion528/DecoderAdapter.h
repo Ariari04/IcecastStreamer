@@ -22,7 +22,8 @@ public:
     static DecoderProducerBase* create(const char* fileName, IProgressManager* progress);
 
 protected:
-    virtual void open(const char* fileName) = 0;
+	virtual void open(const char* fileName) = 0;
+	virtual void open(const wchar_t* fileName) = 0;
 };
 
 /*

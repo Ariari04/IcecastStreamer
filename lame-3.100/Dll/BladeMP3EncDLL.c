@@ -1020,7 +1020,7 @@ static void dump_config( lame_global_flags* gfp )
 
 static void DispErr(char const* strErr)
 {
-    MessageBoxA(NULL,strErr,"LAME_ENC.DLL",MB_OK|MB_ICONHAND);
+    //MessageBoxA(NULL,strErr,"LAME_ENC.DLL",MB_OK|MB_ICONHAND);
 }
 
 #ifdef	__cplusplus

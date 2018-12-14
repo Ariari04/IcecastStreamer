@@ -6,6 +6,8 @@
 #include "IntegerTypes.h"
 #include "KString.h"
 
+#include <AudioFile.h>
+
 namespace WaveFileChunks
 {
 
@@ -98,7 +100,7 @@ namespace WaveFile
 		WFRE_last
 	};
 
-class WaveFileReader
+class WaveFileReader : public AudioFileReader
 {
 public:
 	WaveFileReader();
@@ -107,10 +109,10 @@ public:
 #endif
 	WaveFileReader(const char* strFileName);
 	const WaveFileChunks::WaveFileHeader& getWaveFileHeader() const;
-#ifdef WIN32
-    bool open(const wchar_t* strFileName);
-#endif
-	bool open(const char* strFileName);
+
+	bool open(const wchar_t* strFileName) override;
+	bool open(const char* strFileName) override;
+
 	bool close();
 	bool isOpened() const;
 
@@ -129,7 +131,7 @@ private:
 	WaveFileReaderError m_nLastError;
 };
 
-class WaveFileWriter
+class WaveFileWriter : public AudioFileWriter
 {
 public:
 	WaveFileWriter();

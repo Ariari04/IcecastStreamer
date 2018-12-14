@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DecoderAdapter.h"
-#include "3rd/faad/faadecoder.h"
+#include <extra/faadecoder.h>
 #include <vector>
 #include "Progress.h"
 
@@ -18,7 +18,9 @@ public:
 
 protected:
     virtual bool readSamples(std::vector<byte>& samples);
-    virtual void open(const char* fileName);
+
+    void open(const char* fileName) override;
+	void open(const wchar_t* fileName) override;
 
 private:
 	void*           m_hFile;

@@ -20,7 +20,8 @@ public:
 
 protected:
     virtual bool readSamples(std::vector<byte>& samples);
-    virtual void open(const char* fileName);
+	void open(const char* fileName) override;
+	void open(const wchar_t* fileName) override;
 
     void readFileInfo(const char* fileName);
 

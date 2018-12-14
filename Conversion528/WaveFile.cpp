@@ -279,8 +279,7 @@ bool WaveFile::WaveFileReader::openImpl()
 	size_t nBytesToRead = 0;
 	int nBytesToSeek = 0;
 
-	nBytesRead = fread(&(m_cHeader.m_cIFFHeader), 1, \
-		sizeof(m_cHeader.m_cIFFHeader), m_hFile);
+	nBytesRead = fread(&(m_cHeader.m_cIFFHeader), 1, sizeof(m_cHeader.m_cIFFHeader), m_hFile);
 
 	if(sizeof(m_cHeader.m_cIFFHeader) != nBytesRead)
 	{

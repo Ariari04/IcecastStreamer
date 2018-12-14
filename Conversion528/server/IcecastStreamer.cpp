@@ -1,7 +1,9 @@
 #include "IcecastStreamer.h"
 
 #include <boost/asio.hpp>
+#include <boost/filesystem.hpp>
 #include <WaveFile.h>
+#include <MP3File.h>
 
 const long long MAX_UPLOADED_FILE_SIZE = 1024 * 1024 * 400;
 
@@ -136,9 +138,23 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	const int BUFFER_SIZE = 102400;
 	char dataBuffer[BUFFER_SIZE];
 
-	WaveFile::WaveFileReader reader;
+	auto ext = boost::filesystem::extension(uploading.fileName);
 
-	if (!reader.open(uploading.fileName.c_str()))
+	std::shared_ptr<AudioFileReader> reader;
+
+	IcecastStreamer::AudioFormat format = IcecastStreamer::AudioFormat::Invalid;
+	if (ext == ".wav")
+	{
+		format = IcecastStreamer::AudioFormat::WAV;
+		reader = std::make_shared< WaveFile::WaveFileReader>();
+	}
+	else if (ext == ".mp3")
+	{
+		format = IcecastStreamer::AudioFormat::MP3;
+		reader = std::make_shared<MP3File::MP3FileReader>();
+	}
+
+	if (!reader->open(uploading.fileName.c_str()))
 	{
 		std::cout << "IcecastStreamer: couldn't open the file to be streamed";
 		return false;
@@ -150,9 +166,9 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
-	while (!reader.MusicFeof())
+	while (!reader->MusicFeof())
 	{
-		int byteCount = reader.MusicFread(dataBuffer, 1, BUFFER_SIZE);
+		int byteCount = reader->MusicFread(dataBuffer, 1, BUFFER_SIZE);
 		auto asioBuffer = boost::asio::buffer(dataBuffer, byteCount);
 
 		try

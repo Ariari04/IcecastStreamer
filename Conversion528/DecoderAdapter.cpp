@@ -2,6 +2,7 @@
 #include <cstring>
 #include <vector>
 #include <memory>
+#include <algorithm>
 #include "Mp3Decoder.h"
 #include "AacDecoder.h"
 #include "ConvException.h"
@@ -17,11 +18,11 @@ DecoderProducerBase* DecoderProducerBase::create(const char* fileName, IProgress
 
     std::auto_ptr<DecoderProducerBase> decoder;
 
-    if (strcasecmp(strExt.c_str(), "mp3") == 0)
+    if (stricmp (strExt.c_str(), "mp3") == 0)
         decoder.reset( new Mp3DecoderProducer(progress) );
-    else if (strcasecmp(strExt.c_str(), "aac") == 0||
-			 strcasecmp(strExt.c_str(), "m4a") == 0 ||
-			 strcasecmp(strExt.c_str(), "mp4") == 0)
+    else if (stricmp (strExt.c_str(), "aac") == 0||
+			 stricmp (strExt.c_str(), "m4a") == 0 ||
+			 stricmp (strExt.c_str(), "mp4") == 0)
         decoder.reset( new AacDecoderProducer(progress) );
 	else
 		throw ConvException(ConvException::FileFormatNotSupported, fileName);

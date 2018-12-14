@@ -30,6 +30,13 @@ struct Uploading
 class IcecastStreamer
 {
 public:
+	enum class AudioFormat
+	{
+		Invalid,
+		WAV,
+		MP3
+	};
+
 	std::string addres;
 	std::string port;
 

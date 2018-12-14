@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
-    </Filter>
     <Filter Include="Source Files\audacity">
       <UniqueIdentifier>{a5c61bca-9889-46aa-aaa5-9b15cba4c903}</UniqueIdentifier>
     </Filter>
@@ -21,6 +17,12 @@
     </Filter>
     <Filter Include="Server">
       <UniqueIdentifier>{0d882948-1e90-4cc3-8969-c26df0744029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="blade">
+      <UniqueIdentifier>{732fd927-25ad-4f9c-a394-87a34cf22a96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="faad">
+      <UniqueIdentifier>{a19ca88b-8baf-4abb-a7ae-d42fecaf58d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +58,36 @@
     </ClCompile>
     <ClCompile Include="server\IcecastStreamer.cpp">
       <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mp3Decoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mp3Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DecoderAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EncoderAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AacDecoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\blade\BladeMP3Enc.c">
+      <Filter>blade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\faad2-vs\extra\main.c">
+      <Filter>faad</Filter>
+    </ClCompile>
+    <ClCompile Include="MP3File.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +126,36 @@
     </ClInclude>
     <ClInclude Include="server\IcecastStreamer.h">
       <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mp3Decoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mp3Encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DecoderAdapter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EncoderAdapter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AacDecoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\blade\BladeMP3Enc.h">
+      <Filter>blade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\faad2-vs\extra\faadecoder.h">
+      <Filter>faad</Filter>
+    </ClInclude>
+    <ClInclude Include="MP3File.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

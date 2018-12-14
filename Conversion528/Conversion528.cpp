@@ -74,12 +74,14 @@ void StreamFile()
 {
 	std::cout << "Choose a file:" << std::endl;
 	std::cout << "1) test/original.wav" << std::endl;
+	std::cout << "2) test/original.mp3" << std::endl;
 
 	char key = _getch();
 	_getch();
 	switch (key)
 	{
 	case '1': streamFile("test/original.wav"); break;
+	case '2': streamFile("test/original.mp3"); break;
 	}
 }
 

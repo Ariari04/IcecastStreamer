@@ -1,5 +1,5 @@
 #include "AacDecoder.h"
-#include "3rd/faad/faadecoder.h"
+#include <extra/faadecoder.h>
 #include <cstring>
 #include <stdexcept>
 
@@ -57,12 +57,30 @@ bool AacDecoderProducer::readSamples(std::vector<byte>& samples)
 
 void AacDecoderProducer::open(const char* fileName)
 {
-    m_hFile = FAADInit(fileName, m_fileInfo);
+#ifdef WIN32
+	std::exception("Not implemented");
+#else
+	m_hFile = FAADInit(reinterpret_cast<const FAADCHAR*>(fileName), m_fileInfo);
 
-    if (!m_hFile)
-    {
+	if (!m_hFile)
+	{
 		throw std::runtime_error("failed to open file");
-    }
+	}
+#endif
+}
+
+void AacDecoderProducer::open(const wchar_t* fileName)
+{
+#ifdef WIN32
+	m_hFile = FAADInit(reinterpret_cast<const FAADCHAR*>(fileName), m_fileInfo);
+
+	if (!m_hFile)
+	{
+		throw std::runtime_error("failed to open file");
+	}
+#else
+	std::exception("Not implemented");
+#endif
 }
 
 }

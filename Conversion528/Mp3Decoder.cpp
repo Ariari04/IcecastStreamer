@@ -7,7 +7,7 @@
 
 #define NOANALYSIS
 #include <mpg123.h>
-#include "3rd/mpglib/interface.h"
+#include <interface.h>
 
 #define SAMPLE_SIZE 4608
 #define PIECE_SIZE 100
@@ -102,6 +102,11 @@ void Mp3DecoderProducer::open(const char* fileName)
     readFileInfo(fileName);
 
     fseek(m_file, m_start, SEEK_SET);
+}
+
+void Mp3DecoderProducer::open(const wchar_t* fileName)
+{
+	std::exception("Not implemented");
 }
 
 void Mp3DecoderProducer::readFileInfo(const char* fileName)
