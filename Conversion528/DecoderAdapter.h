@@ -21,7 +21,6 @@ public:
 
     static DecoderProducerBase* create(const char* fileName, IProgressManager* progress);
 
-protected:
 	virtual void open(const char* fileName) = 0;
 	virtual void open(const wchar_t* fileName) = 0;
 };
@@ -47,8 +46,7 @@ public:
 
     virtual uint32	getSound(byte* pBuffer, uint32 nBufferSize);
 
-protected:
-    virtual bool readSamples(std::vector<byte>& samples) = 0;
+	virtual bool readSamples(std::vector<byte>& samples) = 0;
 
 private:
     std::vector<byte> m_intBuffer;

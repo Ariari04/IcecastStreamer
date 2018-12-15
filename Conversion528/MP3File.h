@@ -5,6 +5,7 @@
 //#include "IntegerTypes.h"
 //#include "KString.h"
 
+#include <Mp3Decoder.h>
 #include <AudioFile.h>
 
 namespace MP3File
@@ -13,6 +14,7 @@ namespace MP3File
 class MP3FileReader : public AudioFileReader
 {
 public:
+	Decoding::Mp3DecoderProducer decoder;
 
 	bool open(const wchar_t* strFileName) override;
 	bool open(const char* strFileName) override;

@@ -71,7 +71,10 @@ bool Mp3DecoderProducer::readSamples(std::vector<byte>& samples)
 
         m_bytesReaded += count;
 
-        m_progress->reportProgress(m_bytesReaded, m_streamSize);
+		if (m_progress)
+		{
+			m_progress->reportProgress(m_bytesReaded, m_streamSize);
+		}
 
         int nDone = 0;
         // try to decode the piece

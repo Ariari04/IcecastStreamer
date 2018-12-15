@@ -1,25 +1,32 @@
 #define _CRT_SECURE_NO_DEPRECATE
 
+#include <fstream>
 #include <MP3File.h>
 
 //#include <stdio.h>
 //#include <string.h>
 //#include <cassert>
 
-#ifdef WIN32
 bool MP3File::MP3FileReader::open(const wchar_t* strFileName)
 {
-	return false;
+	decoder.open(strFileName);
+	return true;
 }
-#endif
 
 bool MP3File::MP3FileReader::open(const char* strFileName)
 {
-	return false;
+	decoder.open(strFileName);
+	return true;
 }
 
 size_t MP3File::MP3FileReader::MusicFread(void* DstBuf, size_t ElementSize, size_t Count)
 {
+	std::vector<byte> buffer(255);
+	decoder.readSamples(buffer);
+	
+	std::ofstream ofs("out.txt");
+	ofs << buffer.data();
+
 	return 0;
 }
 
