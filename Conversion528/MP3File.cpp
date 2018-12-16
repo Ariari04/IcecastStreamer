@@ -7,6 +7,8 @@
 //#include <string.h>
 //#include <cassert>
 
+Decoding::Mp3DecoderProducer MP3File::decoder;
+
 bool MP3File::MP3FileReader::open(const wchar_t* strFileName)
 {
 	decoder.open(strFileName);
@@ -21,18 +23,15 @@ bool MP3File::MP3FileReader::open(const char* strFileName)
 
 size_t MP3File::MP3FileReader::MusicFread(void* DstBuf, size_t ElementSize, size_t Count)
 {
-	std::vector<byte> buffer(255);
+	std::vector<byte> buffer;
 	decoder.readSamples(buffer);
-	
-	std::ofstream ofs("out.txt");
-	ofs << buffer.data();
 
 	return 0;
 }
 
 int MP3File::MP3FileReader::MusicFeof()
 {
-	return 0;
+	return decoder.endOfFile;
 }
 
 

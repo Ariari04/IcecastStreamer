@@ -5,6 +5,9 @@
 #include "DecoderAdapter.h"
 #include "Progress.h"
 
+#include <Conversion.h>
+#include <lame.h>
+
 typedef struct mpstr_tag MPSTR;
 
 namespace Decoding
@@ -13,31 +16,18 @@ namespace Decoding
 class Mp3DecoderProducer : public BufferedProducerBase
 {
 public:
-	Mp3DecoderProducer() = default;
-    Mp3DecoderProducer(IProgressManager* progress);
-	~Mp3DecoderProducer();
+	lame_t gf;
+	bool endOfFile;
 
-	virtual Conversion::SoundFormatInfo getSoundFormatInfo() const;
+	Mp3DecoderProducer();
+	~Mp3DecoderProducer();
 
 	void open(const char* fileName) override;
 	void open(const wchar_t* fileName) override;
 
-	virtual bool readSamples(std::vector<byte>& samples);
+	bool readSamples(std::vector<byte>& samples) override;
 
-	void readFileInfo(const char* fileName);
-
-private:
-    bool    m_stereo;
-    int     m_frequency;
-    int 	m_start;
-
-    size_t 	m_streamSize;
-    size_t  m_bytesReaded;
-
-    FILE*   m_file;
-	MPSTR*  m_mp;
-	std::vector<byte> m_remaining;
-	IProgressManager* m_progress;
+	Conversion::SoundFormatInfo getSoundFormatInfo() const override;
 };
 
 }

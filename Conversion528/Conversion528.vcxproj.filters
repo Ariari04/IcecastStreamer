@@ -24,6 +24,9 @@
     <Filter Include="faad">
       <UniqueIdentifier>{a19ca88b-8baf-4abb-a7ae-d42fecaf58d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lame">
+      <UniqueIdentifier>{6a5933a8-19aa-4d84-a9c8-ce3a8a8179b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleHelpers.cpp">
@@ -88,6 +91,21 @@
     </ClCompile>
     <ClCompile Include="MP3File.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lame_interface\lame_interface.c">
+      <Filter>lame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lame-3.100\frontend\get_audio.c">
+      <Filter>lame</Filter>
+    </ClCompile>
+    <ClCompile Include="lame_interface\imported.c">
+      <Filter>lame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lame-3.100\frontend\console.c">
+      <Filter>lame</Filter>
+    </ClCompile>
+    <ClCompile Include="lame_interface\parse_imported.c">
+      <Filter>lame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +174,21 @@
     </ClInclude>
     <ClInclude Include="MP3File.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lame_interface\lame_interface.h">
+      <Filter>lame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lame-3.100\frontend\get_audio.h">
+      <Filter>lame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lame-3.100\frontend\console.h">
+      <Filter>lame</Filter>
+    </ClInclude>
+    <ClInclude Include="lame_interface\parse_imported.h">
+      <Filter>lame</Filter>
+    </ClInclude>
+    <ClInclude Include="lame_interface\imported.h">
+      <Filter>lame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

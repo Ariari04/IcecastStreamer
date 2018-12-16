@@ -85,14 +85,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;;_WIN32_WINNT=0x0601;_DEBUG;_CONSOLE;ID3LIB_LINKOPTION=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_DEBUG;_CONSOLE;ID3LIB_LINKOPTION=1;_WINDOWS;HAVE_MPGLIB;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>.;../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include;../id3lib-3.8.3/include;../lame-3.100/include;../lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/mp4ff;../blade</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include;../id3lib-3.8.3/include;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;lame_interface;../faad2-vs;../faad2-vs/include;../faad2-vs/common/mp4ff;../blade</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencv_core341d.lib;opencv_imgproc341d.lib;opencv_imgcodecs341d.lib;id3lib.lib;libmp3lame-static.lib;libmpghip-static.lib;libfaad2d.lib;mp4ff.lib</AdditionalDependencies>
@@ -173,6 +174,8 @@
   <ItemGroup>
     <ClCompile Include="..\blade\BladeMP3Enc.c" />
     <ClCompile Include="..\faad2-vs\extra\main.c" />
+    <ClCompile Include="..\lame-3.100\frontend\console.c" />
+    <ClCompile Include="..\lame-3.100\frontend\get_audio.c" />
     <ClCompile Include="AacDecoder.cpp" />
     <ClCompile Include="AudioFile.cpp" />
     <ClCompile Include="ConsoleHelpers.cpp" />
@@ -185,6 +188,9 @@
     <ClCompile Include="ExperimentalConverter.cpp" />
     <ClCompile Include="FlatConverter.cpp" />
     <ClCompile Include="KString.cpp" />
+    <ClCompile Include="lame_interface\imported.c" />
+    <ClCompile Include="lame_interface\lame_interface.c" />
+    <ClCompile Include="lame_interface\parse_imported.c" />
     <ClCompile Include="Mp3Decoder.cpp" />
     <ClCompile Include="Mp3Encoder.cpp" />
     <ClCompile Include="MP3File.cpp" />
@@ -196,6 +202,8 @@
   <ItemGroup>
     <ClInclude Include="..\blade\BladeMP3Enc.h" />
     <ClInclude Include="..\faad2-vs\extra\faadecoder.h" />
+    <ClInclude Include="..\lame-3.100\frontend\console.h" />
+    <ClInclude Include="..\lame-3.100\frontend\get_audio.h" />
     <ClInclude Include="AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
     <ClInclude Include="ConsoleHelpers.h" />
@@ -208,6 +216,9 @@
     <ClInclude Include="FlatConverter.h" />
     <ClInclude Include="IntegerTypes.h" />
     <ClInclude Include="KString.h" />
+    <ClInclude Include="lame_interface\imported.h" />
+    <ClInclude Include="lame_interface\lame_interface.h" />
+    <ClInclude Include="lame_interface\parse_imported.h" />
     <ClInclude Include="Mp3Decoder.h" />
     <ClInclude Include="Mp3Encoder.h" />
     <ClInclude Include="MP3File.h" />
