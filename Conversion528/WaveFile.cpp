@@ -480,11 +480,11 @@ const WaveFileChunks::WaveFileHeader& WaveFile::WaveFileReader::getWaveFileHeade
 }
 
 
-size_t WaveFile::WaveFileReader::MusicFread(void* DstBuf, size_t ElementSize, size_t Count)
+int WaveFile::WaveFileReader::read(void* DstBuf, size_t ElementSize, size_t Count, FILE* outFile)
 {
 	return fread(DstBuf, ElementSize, Count, m_hFile);
 }
-int    WaveFile::WaveFileReader::MusicFeof()
+int WaveFile::WaveFileReader::isEof()
 {
 	return feof(m_hFile);
 }
@@ -618,9 +618,9 @@ WaveFile::WaveFileWriter::~WaveFileWriter()
 	}
 }
 
-size_t WaveFile::WaveFileWriter::MusicFwrite(const void* SrcBuf, size_t ElementSize, size_t Count)
+int WaveFile::WaveFileWriter::write(const void* SrcBuf, size_t ElementSize, size_t Count, FILE* outFile)
 {
-	return fwrite(SrcBuf, ElementSize, Count, m_hFile);
+	return fwrite(SrcBuf, ElementSize, Count, outFile);
 }
 
 #undef _CRT_SECURE_NO_DEPRECATE

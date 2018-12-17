@@ -15,7 +15,7 @@ Conversion::SoundFormatInfo WaveFile::WaveProducer::getSoundFormatInfo() const
 
 uint32	WaveFile::WaveProducer::getSound(byte* pBuffer, uint32 nBufferSize)
 {
-	return uint32(m_cReader.MusicFread(pBuffer, 1, nBufferSize));
+	return 0;// uint32(m_cReader.MusicFread(pBuffer, 1, nBufferSize));
 }
 
 WaveFile::WaveConsumer::WaveConsumer(WaveFile::WaveFileWriter& writer)
@@ -49,7 +49,7 @@ bool WaveFile::WaveConsumer::setSoundFormatInfo(const Conversion::SoundFormatInf
 uint32 WaveFile::WaveConsumer::putSound(const byte* pBuffer, uint32 nBufferSize)
 {
     m_soundSize += nBufferSize;
-	return (uint32)m_cWriter.MusicFwrite(pBuffer, 1, nBufferSize);
+	return 0;// (uint32)m_cWriter.MusicFwrite(pBuffer, 1, nBufferSize);
 }
 
 bool WaveFile::WaveConsumer::writeHeader()

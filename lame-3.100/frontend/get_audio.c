@@ -635,20 +635,17 @@ init_infile(lame_t gfp, char const *inPath)
     return (global.snd_file != NULL || global.music_in != NULL) ? 1 : -1;
 }
 
-int
-samples_to_skip_at_start(void)
+int samples_to_skip_at_start(void)
 {
     return global.pcm32.skip_start;
 }
 
-int
-samples_to_skip_at_end(void)
+int samples_to_skip_at_end(void)
 {
     return global.pcm32.skip_end;
 }
 
-void
-close_infile(void)
+void close_infile(void)
 {
 #if defined(HAVE_MPGLIB)
     if (global.hip != 0) {
@@ -675,6 +672,10 @@ close_infile(void)
     global.in_id3v2_size = 0;
 }
 
+void close_outfile(FILE* outFile)
+{
+	fclose(outFile);
+}
 
 static int
         get_audio_common(lame_t gfp, int buffer[2][1152], short buffer16[2][1152]);

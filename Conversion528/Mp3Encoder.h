@@ -1,34 +1,26 @@
 #pragma once
 
-#include <cstdio>
-#include <string>
-#include "EncoderAdapter.h"
-#include <BladeMP3Enc.h>
+#include <AudioFile.h>
+
+#include <lame.h>
 
 namespace Encoding
 {
 
-class Mp3EncoderConsumer : public EncoderConsumerBase
-{
-public:
-    Mp3EncoderConsumer();
-    ~Mp3EncoderConsumer();
+	class Mp3Encoder : public AudioFileWriter // public EncoderConsumerBase
+	{
+	public:
+		lame_t gf;
+		bool writeHeader;
+		FILE* outFile;
 
-	virtual bool setSoundFormatInfo(const Conversion::SoundFormatInfo& sInfo);
-	virtual uint32 putSound(const byte* pBuffer, uint32 nBufferSize);
+		Mp3Encoder();
+		~Mp3Encoder();
 
-	static bool isAcceptableFormat(const Conversion::SoundFormatInfo& info);
+		bool open(const char* fileName) override;
+		bool open(const wchar_t* fileName) override;
 
-protected:
-    virtual void init(const char* fileName, const EncoderSettings& settings);
-
-private:
-    void finishEncoding();
-
-    std::string m_fileName;
-    FILE*       m_hFile;
-    HBE_STREAM  m_hbeStream;
-    BE_CONFIG   m_beConfig;
-};
+		int write(const void* SrcBuf, size_t ElementSize, size_t Count, FILE* outFile) override;
+	};
 
 }

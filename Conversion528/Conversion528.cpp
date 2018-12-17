@@ -94,7 +94,7 @@ void WrapFile()
 	_getch();
 	switch (key)
 	{
-	case '1': streamer.saveWaveSound("test/streamed.wav", "test/wrapped.wav"); break;
+	case '1': streamer.saveSound("test/streamed.wav", "test/wrapped.wav"); break;
 	}
 }
 

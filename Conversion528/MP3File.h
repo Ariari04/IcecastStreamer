@@ -10,32 +10,30 @@
 
 namespace MP3File
 {
-	extern Decoding::Mp3DecoderProducer decoder;
+	//class MP3FileReader : public AudioFileReader
+	//{
+	//public:
+	//	bool open(const wchar_t* strFileName) override;
+	//	bool open(const char* strFileName) override;
 
-	class MP3FileReader : public AudioFileReader
-	{
-	public:
-		bool open(const wchar_t* strFileName) override;
-		bool open(const char* strFileName) override;
+	//	bool close();
+	//	bool isOpened() const;
 
-		bool close();
-		bool isOpened() const;
+	//	size_t MusicFread(void* DstBuf, size_t ElementSize, size_t Count) override;
+	//	int MusicFeof() override;
+	//};
 
-		size_t MusicFread(void* DstBuf, size_t ElementSize, size_t Count) override;
-		int MusicFeof() override;
-	};
+	//class MP3FileWriter : public AudioFileWriter
+	//{
+	//public:
+	//	bool open(const wchar_t* strFileName);
+	//	bool open(const char* strFileName);
 
-	class MP3FileWriter : public AudioFileWriter
-	{
-	public:
-		bool open(const wchar_t* strFileName);
-		bool open(const char* strFileName);
+	//	bool close();
+	//	bool isOpened() const;
 
-		bool close();
-		bool isOpened() const;
-
-		bool writeHeader() override;
-		size_t MusicFwrite(const void* SrcBuf, size_t ElementSize, size_t Count) override;
-	};
+	//	bool writeHeader() override;
+	//	size_t MusicFwrite(const void* SrcBuf, size_t ElementSize, size_t Count) override;
+	//};
 
 }

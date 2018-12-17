@@ -18,8 +18,8 @@ DecoderProducerBase* DecoderProducerBase::create(const char* fileName, IProgress
 
     std::auto_ptr<DecoderProducerBase> decoder;
 
-    if (stricmp (strExt.c_str(), "mp3") == 0)
-        decoder.reset( new Mp3DecoderProducer() );
+	if (stricmp(strExt.c_str(), "mp3") == 0)
+		;// decoder.reset(new Mp3DecoderProducer());
     else if (stricmp (strExt.c_str(), "aac") == 0||
 			 stricmp (strExt.c_str(), "m4a") == 0 ||
 			 stricmp (strExt.c_str(), "mp4") == 0)

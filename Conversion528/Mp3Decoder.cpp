@@ -1,48 +1,53 @@
 #include "Mp3Decoder.h"
 
-#include <lame.h>
 #include <lame_interface/parse_imported.h>
 #include <lame_interface/lame_interface.h>
 
 namespace Decoding
 {
-	Mp3DecoderProducer::Mp3DecoderProducer()
+	Mp3Decoder::Mp3Decoder()
 	{
 		gf = lame_init(); /* initialize libmp3lame */
 	}
 
-	Mp3DecoderProducer::~Mp3DecoderProducer()
+	Mp3Decoder::~Mp3Decoder()
 	{
 		lame_decoding_close();
 		lame_close(gf);
 	}
 
-	void Mp3DecoderProducer::open(const char* fileName)
+	bool Mp3Decoder::open(const char* fileName)
 	{
 		lame_decoding_close();
 
 		endOfFile = false;
 
 		const int MAX_NOGAP = 1;
-		const int PATH_MAX = 1023;
-		int argc = 3;
-		const char* argv[3]{ "", "-V2", fileName };
+		int argc = 4;
+		const char* argv[4]{ "", "-V2", "", fileName };
 		char inPath[PATH_MAX + 1];
 		char outPath[PATH_MAX + 1];
 		//char *nogap_inPath[MAX_NOGAP];
 		int max_nogap = 0;
 
-		int ret = parse_args(gf, argc, const_cast<char**>(argv), inPath, outPath, nullptr, &max_nogap);
+		if (parse_args(gf, argc, const_cast<char**>(argv), inPath, outPath, nullptr, &max_nogap))
+		{
+			return false;
+		}
 
 		lame_decoding_open(gf, const_cast<char*>(fileName));
+
+		return true;
 	}
 
-	void Mp3DecoderProducer::open(const wchar_t* fileName)
+	bool Mp3Decoder::open(const wchar_t* fileName)
 	{
 		std::exception("Not implemented");
+
+		return false;
 	}
 
-	bool Mp3DecoderProducer::readSamples(std::vector<byte>& samples)
+	int Mp3Decoder::read(void* DstBuf, size_t ElementSize, size_t Count, FILE* outFile)
 	{
 		int Buffer[2][1152];
 		int iread = lame_decoding_read(gf, Buffer);
@@ -51,18 +56,23 @@ namespace Decoding
 		{
 			lame_decoding_close();
 			endOfFile = true;
-			return false;
+			return -1;
 		}
 
-		return true;
+		return iread;
 	}
 
-	Conversion::SoundFormatInfo Mp3DecoderProducer::getSoundFormatInfo() const
+	int Mp3Decoder::isEof()
 	{
-		Conversion::SoundFormatInfo info;
-		//info.nSampleRate = m_frequency;
-		//info.nNumberOfChannels = m_stereo ? 2 : 1;
-		//info.nBitsPerSample = 16;
-		return info;
+		return endOfFile;
 	}
+
+	//Conversion::SoundFormatInfo Mp3Decoder::getSoundFormatInfo() const
+	//{
+	//	Conversion::SoundFormatInfo info;
+	//	//info.nSampleRate = m_frequency;
+	//	//info.nNumberOfChannels = m_stereo ? 2 : 1;
+	//	//info.nBitsPerSample = 16;
+	//	return info;
+	//}
 }

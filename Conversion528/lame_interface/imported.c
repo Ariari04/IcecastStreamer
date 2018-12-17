@@ -1,5 +1,6 @@
 #include <imported.h>
 
+#include <assert.h>
 #include <stdio.h>
 #include <windows.h>
 
@@ -7,7 +8,8 @@
 # include <limits.h>
 #endif
 
-#include "lame.h"
+#include <lame.h>
+#include <parse_imported.h>
 
 #define _O_BINARY      0x8000  // file mode is binary (untranslated)
 
@@ -130,6 +132,63 @@ unsigned short* utf8ToUtf16(char const* mbstr) /* additional Byte-Order-Marker *
 		}
 	}
 	return wstr;
+}
+
+int write_xing_frame(lame_global_flags * gf, FILE * outf, size_t offset)
+{
+	unsigned char mp3buffer[LAME_MAXMP3BUFFER];
+	size_t  imp3, owrite;
+
+	imp3 = lame_get_lametag_frame(gf, mp3buffer, sizeof(mp3buffer));
+	if (imp3 <= 0) {
+		return 0;       /* nothing to do */
+	}
+	if (global_ui_config.silent <= 0) {
+		console_printf("Writing LAME Tag...");
+	}
+	if (imp3 > sizeof(mp3buffer)) {
+		error_printf
+		("Error writing LAME-tag frame: buffer too small: buffer size=%d  frame size=%d\n",
+			sizeof(mp3buffer), imp3);
+		return -1;
+	}
+	assert(offset <= LONG_MAX);
+	if (fseek(outf, (long)offset, SEEK_SET) != 0) {
+		error_printf("fatal error: can't update LAME-tag frame!\n");
+		return -1;
+	}
+	owrite = fwrite(mp3buffer, 1, imp3, outf);
+	if (owrite != imp3) {
+		error_printf("Error writing LAME-tag \n");
+		return -1;
+	}
+	if (global_ui_config.silent <= 0) {
+		console_printf("done\n");
+	}
+	assert(imp3 <= INT_MAX);
+	return (int)imp3;
+}
+
+int write_id3v1_tag(lame_t gf, FILE * outf)
+{
+	unsigned char mp3buffer[128];
+	size_t  imp3, owrite;
+
+	imp3 = lame_get_id3v1_tag(gf, mp3buffer, sizeof(mp3buffer));
+	if (imp3 <= 0) {
+		return 0;
+	}
+	if (imp3 > sizeof(mp3buffer)) {
+		error_printf("Error writing ID3v1 tag: buffer too small: buffer size=%d  ID3v1 size=%d\n",
+			sizeof(mp3buffer), imp3);
+		return 0;       /* not critical */
+	}
+	owrite = fwrite(mp3buffer, 1, imp3, outf);
+	if (owrite != imp3) {
+		error_printf("Error writing ID3v1 tag \n");
+		return 1;
+	}
+	return 0;
 }
 
 #if defined( _WIN32 ) && !defined(__MINGW32__)

@@ -3,7 +3,8 @@
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
 #include <WaveFile.h>
-#include <MP3File.h>
+#include <Mp3Decoder.h>
+#include <Mp3Encoder.h>
 
 const long long MAX_UPLOADED_FILE_SIZE = 1024 * 1024 * 400;
 
@@ -151,7 +152,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	else if (ext == ".mp3")
 	{
 		format = IcecastStreamer::AudioFormat::MP3;
-		reader = std::make_shared<MP3File::MP3FileReader>();
+		reader = std::make_shared<Decoding::Mp3Decoder>();
 	}
 
 	if (!reader->open(uploading.fileName.c_str()))
@@ -166,9 +167,9 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
-	while (!reader->MusicFeof())
+	while (!reader->isEof())
 	{
-		int byteCount = reader->MusicFread(dataBuffer, 1, BUFFER_SIZE);
+		int byteCount = reader->read(dataBuffer, 1, BUFFER_SIZE, NULL);
 		auto asioBuffer = boost::asio::buffer(dataBuffer, byteCount);
 
 		try
@@ -190,20 +191,35 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	return true;
 }
 
-void IcecastStreamer::saveWaveSound(const std::string& binarySoundFile, const std::string& waveFile)
+void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::string& savedFile)
 {
 	const int BUFFER_SIZE = 102400;
 	char binarySound[BUFFER_SIZE];
 
+	std::shared_ptr<AudioFileWriter> writer;
+
+	auto ext = boost::filesystem::extension(savedFile);
+	IcecastStreamer::AudioFormat format = IcecastStreamer::AudioFormat::Invalid;
+	if (ext == ".wav")
+	{
+		format = IcecastStreamer::AudioFormat::WAV;
+		writer = std::make_shared< WaveFile::WaveFileWriter>();
+	}
+	else if (ext == ".mp3")
+	{
+		format = IcecastStreamer::AudioFormat::MP3;
+		writer = std::make_shared<Encoding::Mp3Encoder>();
+	}
+
+	writer->open(savedFile.c_str());
+
 	std::ifstream ifs{ binarySoundFile, std::ios::binary };
-
-	WaveFile::WaveFileWriter writer(waveFile.c_str());
-	writer.writeHeader();
-
+	FILE *outFile = fopen(savedFile.c_str(), "wb");
 	while (!ifs.eof())
 	{
 		ifs.read(binarySound, BUFFER_SIZE);
 		int byteCount = ifs.gcount();
-		writer.MusicFwrite(binarySound, 1, byteCount);
+		writer->write(binarySound, 1, BUFFER_SIZE, outFile);
 	}
+	fclose(outFile);
 }

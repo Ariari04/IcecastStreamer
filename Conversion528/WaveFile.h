@@ -120,8 +120,8 @@ public:
 
 	virtual ~WaveFileReader();
 
-	size_t MusicFread(void* DstBuf, size_t ElementSize, size_t Count);
-	int    MusicFeof();
+	int read(void* DstBuf, size_t ElementSize, size_t Count, FILE* outFile);
+	int    isEof();
 
 private:
     bool openImpl();
@@ -148,7 +148,7 @@ public:
 	bool close();
 	bool isOpened() const;
 	bool writeHeader();
-	size_t MusicFwrite(const void* SrcBuf, size_t ElementSize, size_t Count);
+	int write(const void* SrcBuf, size_t ElementSize, size_t Count, FILE* outFile);
 	virtual ~WaveFileWriter();
 
 private:

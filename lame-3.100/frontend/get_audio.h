@@ -83,7 +83,7 @@ int     aw_write(AudioWriter aw, float buffer[2][1152], int n);
 extern size_t sizeOfOldTag(lame_t gf);
 extern unsigned char* getOldTag(lame_t gf);
 
-#ifdef _cplusplus
+#ifdef __cplusplus
 }
 #endif
 

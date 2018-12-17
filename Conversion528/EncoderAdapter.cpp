@@ -30,7 +30,7 @@ EncoderConsumerBase* EncoderConsumerBase::create(const char* fileName, const Enc
 
     if (stricmp(strExt.c_str(), "mp3") == 0)
     {
-		consumer.reset(new Mp3EncoderConsumer);
+		//consumer.reset(new Mp3EncoderConsumer);
     }
 	else
 	{

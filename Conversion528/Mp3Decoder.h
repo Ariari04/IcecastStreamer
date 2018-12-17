@@ -1,33 +1,33 @@
 #pragma once
 
+#include <lame.h>
+
 #include <cstdio>
 #include <vector>
-#include "DecoderAdapter.h"
+#include <AudioFile.h>
 #include "Progress.h"
 
 #include <Conversion.h>
-#include <lame.h>
 
 typedef struct mpstr_tag MPSTR;
 
 namespace Decoding
 {
 
-class Mp3DecoderProducer : public BufferedProducerBase
-{
-public:
-	lame_t gf;
-	bool endOfFile;
+	class Mp3Decoder : public AudioFileReader // public BufferedProducerBase
+	{
+	public:
+		lame_t gf;
+		bool endOfFile;
 
-	Mp3DecoderProducer();
-	~Mp3DecoderProducer();
+		Mp3Decoder();
+		~Mp3Decoder();
 
-	void open(const char* fileName) override;
-	void open(const wchar_t* fileName) override;
+		bool open(const char* fileName) override;
+		bool open(const wchar_t* fileName) override;
 
-	bool readSamples(std::vector<byte>& samples) override;
-
-	Conversion::SoundFormatInfo getSoundFormatInfo() const override;
-};
+		int read(void* DstBuf, size_t ElementSize, size_t Count, FILE* outFile) override;
+		int isEof() override;
+	};
 
 }

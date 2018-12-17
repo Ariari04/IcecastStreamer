@@ -54,7 +54,6 @@ char   *strchr(), *strrchr();
 #include "lame.h"
 
 #include "parse_imported.h"
-#include "main.h"
 #include "get_audio.h"
 #include "version.h"
 #include "console.h"
