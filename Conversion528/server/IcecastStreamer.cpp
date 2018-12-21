@@ -1,5 +1,8 @@
 #include "IcecastStreamer.h"
 
+#include <lame_interface/lame_interface.h>
+//#include <lame_interface/get_audio_imported.h>
+
 #include <conio.h>
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
@@ -61,7 +64,7 @@ void IcecastStreamer::streamFile(boost::asio::ip::tcp::endpoint endpoint, const 
 
 	boost::system::error_code errcode;
 	httpSocket->connect(endpoint, errcode);
-	
+
 	if (errcode)
 	{
 		std::cout << "IcecastStreamer::streamFile: couldn't connect to the server, retry..." << std::endl;
@@ -86,9 +89,7 @@ void IcecastStreamer::streamFile(boost::asio::ip::tcp::endpoint endpoint, const 
 	{
 		promise->set_value();
 	}
-};
-
-#include <lame_interface/lame_interface.h>
+}
 
 template<typename T>
 bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
@@ -171,11 +172,16 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 	char Buffer[2 * 1152 * 2];
 
-	std::ofstream ofs("test/original.wav");
+	//FILE* fff = fopen("test/original.wav", "w+b");
+	//std::ofstream ofs(, std::ios::binary);
 
 	int packet = 0;
 
-	while (!reader->isEof())
+
+	//if (0 == global_decoder.disable_wav_header)
+	//	WriteWaveHeader(fff, 0x7FFFFFFF, lame_get_in_samplerate(gf), lame_get_num_channels(gf), 16);
+
+	while (true/*!reader->isEof()*/)
 	{
 		int byteCount = reader->read(Buffer, NULL);
 
@@ -184,9 +190,10 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 			break;
 		}
 
-		auto asioBuffer = boost::asio::buffer(Buffer, 1152 * 2 * 2);
+		auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
 
-		ofs.write((char*)Buffer, byteCount);
+		//ofs.write((char*)Buffer, byteCount);
+		//fwrite(Buffer, 1, byteCount, fff);
 
 		try
 		{
@@ -203,6 +210,9 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	}
 
 	std::cout << "IcecastStreamer: stream is finished" << std::endl;
+
+	//fclose(fff);
+	//ofs.close();
 
 	return true;
 }

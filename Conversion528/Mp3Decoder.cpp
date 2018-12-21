@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#include <lame_interface/parse_imported.h>
+#include <lame_interface/imported.h>
 #include <lame_interface/lame_interface.h>
 
 namespace Decoding
@@ -14,9 +14,13 @@ namespace Decoding
 
 	Mp3Decoder::~Mp3Decoder()
 	{
-		fclose(oufFile);       /* close the output file */
-		oufFile = NULL;
-		lame_decoding_close();
+		if (oufFile)
+		{
+			fclose(oufFile);       /* close the output file */
+			oufFile = NULL;
+			lame_decoding_close();
+		}
+
 		lame_close(gf);
 	}
 
@@ -26,7 +30,13 @@ namespace Decoding
 
 		endOfFile = false;
 
-		return lame_decoding_open(gf, const_cast<char*>(fileName), &oufFile);
+		int argc = 5;
+		char* argv[5] = { "", "--decode", "-t", "test/original.mp3", "test/raw.wav" };
+		lame_main(gf, argc, argv, &oufFile);
+
+		return 0;
+
+		//return lame_decoding_open(gf, const_cast<char*>(fileName), &oufFile);
 	}
 
 	int Mp3Decoder::open(const wchar_t* fileName)
@@ -38,11 +48,14 @@ namespace Decoding
 
 	int Mp3Decoder::read(char Buffer[2 * 1152 * 2], FILE* outFile)
 	{
-		int iread = lame_decoding_read(gf, Buffer);
+		//int iread = lame_decoding_read(gf, Buffer);
+		int iread = lame_decoder_iter(gf, oufFile);
 
 		if (!iread)
 		{
 			lame_decoding_close();
+			fclose(oufFile);       /* close the output file */
+			oufFile = NULL;
 			endOfFile = true;
 			return -1;
 		}

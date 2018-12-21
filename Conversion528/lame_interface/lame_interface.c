@@ -8,7 +8,7 @@ int lame_decoding_open(lame_global_flags * gf, char *inputFile, FILE   **outf)
 {
 	int     i;
 	int argc = 4;
-	const char* argv[4] = { "", "--decode", "-t", inputFile };
+	const char* argv[4] = { "", "--decode", inputFile, "test/xxx.wav" };
 
 	char inPath[PATH_MAX + 1];
 	char outPath[PATH_MAX + 1];
@@ -125,6 +125,8 @@ FILE* lame_encoding_open(lame_global_flags * gf, char *outPath)
 	return outf;
 }
 
+int chn = 0;
+
 // Buffer is int Buffer[2][MP3_FRAME_BUFFER_SIZE]
 int lame_decoding_read(lame_global_flags * gf, char Buffer[2 * 1152 * 2])
 {
@@ -136,9 +138,11 @@ int lame_decoding_read(lame_global_flags * gf, char Buffer[2 * 1152 * 2])
 	//iread = get_audio16(gf, Buffer); /* read in 'iread' samples */
 	int iread = get_audio16(gf, tmp); /* read in 'iread' samples */
 
+	if (!chn ) chn = lame_get_num_channels(gf);
+
 	if (iread)
 	{
-		iread = put_audio16_imported(tmp, Buffer, iread, lame_get_num_channels(gf));
+		iread = put_audio16_imported(tmp, Buffer, iread, chn);
 	}
 
 	return iread;

@@ -1,11 +1,13 @@
 #pragma once
 
+#include <lame.h>
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-	char* lame_getenv(char const* var);
-	//FILE * init_files(lame_global_flags * gf, char const *inPath, char const *outPath);
+	int lame_main(lame_t gf, int argc, char **argv, FILE** outf);
+	int lame_decoder_iter(lame_t gfp, FILE * outf);
 
 #if defined(__cplusplus)
 }

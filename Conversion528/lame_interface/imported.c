@@ -301,3 +301,159 @@ void setProcessPriority(int Priority)
 	}
 }
 #endif
+
+
+int
+lame_decoder_iter(lame_t gfp, FILE * outf)
+{
+	short int Buffer[2][1152];
+	int     i, iread;
+	static double  wavsize = 0;
+	int     tmp_num_channels = lame_get_num_channels(gfp);
+
+	/* unknown size, so write maximum 32 bit signed value */
+
+	iread = get_audio16(gfp, Buffer); /* read in 'iread' samples */
+	if (iread >= 0) {
+		wavsize += iread;
+		put_audio16(outf, Buffer, iread, tmp_num_channels);
+	}
+
+	if (iread <= 0)
+	{
+		i = (16 / 8) * tmp_num_channels;
+		assert(i > 0);
+		if (wavsize <= 0) {
+			if (global_ui_config.silent < 10)
+				error_printf("WAVE file contains 0 PCM samples\n");
+			wavsize = 0;
+		}
+		else if (wavsize > 0xFFFFFFD0 / i) {
+			if (global_ui_config.silent < 10)
+				error_printf("Very huge WAVE file, can't set filesize accordingly\n");
+			wavsize = 0xFFFFFFD0;
+		}
+		else {
+			wavsize *= i;
+		}
+		/* if outf is seekable, rewind and adjust length */
+		if (!global_decoder.disable_wav_header && !fseek(outf, 0l, SEEK_SET))
+			WriteWaveHeader(outf, (int)wavsize, lame_get_in_samplerate(gfp), tmp_num_channels, 16);
+	}
+
+	return iread;
+}
+
+int
+lame_main(lame_t gf, int argc, char **argv, FILE** outf)
+{
+	char    inPath[PATH_MAX + 1];
+	char    outPath[PATH_MAX + 1];
+	char    nogapdir[PATH_MAX + 1];
+	/* support for "nogap" encoding of up to 200 .wav files */
+#define MAX_NOGAP 200
+	int     nogapout = 0;
+	int     max_nogap = MAX_NOGAP;
+	char    nogap_inPath_[MAX_NOGAP][PATH_MAX + 1];
+	char   *nogap_inPath[MAX_NOGAP];
+	char    nogap_outPath_[MAX_NOGAP][PATH_MAX + 1];
+	char   *nogap_outPath[MAX_NOGAP];
+
+	int     ret;
+	int     i;
+	*outf = NULL;
+
+	//lame_set_msgf(gf, &frontend_msgf);
+	//lame_set_errorf(gf, &frontend_errorf);
+	//lame_set_debugf(gf, &frontend_debugf);
+	if (argc <= 1) {
+		usage(stderr, argv[0]); /* no command-line args, print usage, exit  */
+		return 1;
+	}
+
+	memset(inPath, 0, sizeof(inPath));
+	memset(nogap_inPath_, 0, sizeof(nogap_inPath_));
+	for (i = 0; i < MAX_NOGAP; ++i) {
+		nogap_inPath[i] = &nogap_inPath_[i][0];
+	}
+	memset(nogap_outPath_, 0, sizeof(nogap_outPath_));
+	for (i = 0; i < MAX_NOGAP; ++i) {
+		nogap_outPath[i] = &nogap_outPath_[i][0];
+	}
+
+	/* parse the command line arguments, setting various flags in the
+	 * struct 'gf'.  If you want to parse your own arguments,
+	 * or call libmp3lame from a program which uses a GUI to set arguments,
+	 * skip this call and set the values of interest in the gf struct.
+	 * (see the file API and lame.h for documentation about these parameters)
+	 */
+	ret = parse_args(gf, argc, argv, inPath, outPath, nogap_inPath, &max_nogap);
+	if (ret < 0) {
+		return ret == -2 ? 0 : 1;
+	}
+	if (global_ui_config.update_interval < 0.)
+		global_ui_config.update_interval = 2.;
+
+	if (outPath[0] != '\0' && max_nogap > 0) {
+		strncpy(nogapdir, outPath, PATH_MAX + 1);
+		nogapdir[PATH_MAX] = '\0';
+		nogapout = 1;
+	}
+
+	/* initialize input file.  This also sets samplerate and as much
+	   other data on the input file as available in the headers */
+	if (max_nogap > 0) {
+		/* for nogap encoding of multiple input files, it is not possible to
+		 * specify the output file name, only an optional output directory. */
+		for (i = 0; i < max_nogap; ++i) {
+			char const* outdir = nogapout ? nogapdir : "";
+			if (generateOutPath(nogap_inPath[i], outdir, ".mp3", nogap_outPath[i]) != 0) {
+				error_printf("processing nogap file %d: %s\n", i + 1, nogap_inPath[i]);
+				return -1;
+			}
+		}
+		*outf = init_files(gf, nogap_inPath[0], nogap_outPath[0]);
+	}
+	else {
+		*outf = init_files(gf, inPath, outPath);
+	}
+	if (*outf == NULL) {
+		close_infile();
+		return -1;
+	}
+	/* turn off automatic writing of ID3 tag data into mp3 stream
+	 * we have to call it before 'lame_init_params', because that
+	 * function would spit out ID3v2 tag data.
+	 */
+	lame_set_write_id3tag_automatic(gf, 0);
+
+	/* Now that all the options are set, lame needs to analyze them and
+	 * set some more internal options and check for problems
+	 */
+	ret = lame_init_params(gf);
+	if (ret < 0) {
+		if (ret == -1) {
+			display_bitrates(stderr);
+		}
+		error_printf("fatal error during initialization\n");
+		fclose(*outf);
+		close_infile();
+		return ret;
+	}
+
+	if (global_ui_config.silent > 0) {
+		global_ui_config.brhist = 0; /* turn off VBR histogram */
+	}
+
+	int     tmp_num_channels = lame_get_num_channels(gf);
+
+	if (!(tmp_num_channels >= 1 && tmp_num_channels <= 2)) {
+		error_printf("Internal error.  Aborting.");
+		return -1;
+	}
+
+	if (0 == global_decoder.disable_wav_header)
+		WriteWaveHeader(*outf, 0x7FFFFFFF, lame_get_in_samplerate(gf), tmp_num_channels, 16);
+
+	return 0;
+}
