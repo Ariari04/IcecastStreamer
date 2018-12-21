@@ -241,15 +241,21 @@ void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::s
 
 	//FILE *outFile = fopen(savedFile.c_str(), "wb");
 	std::ifstream ifs{ binarySoundFile, std::ios::binary };
-	while (!ifs.eof())
+	do
 	{
 		ifs.read((char*)binarySound, 1152 * 2 * sizeof(int));
 		int byteCount = ifs.gcount();
 
-		if (byteCount == 1152 * 2 * sizeof(int))
+		int ret = writer->write(binarySound, 1, 1152 * 2, nullptr);
+		if (!ret)
 		{
-			writer->write(binarySound, 1, 1152 * 2, nullptr);
+			break;
 		}
+		//if (byteCount == 1152 * 2 * sizeof(int))
+		//{
+		//	writer->write(binarySound, 1, 1152 * 2, nullptr);
+		//}
 	}
+	while (true);
 	//fclose(outFile);
 }

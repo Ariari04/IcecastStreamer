@@ -13,6 +13,7 @@ namespace Encoding
 		lame_t gf;
 		bool writeHeader;
 		FILE* outFile;
+		size_t  id3v2_size;
 
 		Mp3Encoder();
 		~Mp3Encoder();

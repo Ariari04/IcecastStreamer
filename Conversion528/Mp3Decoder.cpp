@@ -9,6 +9,7 @@ namespace Decoding
 {
 	Mp3Decoder::Mp3Decoder()
 	{
+		oufFile = NULL;
 		gf = lame_init(); /* initialize libmp3lame */
 	}
 
@@ -32,7 +33,15 @@ namespace Decoding
 
 		int argc = 5;
 		char* argv[5] = { "", "--decode", "-t", "test/original.mp3", "test/raw.wav" };
-		lame_main(gf, argc, argv, &oufFile);
+		if (lame_main_2(gf, argc, argv, &oufFile))
+		{
+			return 1;
+		}
+
+		if (xxx_open_decode(gf, &oufFile))
+		{
+			return 1;
+		}
 
 		return 0;
 

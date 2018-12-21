@@ -2,6 +2,7 @@
 
 #include <exception>
 
+#include <lame_interface/imported.h>
 #include <lame_interface/parse_imported.h>
 #include <lame_interface/lame_interface.h>
 
@@ -10,36 +11,40 @@ namespace Encoding
 
 	Mp3Encoder::Mp3Encoder()
 	{
+		outFile = NULL;
 		writeHeader = true;
 		gf = lame_init(); /* initialize libmp3lame */
 	}
 
 	Mp3Encoder::~Mp3Encoder()
 	{
-		lame_encoding_close(outFile);
-		outFile = NULL;
+		if (outFile)
+		{
+			lame_encoding_close(outFile);
+			outFile = NULL;
+		}
 		lame_close(gf);
 	}
 
 	int Mp3Encoder::open(const char* fileName)
 	{
-		lame_encoding_close(outFile);
-		outFile = NULL;
-
-		const int MAX_NOGAP = 1;
-		int argc = 3;
-		const char* argv[3]{ "", "-V2", fileName };
-		char inPath[PATH_MAX + 1];
-		char outPath[PATH_MAX + 1];
-		//char *nogap_inPath[MAX_NOGAP];
-		int max_nogap = 0;
-
-		if(parse_args(gf, argc, const_cast<char**>(argv), inPath, outPath, nullptr, &max_nogap))
+		if (outFile)
 		{
-			return false;
+			lame_encoding_close(outFile);
+			outFile = NULL;
 		}
 
-		outFile = lame_encoding_open(gf, const_cast<char*>(fileName));
+		int argc = 4;
+		char* argv[4] = { "", "-r",  "test/raw.wav", "test/encoded.mp3" };
+		if (lame_main_2(gf, argc, argv, &outFile))
+		{
+			return 1;
+		}
+
+		if (xxx_open_encode(gf, &outFile, &id3v2_size))
+		{
+			return 1;
+		}
 
 		return true;
 	}
@@ -53,18 +58,17 @@ namespace Encoding
 
 	int Mp3Encoder::write(int Buffer[2][1152], size_t ElementSize, size_t Count, FILE* outFile)
 	{
-		int wroteBytes = lame_encoding_write(gf, Buffer, Count, this->outFile, writeHeader);
+		int iread = lame_encoder_iter(gf, this->outFile, id3v2_size);
 
-		writeHeader = false;
-
-		if (!wroteBytes)
+		if (iread < 1)
 		{
-			lame_encoding_close(this->outFile);
+			lame_decoding_close();
+			fclose(this->outFile);       /* close the output file */
 			this->outFile = NULL;
-			return -1;
+			return 0;
 		}
 
-		return wroteBytes;
+		return iread;
 	}
 
 	//bool Mp3Encoder::isAcceptableFormat(const Conversion::SoundFormatInfo& info)
