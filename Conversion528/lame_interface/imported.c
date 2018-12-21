@@ -17,6 +17,36 @@
 #define PATH_MAX 1024
 #endif
 
+FILE * init_files(lame_global_flags * gf, char const *inPath, char const *outPath)
+{
+	FILE   *outf;
+	/* Mostly it is not useful to use the same input and output name.
+	   This test is very easy and buggy and don't recognize different names
+	   assigning the same file
+	 */
+	if (0 != strcmp("-", outPath) && 0 == strcmp(inPath, outPath)) {
+		error_printf("Input file and Output file are the same. Abort.\n");
+		return NULL;
+	}
+
+	/* open the wav/aiff/raw pcm or mp3 input file.  This call will
+	 * open the file, try to parse the headers and
+	 * set gf.samplerate, gf.num_channels, gf.num_samples.
+	 * if you want to do your own file input, skip this call and set
+	 * samplerate, num_channels and num_samples yourself.
+	 */
+	if (init_infile(gf, inPath) < 0) {
+		error_printf("Can't init infile '%s'\n", inPath);
+		return NULL;
+	}
+	if ((outf = init_outfile(outPath, lame_get_decode_only(gf))) == NULL) {
+		error_printf("Can't init outfile '%s'\n", outPath);
+		return NULL;
+	}
+
+	return outf;
+}
+
 int lame_set_stream_binary_mode(FILE * const fp)
 {
 #if   defined __EMX__
@@ -209,18 +239,19 @@ char* lame_getenv(char const* var)
 
 FILE* lame_fopen(char const* file, char const* mode)
 {
-	FILE* fh = 0;
-	wchar_t* wfile = utf8ToUnicode(file);
-	wchar_t* wmode = utf8ToUnicode(mode);
-	if (wfile != 0 && wmode != 0) {
-		fh = _wfopen(wfile, wmode);
-	}
-	else {
-		fh = fopen(file, mode);
-	}
-	free(wfile);
-	free(wmode);
-	return fh;
+	return fopen(file, mode);
+	//FILE* fh = 0;
+	//wchar_t* wfile = utf8ToUnicode(file);
+	//wchar_t* wmode = utf8ToUnicode(mode);
+	//if (wfile != 0 && wmode != 0) {
+	//	fh = _wfopen(wfile, wmode);
+	//}
+	//else {
+	//	fh = fopen(file, mode);
+	//}
+	//free(wfile);
+	//free(wmode);
+	//return fh;
 }
 
 #else

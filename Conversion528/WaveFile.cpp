@@ -232,7 +232,7 @@ WaveFile::WaveFileReaderError WaveFile::WaveFileReader::getLastError() const
 }
 
 #ifdef WIN32
-bool WaveFile::WaveFileReader::open(const wchar_t* strFileName)
+int WaveFile::WaveFileReader::open(const wchar_t* strFileName)
 {
 	if(isOpened())
 	{
@@ -252,7 +252,7 @@ bool WaveFile::WaveFileReader::open(const wchar_t* strFileName)
 }
 #endif
 
-bool WaveFile::WaveFileReader::open(const char* strFileName)
+int WaveFile::WaveFileReader::open(const char* strFileName)
 {
 	if(isOpened())
 	{
@@ -480,9 +480,9 @@ const WaveFileChunks::WaveFileHeader& WaveFile::WaveFileReader::getWaveFileHeade
 }
 
 
-int WaveFile::WaveFileReader::read(void* DstBuf, size_t ElementSize, size_t Count, FILE* outFile)
+int WaveFile::WaveFileReader::read(char Buffer[1152 * 2 * 2], FILE* outFile)
 {
-	return fread(DstBuf, ElementSize, Count, m_hFile);
+	return fread(Buffer, 1, 0, m_hFile);
 }
 int WaveFile::WaveFileReader::isEof()
 {
@@ -522,7 +522,7 @@ void WaveFile::WaveFileWriter::setWaveFileHeader(const WaveFileChunks::WaveFileH
 }
 
 #ifdef WIN32
-bool WaveFile::WaveFileWriter::open(const wchar_t* strFileName)
+int WaveFile::WaveFileWriter::open(const wchar_t* strFileName)
 {
 	if(isOpened())
 	{
@@ -537,7 +537,7 @@ bool WaveFile::WaveFileWriter::open(const wchar_t* strFileName)
 }
 #endif
 
-bool WaveFile::WaveFileWriter::open(const char* strFileName)
+int WaveFile::WaveFileWriter::open(const char* strFileName)
 {
 	if(isOpened())
 	{
@@ -618,9 +618,18 @@ WaveFile::WaveFileWriter::~WaveFileWriter()
 	}
 }
 
-int WaveFile::WaveFileWriter::write(const void* SrcBuf, size_t ElementSize, size_t Count, FILE* outFile)
+int WaveFile::WaveFileWriter::write(int Buffer[2][1152], size_t ElementSize, size_t Count, FILE* outFile)
 {
-	return fwrite(SrcBuf, ElementSize, Count, outFile);
+	if (!m_bHeaderWritten)
+	{
+		if (!writeHeader())
+		{
+			return -1;
+		}
+	}
+
+	//return fwrite(SrcBuf, ElementSize, Count, m_hFile);
+	return 0;
 }
 
 #undef _CRT_SECURE_NO_DEPRECATE

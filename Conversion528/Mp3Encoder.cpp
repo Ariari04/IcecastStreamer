@@ -16,13 +16,15 @@ namespace Encoding
 
 	Mp3Encoder::~Mp3Encoder()
 	{
-		lame_encoding_close();
+		lame_encoding_close(outFile);
+		outFile = NULL;
 		lame_close(gf);
 	}
 
-	bool Mp3Encoder::open(const char* fileName)
+	int Mp3Encoder::open(const char* fileName)
 	{
-		lame_encoding_close();
+		lame_encoding_close(outFile);
+		outFile = NULL;
 
 		const int MAX_NOGAP = 1;
 		int argc = 3;
@@ -37,29 +39,28 @@ namespace Encoding
 			return false;
 		}
 
-		lame_encoding_open(gf, const_cast<char*>(fileName));
+		outFile = lame_encoding_open(gf, const_cast<char*>(fileName));
 
 		return true;
 	}
 
-	bool Mp3Encoder::open(const wchar_t* fileName)
+	int Mp3Encoder::open(const wchar_t* fileName)
 	{
 		std::exception("Not implemented");
 
 		return false;
 	}
 
-	int Mp3Encoder::write(const void* SrcBuf, size_t ElementSize, size_t Count, FILE* outFile)
+	int Mp3Encoder::write(int Buffer[2][1152], size_t ElementSize, size_t Count, FILE* outFile)
 	{
-		int byteCount = 0;
-		int Buffer[2][1152];
-		int wroteBytes = lame_encoding_write(gf, Buffer, byteCount, outFile, writeHeader);
+		int wroteBytes = lame_encoding_write(gf, Buffer, Count, this->outFile, writeHeader);
 
 		writeHeader = false;
 
 		if (!wroteBytes)
 		{
-			lame_encoding_close();
+			lame_encoding_close(this->outFile);
+			this->outFile = NULL;
 			return -1;
 		}
 

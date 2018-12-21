@@ -18,15 +18,16 @@ namespace Decoding
 	{
 	public:
 		lame_t gf;
+		FILE* oufFile;
 		bool endOfFile;
 
 		Mp3Decoder();
 		~Mp3Decoder();
 
-		bool open(const char* fileName) override;
-		bool open(const wchar_t* fileName) override;
+		int open(const char* fileName) override;
+		int open(const wchar_t* fileName) override;
 
-		int read(void* DstBuf, size_t ElementSize, size_t Count, FILE* outFile) override;
+		int read(char Buffer[2 * 1152 * 2], FILE* outFile) override;
 		int isEof() override;
 	};
 

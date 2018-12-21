@@ -110,8 +110,8 @@ public:
 	WaveFileReader(const char* strFileName);
 	const WaveFileChunks::WaveFileHeader& getWaveFileHeader() const;
 
-	bool open(const wchar_t* strFileName) override;
-	bool open(const char* strFileName) override;
+	int open(const wchar_t* strFileName) override;
+	int open(const char* strFileName) override;
 
 	bool close();
 	bool isOpened() const;
@@ -120,7 +120,7 @@ public:
 
 	virtual ~WaveFileReader();
 
-	int read(void* DstBuf, size_t ElementSize, size_t Count, FILE* outFile);
+	int read(char Buffer[1152 * 2 * 2], FILE* outFile);
 	int    isEof();
 
 private:
@@ -142,13 +142,13 @@ public:
 	WaveFileChunks::WaveFileHeader& getWaveFileHeader();
 	void setWaveFileHeader(const WaveFileChunks::WaveFileHeader& header);
 #ifdef WIN32
-	bool open(const wchar_t* strFileName);
+	int open(const wchar_t* strFileName);
 #endif
-	bool open(const char* strFileName);
+	int open(const char* strFileName);
 	bool close();
 	bool isOpened() const;
 	bool writeHeader();
-	int write(const void* SrcBuf, size_t ElementSize, size_t Count, FILE* outFile);
+	int write(int Buffer[2][1152], size_t ElementSize, size_t Count, FILE* outFile);
 	virtual ~WaveFileWriter();
 
 private:

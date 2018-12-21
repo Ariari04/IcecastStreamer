@@ -1,5 +1,6 @@
 #include "IcecastStreamer.h"
 
+#include <conio.h>
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
 #include <WaveFile.h>
@@ -87,6 +88,8 @@ void IcecastStreamer::streamFile(boost::asio::ip::tcp::endpoint endpoint, const 
 	}
 };
 
+#include <lame_interface/lame_interface.h>
+
 template<typename T>
 bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 {
@@ -136,9 +139,6 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		}
 	}
 
-	const int BUFFER_SIZE = 102400;
-	char dataBuffer[BUFFER_SIZE];
-
 	auto ext = boost::filesystem::extension(uploading.fileName);
 
 	std::shared_ptr<AudioFileReader> reader;
@@ -155,27 +155,43 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		reader = std::make_shared<Decoding::Mp3Decoder>();
 	}
 
-	if (!reader->open(uploading.fileName.c_str()))
+	if (format == IcecastStreamer::AudioFormat::Invalid)
+	{
+		return false;
+	}
+
+	if (reader->open(uploading.fileName.c_str()) < 0)
 	{
 		std::cout << "IcecastStreamer: couldn't open the file to be streamed";
 		return false;
 	}
 
-	for (int i = 0; i < 5; ++i)
-	{
-		std::cout << "IcecastStreamer: start stream in " << 5 - i << " seconds" << std::endl;
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-	}
+	std::cout << "IcecastStreamer: press any key to start streaming";
+	_getch();
+
+	char Buffer[2 * 1152 * 2];
+
+	std::ofstream ofs("test/original.wav");
+
+	int packet = 0;
 
 	while (!reader->isEof())
 	{
-		int byteCount = reader->read(dataBuffer, 1, BUFFER_SIZE, NULL);
-		auto asioBuffer = boost::asio::buffer(dataBuffer, byteCount);
+		int byteCount = reader->read(Buffer, NULL);
+
+		if (byteCount < 1)
+		{
+			break;
+		}
+
+		auto asioBuffer = boost::asio::buffer(Buffer, 1152 * 2 * 2);
+
+		ofs.write((char*)Buffer, byteCount);
 
 		try
 		{
 			socket->send(asioBuffer);
-			std::cout << "IcecastStreamer: streaming..." << std::endl;
+			std::cout << "IcecastStreamer: streaming... " << ++packet << " : " << byteCount << std::endl;
 		}
 		catch (std::exception &e)
 		{
@@ -183,7 +199,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 			return false;
 		}
 
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(2));
 	}
 
 	std::cout << "IcecastStreamer: stream is finished" << std::endl;
@@ -194,7 +210,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::string& savedFile)
 {
 	const int BUFFER_SIZE = 102400;
-	char binarySound[BUFFER_SIZE];
+	int binarySound[2][1152];
 
 	std::shared_ptr<AudioFileWriter> writer;
 
@@ -213,13 +229,17 @@ void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::s
 
 	writer->open(savedFile.c_str());
 
+	//FILE *outFile = fopen(savedFile.c_str(), "wb");
 	std::ifstream ifs{ binarySoundFile, std::ios::binary };
-	FILE *outFile = fopen(savedFile.c_str(), "wb");
 	while (!ifs.eof())
 	{
-		ifs.read(binarySound, BUFFER_SIZE);
+		ifs.read((char*)binarySound, 1152 * 2 * sizeof(int));
 		int byteCount = ifs.gcount();
-		writer->write(binarySound, 1, BUFFER_SIZE, outFile);
+
+		if (byteCount == 1152 * 2 * sizeof(int))
+		{
+			writer->write(binarySound, 1, 1152 * 2, nullptr);
+		}
 	}
-	fclose(outFile);
+	//fclose(outFile);
 }

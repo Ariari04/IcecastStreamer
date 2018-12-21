@@ -76,8 +76,8 @@ void StreamFile()
 	std::cout << "1) test/original.wav" << std::endl;
 	std::cout << "2) test/original.mp3" << std::endl;
 
-	char key = _getch();
-	_getch();
+	char key = _getwch();
+
 	switch (key)
 	{
 	case '1': streamFile("test/original.wav"); break;
@@ -89,12 +89,14 @@ void WrapFile()
 {
 	std::cout << "Choose a file:" << std::endl;
 	std::cout << "1) test/streamed.wav -> test/wrapped.wav" << std::endl;
+	std::cout << "2) test/streamed.mp3 -> test/wrapped.mp3" << std::endl;
 
-	char key = _getch();
-	_getch();
+	char key = _getwch();
+
 	switch (key)
 	{
 	case '1': streamer.saveSound("test/streamed.wav", "test/wrapped.wav"); break;
+	case '2': streamer.saveSound("test/streamed.mp3", "test/wrapped.mp3"); break;
 	}
 }
 
@@ -114,8 +116,7 @@ int main(int argc, char* argv[])
 		std::cout << "1) stream sound from a file" << std::endl;
 		std::cout << "2) wrap downloaded streamed sound into a file" << std::endl;
 
-		key = _getch();
-		_getch();
+		key = _getwch();
 
 		switch (key)
 		{

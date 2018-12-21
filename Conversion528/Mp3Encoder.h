@@ -17,10 +17,10 @@ namespace Encoding
 		Mp3Encoder();
 		~Mp3Encoder();
 
-		bool open(const char* fileName) override;
-		bool open(const wchar_t* fileName) override;
+		int open(const char* fileName) override;
+		int open(const wchar_t* fileName) override;
 
-		int write(const void* SrcBuf, size_t ElementSize, size_t Count, FILE* outFile) override;
+		int write(int Buffer[2][1152], size_t ElementSize, size_t Count, FILE* outFile) override;
 	};
 
 }
