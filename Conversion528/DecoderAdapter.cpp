@@ -3,7 +3,6 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
-#include "Mp3Decoder.h"
 #include "AacDecoder.h"
 #include "ConvException.h"
 #include "PathOperations.h"
@@ -19,7 +18,7 @@ DecoderProducerBase* DecoderProducerBase::create(const char* fileName, IProgress
     std::auto_ptr<DecoderProducerBase> decoder;
 
 	if (stricmp(strExt.c_str(), "mp3") == 0)
-		;// decoder.reset(new Mp3DecoderProducer());
+		throw std::exception(); // decoder.reset(new Mp3DecoderProducer());
     else if (stricmp (strExt.c_str(), "aac") == 0||
 			 stricmp (strExt.c_str(), "m4a") == 0 ||
 			 stricmp (strExt.c_str(), "mp4") == 0)

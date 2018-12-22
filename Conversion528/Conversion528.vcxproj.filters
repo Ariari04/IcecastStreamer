@@ -9,15 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Source Files\audacity">
-      <UniqueIdentifier>{a5c61bca-9889-46aa-aaa5-9b15cba4c903}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\audacity">
-      <UniqueIdentifier>{86d71b53-895b-4b4c-a903-40f781a06518}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Server">
-      <UniqueIdentifier>{0d882948-1e90-4cc3-8969-c26df0744029}</UniqueIdentifier>
-    </Filter>
     <Filter Include="blade">
       <UniqueIdentifier>{732fd927-25ad-4f9c-a394-87a34cf22a96}</UniqueIdentifier>
     </Filter>
@@ -26,6 +17,15 @@
     </Filter>
     <Filter Include="lame">
       <UniqueIdentifier>{6a5933a8-19aa-4d84-a9c8-ce3a8a8179b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mp3">
+      <UniqueIdentifier>{d04e65a1-df8a-4faf-9e25-3e6a41e5badc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="icecast">
+      <UniqueIdentifier>{0d882948-1e90-4cc3-8969-c26df0744029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wave">
+      <UniqueIdentifier>{8069661c-1e6a-4286-8683-294b170351fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -44,9 +44,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WaveFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WaveFileAdapter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,18 +54,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExperimentalConverter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="server\IcecastStreamer.cpp">
-      <Filter>Server</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mp3Decoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mp3Encoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DecoderAdapter.cpp">
@@ -89,23 +74,35 @@
     <ClCompile Include="..\faad2-vs\extra\main.c">
       <Filter>faad</Filter>
     </ClCompile>
-    <ClCompile Include="MP3File.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="mp3\Mp3Decoder.cpp">
+      <Filter>mp3</Filter>
     </ClCompile>
-    <ClCompile Include="lame_interface\lame_interface.c">
+    <ClCompile Include="mp3\Mp3Encoder.cpp">
+      <Filter>mp3</Filter>
+    </ClCompile>
+    <ClCompile Include="lame_imported\get_audio_imported.c">
       <Filter>lame</Filter>
     </ClCompile>
-    <ClCompile Include="lame_interface\imported.c">
+    <ClCompile Include="lame_imported\imported.c">
+      <Filter>lame</Filter>
+    </ClCompile>
+    <ClCompile Include="lame_imported\parse_imported.c">
       <Filter>lame</Filter>
     </ClCompile>
     <ClCompile Include="..\lame-3.100\frontend\console.c">
       <Filter>lame</Filter>
     </ClCompile>
-    <ClCompile Include="lame_interface\parse_imported.c">
-      <Filter>lame</Filter>
+    <ClCompile Include="icecast\IcecastStreamer.cpp">
+      <Filter>icecast</Filter>
     </ClCompile>
-    <ClCompile Include="lame_interface\get_audio_imported.c">
-      <Filter>lame</Filter>
+    <ClCompile Include="wave\WaveDecoder.cpp">
+      <Filter>wave</Filter>
+    </ClCompile>
+    <ClCompile Include="wave\WaveEncoder.cpp">
+      <Filter>wave</Filter>
+    </ClCompile>
+    <ClCompile Include="wave\WaveFile.cpp">
+      <Filter>wave</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,16 +139,7 @@
     <ClInclude Include="ExperimentalConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="server\IcecastStreamer.h">
-      <Filter>Server</Filter>
-    </ClInclude>
     <ClInclude Include="AudioFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mp3Decoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mp3Encoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DecoderAdapter.h">
@@ -172,23 +160,35 @@
     <ClInclude Include="..\faad2-vs\extra\faadecoder.h">
       <Filter>faad</Filter>
     </ClInclude>
-    <ClInclude Include="MP3File.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="mp3\Mp3Decoder.h">
+      <Filter>mp3</Filter>
     </ClInclude>
-    <ClInclude Include="lame_interface\lame_interface.h">
+    <ClInclude Include="mp3\Mp3Encoder.h">
+      <Filter>mp3</Filter>
+    </ClInclude>
+    <ClInclude Include="lame_imported\get_audio_imported.h">
+      <Filter>lame</Filter>
+    </ClInclude>
+    <ClInclude Include="lame_imported\imported.h">
+      <Filter>lame</Filter>
+    </ClInclude>
+    <ClInclude Include="lame_imported\parse_imported.h">
       <Filter>lame</Filter>
     </ClInclude>
     <ClInclude Include="..\lame-3.100\frontend\console.h">
       <Filter>lame</Filter>
     </ClInclude>
-    <ClInclude Include="lame_interface\parse_imported.h">
-      <Filter>lame</Filter>
+    <ClInclude Include="icecast\IcecastStreamer.h">
+      <Filter>icecast</Filter>
     </ClInclude>
-    <ClInclude Include="lame_interface\imported.h">
-      <Filter>lame</Filter>
+    <ClInclude Include="wave\WaveDecoder.h">
+      <Filter>wave</Filter>
     </ClInclude>
-    <ClInclude Include="lame_interface\get_audio_imported.h">
-      <Filter>lame</Filter>
+    <ClInclude Include="wave\WaveEncoder.h">
+      <Filter>wave</Filter>
+    </ClInclude>
+    <ClInclude Include="wave\WaveFile.h">
+      <Filter>wave</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

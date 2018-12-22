@@ -1,11 +1,11 @@
 #include "WaveFileAdapter.h"
 
-WaveFile::WaveProducer::WaveProducer(WaveFile::WaveFileReader &reader)
+WaveFile::WaveProducer::WaveProducer(Decoding::WaveDecoder &reader)
 : m_cReader(reader)
 {
-	m_sSoundFormatInfo.nBitsPerSample = reader.getWaveFileHeader().m_cFormatChunk.m_nBitsPerSample;
-	m_sSoundFormatInfo.nNumberOfChannels = reader.getWaveFileHeader().m_cFormatChunk.m_nChannels;
-	m_sSoundFormatInfo.nSampleRate = reader.getWaveFileHeader().m_cFormatChunk.m_nSamplesPerSec;
+	m_sSoundFormatInfo.nBitsPerSample = reader.Header.m_cFormatChunk.m_nBitsPerSample;
+	m_sSoundFormatInfo.nNumberOfChannels = reader.Header.m_cFormatChunk.m_nChannels;
+	m_sSoundFormatInfo.nSampleRate = reader.Header.m_cFormatChunk.m_nSamplesPerSec;
 }
 
 Conversion::SoundFormatInfo WaveFile::WaveProducer::getSoundFormatInfo() const
@@ -15,18 +15,20 @@ Conversion::SoundFormatInfo WaveFile::WaveProducer::getSoundFormatInfo() const
 
 uint32	WaveFile::WaveProducer::getSound(byte* pBuffer, uint32 nBufferSize)
 {
+	throw std::exception("Disabled function");
 	return 0;// uint32(m_cReader.MusicFread(pBuffer, 1, nBufferSize));
 }
 
-WaveFile::WaveConsumer::WaveConsumer(WaveFile::WaveFileWriter& writer)
+WaveFile::WaveConsumer::WaveConsumer(Encoding::WaveEncoder& writer)
 : m_cWriter(writer)
 , m_soundSize(0)
 {
 }
 WaveFile::WaveConsumer::~WaveConsumer()
 {
-	m_cWriter.getWaveFileHeader().setSoundSizeInBytes(m_soundSize);
-	m_cWriter.writeHeader();
+	m_cWriter.Header.setSoundSizeInBytes(m_soundSize);
+	throw std::exception("Disabled function");
+	//m_cWriter.writeHeader();
 }
 bool WaveFile::WaveConsumer::setSoundFormatInfo(const Conversion::SoundFormatInfo& sInfo)
 {
@@ -43,19 +45,22 @@ bool WaveFile::WaveConsumer::setSoundFormatInfo(const Conversion::SoundFormatInf
 	{
 		return false;
 	}
-	m_cWriter.setWaveFileHeader(header);
+	throw std::exception("Disabled function");
+	//m_cWriter.setWaveFileHeader(header);
 	return true;
 }
 uint32 WaveFile::WaveConsumer::putSound(const byte* pBuffer, uint32 nBufferSize)
 {
     m_soundSize += nBufferSize;
+	throw std::exception("Disabled function");
 	return 0;// (uint32)m_cWriter.MusicFwrite(pBuffer, 1, nBufferSize);
 }
 
 bool WaveFile::WaveConsumer::writeHeader()
 {
-	m_cWriter.getWaveFileHeader().setSoundSizeInBytes(m_soundSize);
-	m_cWriter.writeHeader();
+	throw std::exception("Disabled function");
+	m_cWriter.Header.setSoundSizeInBytes(m_soundSize);
+	//m_cWriter.writeHeader();
 	
 	return true;
 }

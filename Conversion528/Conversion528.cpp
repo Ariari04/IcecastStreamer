@@ -3,7 +3,7 @@
 
 #include <conio.h>
 #include "stdafx.h"
-#include "WaveFile.h"
+#include "wave/WaveFile.h"
 #include "Conversion.h"
 #include <memory.h>
 #include "WaveFileAdapter.h"
@@ -24,11 +24,11 @@
 #include <boost/thread/thread.hpp>
 #include "boost/asio.hpp"
 
-#include <server/IcecastStreamer.h>
+#include <icecast/IcecastStreamer.h>
 
 boost::asio::io_service ioService;
 boost::asio::io_service::work work(ioService);
-boost::thread_group serverThreadPool;
+boost::thread_group threadPool;
 
 IcecastStreamer streamer{ ioService, "127.0.0.1", "8000" };
 
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
 		ioService.run();
 	};
 
-	serverThreadPool.create_thread(f);
+	threadPool.create_thread(f);
 
 	char key;
 	do
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
 	} while (true);
 
 	ioService.stop();
-	serverThreadPool.join_all();
+	threadPool.join_all();
 
 	return 0;
 }

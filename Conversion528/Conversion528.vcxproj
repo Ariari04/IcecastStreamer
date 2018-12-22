@@ -92,7 +92,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>.;../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include;../id3lib-3.8.3/include;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;lame_interface;../faad2-vs;../faad2-vs/include;../faad2-vs/common/mp4ff;../blade</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include;../id3lib-3.8.3/include;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/mp4ff;../blade</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -176,7 +176,6 @@
     <ClCompile Include="..\faad2-vs\extra\main.c" />
     <ClCompile Include="..\lame-3.100\frontend\console.c" />
     <ClCompile Include="AacDecoder.cpp" />
-    <ClCompile Include="AudioFile.cpp" />
     <ClCompile Include="ConsoleHelpers.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Conversion528.cpp" />
@@ -186,18 +185,18 @@
     <ClCompile Include="EncoderAdapter.cpp" />
     <ClCompile Include="ExperimentalConverter.cpp" />
     <ClCompile Include="FlatConverter.cpp" />
+    <ClCompile Include="icecast\IcecastStreamer.cpp" />
     <ClCompile Include="KString.cpp" />
-    <ClCompile Include="lame_interface\get_audio_imported.c" />
-    <ClCompile Include="lame_interface\imported.c" />
-    <ClCompile Include="lame_interface\lame_interface.c" />
-    <ClCompile Include="lame_interface\parse_imported.c" />
-    <ClCompile Include="Mp3Decoder.cpp" />
-    <ClCompile Include="Mp3Encoder.cpp" />
-    <ClCompile Include="MP3File.cpp" />
-    <ClCompile Include="server\IcecastStreamer.cpp" />
+    <ClCompile Include="lame_imported\get_audio_imported.c" />
+    <ClCompile Include="lame_imported\imported.c" />
+    <ClCompile Include="lame_imported\parse_imported.c" />
+    <ClCompile Include="mp3\Mp3Decoder.cpp" />
+    <ClCompile Include="mp3\Mp3Encoder.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="WaveFileAdapter.cpp" />
+    <ClCompile Include="wave\WaveDecoder.cpp" />
+    <ClCompile Include="wave\WaveEncoder.cpp" />
+    <ClCompile Include="wave\WaveFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\blade\BladeMP3Enc.h" />
@@ -213,20 +212,21 @@
     <ClInclude Include="EncoderAdapter.h" />
     <ClInclude Include="ExperimentalConverter.h" />
     <ClInclude Include="FlatConverter.h" />
+    <ClInclude Include="icecast\IcecastStreamer.h" />
     <ClInclude Include="IntegerTypes.h" />
     <ClInclude Include="KString.h" />
-    <ClInclude Include="lame_interface\get_audio_imported.h" />
-    <ClInclude Include="lame_interface\imported.h" />
-    <ClInclude Include="lame_interface\lame_interface.h" />
-    <ClInclude Include="lame_interface\parse_imported.h" />
-    <ClInclude Include="Mp3Decoder.h" />
-    <ClInclude Include="Mp3Encoder.h" />
-    <ClInclude Include="MP3File.h" />
-    <ClInclude Include="server\IcecastStreamer.h" />
+    <ClInclude Include="lame_imported\get_audio_imported.h" />
+    <ClInclude Include="lame_imported\imported.h" />
+    <ClInclude Include="lame_imported\parse_imported.h" />
+    <ClInclude Include="mp3\Mp3Decoder.h" />
+    <ClInclude Include="mp3\Mp3Encoder.h" />
     <ClInclude Include="StaticAssertion.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileAdapter.h" />
+    <ClInclude Include="wave\WaveDecoder.h" />
+    <ClInclude Include="wave\WaveEncoder.h" />
+    <ClInclude Include="wave\WaveFile.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

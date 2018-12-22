@@ -2,25 +2,20 @@
 
 #include <stdio.h>
 
-class AudioFileReader
+class AudioDecoder
 {
 public:
-	virtual ~AudioFileReader() = default;
+	virtual ~AudioDecoder() = default;
 
-	virtual int open(const wchar_t* strFile) = 0;
-	virtual int open(const char* strFile) = 0;
-
-	virtual int read(char Buffer[2 * 1152 * 2], FILE* outFile) = 0;
-	virtual int isEof() = 0;
+	virtual int open(const char* fileName) = 0;
+	virtual int read(char* Buffer, size_t Count) = 0;
 };
 
-class AudioFileWriter
+class AudioEncoder
 {
 public:
-	virtual ~AudioFileWriter() = default;
+	virtual ~AudioEncoder() = default;
 
-	virtual int open(const wchar_t* strFile) = 0;
-	virtual int open(const char* strFile) = 0;
-
-	virtual int write(int Buffer[2][1152], size_t ElementSize, size_t Count, FILE* outFile) = 0;
+	virtual int open(const char* fileName) = 0;
+	virtual int write(char* Buffer, size_t Count) = 0;
 };

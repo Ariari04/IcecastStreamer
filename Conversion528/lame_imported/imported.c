@@ -1,15 +1,16 @@
-#include <imported.h>
+#include <lame_imported/imported.h>
 
 #include <assert.h>
 #include <stdio.h>
 #include <windows.h>
+#include "console.h"
 
 #ifdef HAVE_LIMITS_H
 # include <limits.h>
 #endif
 
 #include <lame.h>
-#include <parse_imported.h>
+#include <lame_imported/parse_imported.h>
 
 #define _O_BINARY      0x8000  // file mode is binary (untranslated)
 
@@ -303,146 +304,59 @@ void setProcessPriority(int Priority)
 #endif
 
 
-int
-lame_decoder_iter(lame_t gfp, FILE * outf)
+
+int open_decoding(lame_t gf, FILE** outf)
 {
-	short int Buffer[2][1152];
-	int     i, iread;
-	static double  wavsize = 0;
-	int     tmp_num_channels = lame_get_num_channels(gfp);
+	int     tmp_num_channels = lame_get_num_channels(gf);
 
-	/* unknown size, so write maximum 32 bit signed value */
-
-	iread = get_audio16(gfp, Buffer); /* read in 'iread' samples */
-	if (iread >= 0) {
-		wavsize += iread;
-		put_audio16(outf, Buffer, iread, tmp_num_channels);
+	if (!(tmp_num_channels >= 1 && tmp_num_channels <= 2)) {
+		error_printf("Internal error.  Aborting.");
+		return -1;
 	}
 
-	if (iread <= 0)
-	{
-		i = (16 / 8) * tmp_num_channels;
-		assert(i > 0);
-		if (wavsize <= 0) {
-			if (global_ui_config.silent < 10)
-				error_printf("WAVE file contains 0 PCM samples\n");
-			wavsize = 0;
-		}
-		else if (wavsize > 0xFFFFFFD0 / i) {
-			if (global_ui_config.silent < 10)
-				error_printf("Very huge WAVE file, can't set filesize accordingly\n");
-			wavsize = 0xFFFFFFD0;
-		}
-		else {
-			wavsize *= i;
-		}
-		/* if outf is seekable, rewind and adjust length */
-		if (!global_decoder.disable_wav_header && !fseek(outf, 0l, SEEK_SET))
-			WriteWaveHeader(outf, (int)wavsize, lame_get_in_samplerate(gfp), tmp_num_channels, 16);
-	}
+	if (0 == global_decoder.disable_wav_header)
+		WriteWaveHeader(*outf, 0x7FFFFFFF, lame_get_in_samplerate(gf), tmp_num_channels, 16);
 
-	return iread;
+	return 0;
 }
 
-int
-lame_encoder_iter(lame_t gfp, FILE * outf, size_t  id3v2_size)
+int open_encoding(lame_t gf, FILE** outf, size_t*  id3v2_size)
 {
-	unsigned char mp3buffer[LAME_MAXMP3BUFFER];
-	int     Buffer[2][1152];
-	int     iread, imp3, owrite, in_limit = 0;
+	*id3v2_size = lame_get_id3v2_tag(gf, 0, 0);
 
-	/* do not feed more than in_limit PCM samples in one encode call
-	   otherwise the mp3buffer is likely too small
-	 */
-	in_limit = lame_get_maximum_number_of_samples(gfp, sizeof(mp3buffer));
-	if (in_limit < 1)
-		in_limit = 1;
-
-	/* encode until we hit eof */
-
-		/* read in 'iread' samples */
-	iread = get_audio(gfp, Buffer);
-
-	if (iread >= 0) {
-		const int* buffer_l = Buffer[0];
-		const int* buffer_r = Buffer[1];
-		int     rest = iread;
-		do {
-			int const chunk = rest < in_limit ? rest : in_limit;
-
-			/* encode */
-
-			imp3 = lame_encode_buffer_int(gfp, buffer_l, buffer_r, chunk,
-				mp3buffer, sizeof(mp3buffer));
-			buffer_l += chunk;
-			buffer_r += chunk;
-			rest -= chunk;
-
-			/* was our output buffer big enough? */
-			if (imp3 < 0) {
-				if (imp3 == -1)
-					error_printf("mp3 buffer is not big enough... \n");
-				else
-					error_printf("mp3 internal error:  error code=%i\n", imp3);
+	if (*id3v2_size > 0) {
+		unsigned char *id3v2tag = malloc(*id3v2_size);
+		if (id3v2tag != 0) {
+			size_t  n_bytes = lame_get_id3v2_tag(gf, id3v2tag, *id3v2_size);
+			size_t  written = fwrite(id3v2tag, 1, n_bytes, *outf);
+			free(id3v2tag);
+			if (written != n_bytes) {
+				error_printf("Error writing ID3v2 tag \n");
 				return 1;
 			}
-			owrite = (int)fwrite(mp3buffer, 1, imp3, outf);
-			if (owrite != imp3) {
-				error_printf("Error writing mp3 output \n");
+		}
+	}
+	else {
+		unsigned char* id3v2tag = getOldTag(gf);
+		*id3v2_size = sizeOfOldTag(gf);
+		if (*id3v2_size > 0) {
+			size_t owrite = fwrite(id3v2tag, 1, *id3v2_size, *outf);
+			if (owrite != *id3v2_size) {
+				error_printf("Error writing ID3v2 tag \n");
 				return 1;
 			}
-		} while (rest > 0);
+		}
 	}
 	if (global_writer.flush_write == 1) {
 		fflush(outf);
 	}
 
-	if (iread < 1)
-	{
-
-		if (0)
-			imp3 = lame_encode_flush_nogap(gfp, mp3buffer, sizeof(mp3buffer)); /* may return one more mp3 frame */
-		else
-			imp3 = lame_encode_flush(gfp, mp3buffer, sizeof(mp3buffer)); /* may return one more mp3 frame */
-
-		if (imp3 < 0) {
-			if (imp3 == -1)
-				error_printf("mp3 buffer is not big enough... \n");
-			else
-				error_printf("mp3 internal error:  error code=%i\n", imp3);
-			return 1;
-
-		}
-
-		owrite = (int)fwrite(mp3buffer, 1, imp3, outf);
-		if (owrite != imp3) {
-			error_printf("Error writing mp3 output \n");
-			return 1;
-		}
-		if (global_writer.flush_write == 1) {
-			fflush(outf);
-		}
-		imp3 = write_id3v1_tag(gfp, outf);
-		if (global_writer.flush_write == 1) {
-			fflush(outf);
-		}
-		if (imp3) {
-			return 1;
-		}
-		write_xing_frame(gfp, outf, id3v2_size);
-		if (global_writer.flush_write == 1) {
-			fflush(outf);
-		}
-		//if (global_ui_config.silent <= 0) {
-		//	print_trailing_info(gfp);
-		//}
-	}
-
-	return iread;
+	return 0;
 }
 
+
 int
-lame_main_2(lame_t gf, int argc, char **argv, FILE** outf)
+lame_main_imported(lame_t gf, int argc, char **argv, FILE** outf)
 {
 	char    inPath[PATH_MAX + 1];
 	char    outPath[PATH_MAX + 1];
@@ -460,9 +374,9 @@ lame_main_2(lame_t gf, int argc, char **argv, FILE** outf)
 	int     i;
 	*outf = NULL;
 
-	//lame_set_msgf(gf, &frontend_msgf);
-	//lame_set_errorf(gf, &frontend_errorf);
-	//lame_set_debugf(gf, &frontend_debugf);
+	lame_set_msgf(gf, &frontend_msgf);
+	lame_set_errorf(gf, &frontend_errorf);
+	lame_set_debugf(gf, &frontend_debugf);
 	if (argc <= 1) {
 		usage(stderr, argv[0]); /* no command-line args, print usage, exit  */
 		return 1;
@@ -545,50 +459,160 @@ lame_main_2(lame_t gf, int argc, char **argv, FILE** outf)
 	return 0;
 }
 
-int xxx_open_decode(lame_t gf, FILE** outf)
-{
-	int     tmp_num_channels = lame_get_num_channels(gf);
 
-	if (!(tmp_num_channels >= 1 && tmp_num_channels <= 2)) {
-		error_printf("Internal error.  Aborting.");
-		return -1;
+int
+lame_decoder_iter(lame_t gfp, FILE * outf, char* Buffer, size_t Size, double* wavsize)
+{
+	int     i, iread;
+	int     tmp_num_channels = lame_get_num_channels(gfp);
+
+	/* unknown size, so write maximum 32 bit signed value */
+
+	iread = get_audio16(gfp, Buffer); /* read in 'iread' samples */
+	if (iread >= 0 && outf) {
+		*wavsize += iread;
+		put_audio16(outf, Buffer, iread, tmp_num_channels);
 	}
 
-	if (0 == global_decoder.disable_wav_header)
-		WriteWaveHeader(*outf, 0x7FFFFFFF, lame_get_in_samplerate(gf), tmp_num_channels, 16);
+	if (iread <= 0 && outf)
+	{
+		i = (16 / 8) * tmp_num_channels;
+		assert(i > 0);
+		if (*wavsize <= 0) {
+			if (global_ui_config.silent < 10)
+				error_printf("WAVE file contains 0 PCM samples\n");
+			*wavsize = 0;
+		}
+		else if (*wavsize > 0xFFFFFFD0 / i) {
+			if (global_ui_config.silent < 10)
+				error_printf("Very huge WAVE file, can't set filesize accordingly\n");
+			*wavsize = 0xFFFFFFD0;
+		}
+		else {
+			*wavsize *= i;
+		}
+		/* if outf is seekable, rewind and adjust length */
+		if (!global_decoder.disable_wav_header && !fseek(outf, 0l, SEEK_SET))
+			WriteWaveHeader(outf, (int)*wavsize, lame_get_in_samplerate(gfp), tmp_num_channels, 16);
+	}
+
+	return iread;
+}
+
+int
+lame_encoder_iter(lame_t gfp, FILE * outf, char* Buffer, size_t Size, size_t  id3v2_size)
+{
+	unsigned char mp3buffer[LAME_MAXMP3BUFFER];
+	int     iread, imp3, owrite, in_limit = 0;
+
+	/* do not feed more than in_limit PCM samples in one encode call
+	   otherwise the mp3buffer is likely too small
+	 */
+	in_limit = lame_get_maximum_number_of_samples(gfp, sizeof(mp3buffer));
+	if (in_limit < 1)
+		in_limit = 1;
+
+	/* encode until we hit eof */
+
+		/* read in 'iread' samples */
+	iread = get_audio(gfp, Buffer);
+
+	if (outf)
+	{
+		if (iread >= 0) {
+			const int* buffer_l = Buffer[0];
+			const int* buffer_r = Buffer[1];
+			int     rest = iread;
+			do {
+				int const chunk = rest < in_limit ? rest : in_limit;
+
+				/* encode */
+
+				imp3 = lame_encode_buffer_int(gfp, buffer_l, buffer_r, chunk,
+					mp3buffer, sizeof(mp3buffer));
+				buffer_l += chunk;
+				buffer_r += chunk;
+				rest -= chunk;
+
+				/* was our output buffer big enough? */
+				if (imp3 < 0) {
+					if (imp3 == -1)
+						error_printf("mp3 buffer is not big enough... \n");
+					else
+						error_printf("mp3 internal error:  error code=%i\n", imp3);
+					return 1;
+				}
+				owrite = (int)fwrite(mp3buffer, 1, imp3, outf);
+				if (owrite != imp3) {
+					error_printf("Error writing mp3 output \n");
+					return 1;
+				}
+			} while (rest > 0);
+		}
+		if (global_writer.flush_write == 1) {
+			fflush(outf);
+		}
+	}
+
+	if (iread < 1)
+	{
+
+		if (0)
+			imp3 = lame_encode_flush_nogap(gfp, mp3buffer, sizeof(mp3buffer)); /* may return one more mp3 frame */
+		else
+			imp3 = lame_encode_flush(gfp, mp3buffer, sizeof(mp3buffer)); /* may return one more mp3 frame */
+
+		if (imp3 < 0) {
+			if (imp3 == -1)
+				error_printf("mp3 buffer is not big enough... \n");
+			else
+				error_printf("mp3 internal error:  error code=%i\n", imp3);
+			return 1;
+
+		}
+
+		if (outf)
+		{
+			owrite = (int)fwrite(mp3buffer, 1, imp3, outf);
+			if (owrite != imp3) {
+				error_printf("Error writing mp3 output \n");
+				return 1;
+			}
+			if (global_writer.flush_write == 1) {
+				fflush(outf);
+			}
+			imp3 = write_id3v1_tag(gfp, outf);
+			if (global_writer.flush_write == 1) {
+				fflush(outf);
+			}
+			if (imp3) {
+				return 1;
+			}
+			write_xing_frame(gfp, outf, id3v2_size);
+			if (global_writer.flush_write == 1) {
+				fflush(outf);
+			}
+			//if (global_ui_config.silent <= 0) {
+			//	print_trailing_info(gfp);
+			//}
+		}
+	}
+
+	return iread;
+}
+
+int lame_decoding_close()
+{
+	close_infile();     /* close the input file */
 
 	return 0;
 }
 
-int xxx_open_encode(lame_t gf, FILE** outf, size_t*  id3v2_size)
+int lame_encoding_close(FILE* outFile)
 {
-	*id3v2_size = lame_get_id3v2_tag(gf, 0, 0);
-
-	if (*id3v2_size > 0) {
-		unsigned char *id3v2tag = malloc(*id3v2_size);
-		if (id3v2tag != 0) {
-			size_t  n_bytes = lame_get_id3v2_tag(gf, id3v2tag, *id3v2_size);
-			size_t  written = fwrite(id3v2tag, 1, n_bytes, *outf);
-			free(id3v2tag);
-			if (written != n_bytes) {
-				error_printf("Error writing ID3v2 tag \n");
-				return 1;
-			}
-		}
-	}
-	else {
-		unsigned char* id3v2tag = getOldTag(gf);
-		*id3v2_size = sizeOfOldTag(gf);
-		if (*id3v2_size > 0) {
-			size_t owrite = fwrite(id3v2tag, 1, *id3v2_size, *outf);
-			if (owrite != *id3v2_size) {
-				error_printf("Error writing ID3v2 tag \n");
-				return 1;
-			}
-		}
-	}
-	if (global_writer.flush_write == 1) {
-		fflush(outf);
+	if (!outFile)
+	{
+		fclose(outFile);
 	}
 
 	return 0;

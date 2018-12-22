@@ -1,5 +1,4 @@
 #include "EncoderAdapter.h"
-#include "Mp3Encoder.h"
 #include "ConvException.h"
 #include "PathOperations.h"
 #include <memory>
@@ -30,6 +29,7 @@ EncoderConsumerBase* EncoderConsumerBase::create(const char* fileName, const Enc
 
     if (stricmp(strExt.c_str(), "mp3") == 0)
     {
+		throw std::exception("Disabled function");
 		//consumer.reset(new Mp3EncoderConsumer);
     }
 	else

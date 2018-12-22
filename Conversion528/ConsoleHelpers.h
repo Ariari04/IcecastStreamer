@@ -3,9 +3,9 @@
 
 #include "KString.h"
 #include "Conversion.h"
-#include "WaveFile.h"
+//#include "WaveFile.h"
 
 KString ConversionResultToString(Conversion::ConversionResult cr);
-KString WFREToString(WaveFile::WaveFileReaderError err);
+//KString WFREToString(WaveFile::WaveFileReaderError err);
 
 #endif

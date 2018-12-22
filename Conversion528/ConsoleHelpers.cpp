@@ -33,33 +33,33 @@ KString ConversionResultToString(Conversion::ConversionResult cr)
 	return str_arr[cr];
 }
 
-KString WFREToString(WaveFile::WaveFileReaderError err)
-{
-	StaticAssert(WaveFile::WFRE_last == 6);
-	if(!(WaveFile::WFREOk <= err && err < WaveFile::WFRE_last))
-	{
-		return L"Unknown error";
-	}
-
-		/* the enum
-		WFREOk = 0,
-		WFRECorruptedWaveFile,
-		WFREAlreadyOpened,
-		WFRECanNotOpenFile,
-		WFREFileNotOpened,
-		WFREUnsupportedFormat,
-		//Correct console helpers before any addition here.
-		WFRE_last
-		*/
-
-	const wchar_t *str_arr[WaveFile::WFRE_last] =
-	{ L"Ok",
-	  L"Corrupted or unsupported wave file",
-	  L"Already opened",
-	  L"Can not open file",
-	  L"File not opened",
-	  L"Unsupported format",
-	};
-
-	return str_arr[err];
-}
+//KString WFREToString(WaveFile::WaveFileReaderError err)
+//{
+//	StaticAssert(WaveFile::WFRE_last == 6);
+//	if(!(WaveFile::WFREOk <= err && err < WaveFile::WFRE_last))
+//	{
+//		return L"Unknown error";
+//	}
+//
+//		/* the enum
+//		WFREOk = 0,
+//		WFRECorruptedWaveFile,
+//		WFREAlreadyOpened,
+//		WFRECanNotOpenFile,
+//		WFREFileNotOpened,
+//		WFREUnsupportedFormat,
+//		//Correct console helpers before any addition here.
+//		WFRE_last
+//		*/
+//
+//	const wchar_t *str_arr[WaveFile::WFRE_last] =
+//	{ L"Ok",
+//	  L"Corrupted or unsupported wave file",
+//	  L"Already opened",
+//	  L"Can not open file",
+//	  L"File not opened",
+//	  L"Unsupported format",
+//	};
+//
+//	return str_arr[err];
+//}
