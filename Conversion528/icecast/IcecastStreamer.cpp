@@ -166,12 +166,10 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		return false;
 	}
 
-	std::cout << "IcecastStreamer: press any key to start streaming";
+	std::cout << "IcecastStreamer: press any key to start streaming" << std::endl;
 	_getch();
 
 	char Buffer[2 * 1152 * 2];
-
-	std::ofstream ofs("test/fff.wav", std::ios::binary);
 
 	int packet = 0;
 
@@ -185,8 +183,6 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		}
 
 		auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
-
-		ofs.write((char*)Buffer, byteCount);
 
 		try
 		{
@@ -209,7 +205,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::string& savedFile)
 {
-	char binarySound[2 * 1152 * 2]; // MP3 chunks have size 2 * 1152 * 2, WAVE chunks may be different, let's take 2 * 1152 * 2 as the size of the buffer
+	char binarySound[2 * 1152 * 4]; 
 
 	std::shared_ptr<AudioEncoder> writer;
 
@@ -226,15 +222,11 @@ void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::s
 		writer = std::make_shared<Encoding::Mp3Encoder>();
 	}
 
-	writer->open(savedFile.c_str());
+	writer->open(binarySoundFile.c_str());
 
-	std::ifstream raw{ binarySoundFile, std::ios::binary };
 	do
 	{
-		raw.read((char*)binarySound, 2 * 1152 * 2);
-		int count = raw.gcount();
-
-		writer->write(binarySound, count);
+		int count = writer->write(binarySound, 2 * 1152 * 2);
 		if (count < 1)
 		{
 			break;

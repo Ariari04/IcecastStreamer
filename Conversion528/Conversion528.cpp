@@ -89,14 +89,14 @@ void WrapFile()
 {
 	std::cout << "Choose a file:" << std::endl;
 	std::cout << "1) test/streamed.wav -> test/wrapped.wav" << std::endl;
-	std::cout << "2) test/streamed.mp3 -> test/wrapped.mp3" << std::endl;
+	std::cout << "2) test/streamed.wav -> test/wrapped.mp3" << std::endl;
 
 	char key = _getwch();
 
 	switch (key)
 	{
 	case '1': streamer.saveSound("test/streamed.wav", "test/wrapped.wav"); break;
-	case '2': streamer.saveSound("test/streamed.mp3", "test/wrapped.mp3"); break;
+	case '2': streamer.saveSound("test/streamed.wav", "test/wrapped.mp3"); break;
 	}
 }
 

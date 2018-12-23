@@ -20,14 +20,17 @@
 
 FILE * init_files(lame_global_flags * gf, char const *inPath, char const *outPath)
 {
-	FILE   *outf;
+	FILE   *outf = NULL;
 	/* Mostly it is not useful to use the same input and output name.
 	   This test is very easy and buggy and don't recognize different names
 	   assigning the same file
 	 */
-	if (0 != strcmp("-", outPath) && 0 == strcmp(inPath, outPath)) {
-		error_printf("Input file and Output file are the same. Abort.\n");
-		return NULL;
+	if (outPath)
+	{
+		if (0 != strcmp("-", outPath) && 0 == strcmp(inPath, outPath)) {
+			error_printf("Input file and Output file are the same. Abort.\n");
+			return NULL;
+		}
 	}
 
 	/* open the wav/aiff/raw pcm or mp3 input file.  This call will
@@ -40,9 +43,13 @@ FILE * init_files(lame_global_flags * gf, char const *inPath, char const *outPat
 		error_printf("Can't init infile '%s'\n", inPath);
 		return NULL;
 	}
-	if ((outf = init_outfile(outPath, lame_get_decode_only(gf))) == NULL) {
-		error_printf("Can't init outfile '%s'\n", outPath);
-		return NULL;
+
+	if (outPath)
+	{
+		if ((outf = init_outfile(outPath, lame_get_decode_only(gf))) == NULL) {
+			error_printf("Can't init outfile '%s'\n", outPath);
+			return NULL;
+		}
 	}
 
 	return outf;
@@ -240,19 +247,19 @@ char* lame_getenv(char const* var)
 
 FILE* lame_fopen(char const* file, char const* mode)
 {
-	return fopen(file, mode);
-	//FILE* fh = 0;
-	//wchar_t* wfile = utf8ToUnicode(file);
-	//wchar_t* wmode = utf8ToUnicode(mode);
-	//if (wfile != 0 && wmode != 0) {
-	//	fh = _wfopen(wfile, wmode);
-	//}
-	//else {
-	//	fh = fopen(file, mode);
-	//}
-	//free(wfile);
-	//free(wmode);
-	//return fh;
+	//return fopen(file, mode);
+	FILE* fh = 0;
+	wchar_t* wfile = utf8ToUnicode(file);
+	wchar_t* wmode = utf8ToUnicode(mode);
+	if (wfile != 0 && wmode != 0) {
+		fh = _wfopen(wfile, wmode);
+	}
+	else {
+		fh = fopen(file, mode);
+	}
+	free(wfile);
+	free(wmode);
+	return fh;
 }
 
 #else
@@ -304,59 +311,8 @@ void setProcessPriority(int Priority)
 #endif
 
 
-
-int open_decoding(lame_t gf, FILE** outf)
-{
-	int     tmp_num_channels = lame_get_num_channels(gf);
-
-	if (!(tmp_num_channels >= 1 && tmp_num_channels <= 2)) {
-		error_printf("Internal error.  Aborting.");
-		return -1;
-	}
-
-	if (0 == global_decoder.disable_wav_header)
-		WriteWaveHeader(*outf, 0x7FFFFFFF, lame_get_in_samplerate(gf), tmp_num_channels, 16);
-
-	return 0;
-}
-
-int open_encoding(lame_t gf, FILE** outf, size_t*  id3v2_size)
-{
-	*id3v2_size = lame_get_id3v2_tag(gf, 0, 0);
-
-	if (*id3v2_size > 0) {
-		unsigned char *id3v2tag = malloc(*id3v2_size);
-		if (id3v2tag != 0) {
-			size_t  n_bytes = lame_get_id3v2_tag(gf, id3v2tag, *id3v2_size);
-			size_t  written = fwrite(id3v2tag, 1, n_bytes, *outf);
-			free(id3v2tag);
-			if (written != n_bytes) {
-				error_printf("Error writing ID3v2 tag \n");
-				return 1;
-			}
-		}
-	}
-	else {
-		unsigned char* id3v2tag = getOldTag(gf);
-		*id3v2_size = sizeOfOldTag(gf);
-		if (*id3v2_size > 0) {
-			size_t owrite = fwrite(id3v2tag, 1, *id3v2_size, *outf);
-			if (owrite != *id3v2_size) {
-				error_printf("Error writing ID3v2 tag \n");
-				return 1;
-			}
-		}
-	}
-	if (global_writer.flush_write == 1) {
-		fflush(outf);
-	}
-
-	return 0;
-}
-
-
 int
-lame_main_imported(lame_t gf, int argc, char **argv, FILE** outf)
+lame_main_imported(lame_t gf, int argc, char **argv, FILE** outf, int addOutputToFile)
 {
 	char    inPath[PATH_MAX + 1];
 	char    outPath[PATH_MAX + 1];
@@ -426,9 +382,9 @@ lame_main_imported(lame_t gf, int argc, char **argv, FILE** outf)
 		*outf = init_files(gf, nogap_inPath[0], nogap_outPath[0]);
 	}
 	else {
-		*outf = init_files(gf, inPath, outPath);
+		*outf = init_files(gf, inPath, addOutputToFile ? outPath : NULL);
 	}
-	if (*outf == NULL) {
+	if (*outf == NULL && addOutputToFile) {
 		close_infile();
 		return -1;
 	}
@@ -447,7 +403,7 @@ lame_main_imported(lame_t gf, int argc, char **argv, FILE** outf)
 			display_bitrates(stderr);
 		}
 		error_printf("fatal error during initialization\n");
-		fclose(*outf);
+		if (*outf) fclose(*outf);
 		close_infile();
 		return ret;
 	}
@@ -460,18 +416,82 @@ lame_main_imported(lame_t gf, int argc, char **argv, FILE** outf)
 }
 
 
+int open_decoding(lame_t gf, FILE** outf)
+{
+	int     tmp_num_channels = lame_get_num_channels(gf);
+
+	if (!(tmp_num_channels >= 1 && tmp_num_channels <= 2)) {
+		error_printf("Internal error.  Aborting.");
+		return -1;
+	}
+
+	if (outf)
+	{
+		if (0 == global_decoder.disable_wav_header)
+			WriteWaveHeader(*outf, 0x7FFFFFFF, lame_get_in_samplerate(gf), tmp_num_channels, 16);
+	}
+
+	return 0;
+}
+
+int open_encoding(lame_t gf, FILE** outf, size_t*  id3v2_size)
+{
+	*id3v2_size = lame_get_id3v2_tag(gf, 0, 0);
+
+	if (*id3v2_size > 0) {
+		unsigned char *id3v2tag = malloc(*id3v2_size);
+		if (id3v2tag != 0) {
+			size_t  n_bytes = lame_get_id3v2_tag(gf, id3v2tag, *id3v2_size);
+			size_t  written = fwrite(id3v2tag, 1, n_bytes, *outf);
+			free(id3v2tag);
+			if (written != n_bytes) {
+				error_printf("Error writing ID3v2 tag \n");
+				return 1;
+			}
+		}
+	}
+	else {
+		unsigned char* id3v2tag = getOldTag(gf);
+		*id3v2_size = sizeOfOldTag(gf);
+		if (*id3v2_size > 0) {
+			size_t owrite = fwrite(id3v2tag, 1, *id3v2_size, *outf);
+			if (owrite != *id3v2_size) {
+				error_printf("Error writing ID3v2 tag \n");
+				return 1;
+			}
+		}
+	}
+	if (global_writer.flush_write == 1) {
+		fflush(*outf);
+	}
+
+	return 0;
+}
+
 int
 lame_decoder_iter(lame_t gfp, FILE * outf, char* Buffer, size_t Size, double* wavsize)
 {
-	int     i, iread;
+	int     i, iread, ret;
 	int     tmp_num_channels = lame_get_num_channels(gfp);
 
 	/* unknown size, so write maximum 32 bit signed value */
 
-	iread = get_audio16(gfp, Buffer); /* read in 'iread' samples */
-	if (iread >= 0 && outf) {
-		*wavsize += iread;
-		put_audio16(outf, Buffer, iread, tmp_num_channels);
+	char* tmpBuffer[2 * 1152 * 2];
+
+	iread = get_audio16(gfp, tmpBuffer); /* read in 'iread' samples */
+
+	if (iread > 0)
+	{
+		ret = put_audio16_imported(tmpBuffer, Buffer, iread, tmp_num_channels);
+
+		if (outf) {
+			*wavsize += iread;
+			put_audio16(outf, tmpBuffer, iread, tmp_num_channels);
+		}
+	}
+	else
+	{
+		ret = -1;
 	}
 
 	if (iread <= 0 && outf)
@@ -496,7 +516,7 @@ lame_decoder_iter(lame_t gfp, FILE * outf, char* Buffer, size_t Size, double* wa
 			WriteWaveHeader(outf, (int)*wavsize, lame_get_in_samplerate(gfp), tmp_num_channels, 16);
 	}
 
-	return iread;
+	return ret;
 }
 
 int
@@ -520,8 +540,8 @@ lame_encoder_iter(lame_t gfp, FILE * outf, char* Buffer, size_t Size, size_t  id
 	if (outf)
 	{
 		if (iread >= 0) {
-			const int* buffer_l = Buffer[0];
-			const int* buffer_r = Buffer[1];
+			const int* buffer_l = &Buffer[0];
+			const int* buffer_r = &Buffer[1152 * sizeof(int)];
 			int     rest = iread;
 			do {
 				int const chunk = rest < in_limit ? rest : in_limit;

@@ -1,7 +1,5 @@
 #include "wave/WaveEncoder.h"
 
-#include <exception>
-
 #include <lame_imported/imported.h>
 #include <lame_imported/parse_imported.h>
 

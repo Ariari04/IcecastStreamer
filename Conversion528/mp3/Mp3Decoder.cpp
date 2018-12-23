@@ -28,9 +28,10 @@ namespace Decoding
 	{
 		wavsize = 0;
 
+		std::string additionalOutputFile = std::string(fileName) + ".wav";
 		int argc = 5;
-		char* argv[5] = { "", "--decode", "-t", "test/original.mp3", "test/raw.wav" };
-		if (lame_main_imported(gf, argc, argv, &oufFile))
+		char* argv[5] = { "", "--decode", "-t", (char*)fileName, (char*)additionalOutputFile.c_str() };
+		if (lame_main_imported(gf, argc, argv, &oufFile, 0))
 		{
 			return 0;
 		}
@@ -47,11 +48,14 @@ namespace Decoding
 	{
 		int iread = lame_decoder_iter(gf, oufFile, Buffer, Count, &wavsize);
 
-		if (!iread)
+		if (iread < 1)
 		{
 			lame_decoding_close();
-			fclose(oufFile);       /* close the output file */
-			oufFile = NULL;
+			if (oufFile)
+			{
+				fclose(oufFile);       /* close the output file */
+				oufFile = NULL;
+			}
 			return -1;
 		}
 

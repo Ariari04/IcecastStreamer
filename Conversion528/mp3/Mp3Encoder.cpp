@@ -1,6 +1,6 @@
 #include "Mp3Encoder.h"
 
-#include <exception>
+#include <string>
 
 #include <lame_imported/imported.h>
 #include <lame_imported/parse_imported.h>
@@ -32,9 +32,10 @@ namespace Encoding
 			outFile = NULL;
 		}
 
+		std::string additionalOutputFile = std::string(fileName) + ".mp3";
 		int argc = 4;
-		char* argv[4] = { "", "-r",  "test/raw.wav", "test/encoded.mp3" };
-		if (lame_main_imported(gf, argc, argv, &outFile))
+		char* argv[4] = { "", "-r",  (char*)fileName, (char*)additionalOutputFile.c_str() };
+		if (lame_main_imported(gf, argc, argv, &outFile, 1))
 		{
 			return 0;
 		}

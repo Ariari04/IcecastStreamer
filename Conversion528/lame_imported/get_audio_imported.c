@@ -2304,6 +2304,13 @@ int put_audio16_imported(short input[2][1152], char output[2 * 1152 * 2], int ir
 		else {
 			for (i = 0; i < iread; i++) {
 				short   x = input[0][i], y = input[1][i];
+
+				int xaddr = &input[0][0];
+				int yaddr = &input[1][0];
+
+				int xdiff = xaddr - (int)&input;
+				int ydiff = yaddr - (int)&input;
+
 				/* write 16 Bits Low High */
 				output[m++] = LOW__BYTE(x);
 				output[m++] = HIGH_BYTE(x);
