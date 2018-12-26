@@ -12,9 +12,6 @@
     <Filter Include="blade">
       <UniqueIdentifier>{732fd927-25ad-4f9c-a394-87a34cf22a96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="faad">
-      <UniqueIdentifier>{a19ca88b-8baf-4abb-a7ae-d42fecaf58d4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="lame">
       <UniqueIdentifier>{6a5933a8-19aa-4d84-a9c8-ce3a8a8179b1}</UniqueIdentifier>
     </Filter>
@@ -26,6 +23,9 @@
     </Filter>
     <Filter Include="wave">
       <UniqueIdentifier>{8069661c-1e6a-4286-8683-294b170351fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="m4a">
+      <UniqueIdentifier>{38121723-0d54-4a54-8fec-8328aae5fc06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +71,6 @@
     <ClCompile Include="..\blade\BladeMP3Enc.c">
       <Filter>blade</Filter>
     </ClCompile>
-    <ClCompile Include="..\faad2-vs\extra\main.c">
-      <Filter>faad</Filter>
-    </ClCompile>
     <ClCompile Include="mp3\Mp3Decoder.cpp">
       <Filter>mp3</Filter>
     </ClCompile>
@@ -104,6 +101,12 @@
     <ClCompile Include="wave\WaveFile.cpp">
       <Filter>wave</Filter>
     </ClCompile>
+    <ClCompile Include="m4a\M4aDecoder.cpp">
+      <Filter>m4a</Filter>
+    </ClCompile>
+    <ClCompile Include="m4a\M4aEncoder.cpp">
+      <Filter>m4a</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleHelpers.h">
@@ -122,9 +125,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WaveFileAdapter.h">
@@ -157,9 +157,6 @@
     <ClInclude Include="..\blade\BladeMP3Enc.h">
       <Filter>blade</Filter>
     </ClInclude>
-    <ClInclude Include="..\faad2-vs\extra\faadecoder.h">
-      <Filter>faad</Filter>
-    </ClInclude>
     <ClInclude Include="mp3\Mp3Decoder.h">
       <Filter>mp3</Filter>
     </ClInclude>
@@ -189,6 +186,12 @@
     </ClInclude>
     <ClInclude Include="wave\WaveFile.h">
       <Filter>wave</Filter>
+    </ClInclude>
+    <ClInclude Include="m4a\M4aDecoder.h">
+      <Filter>m4a</Filter>
+    </ClInclude>
+    <ClInclude Include="m4a\M4aEncoder.h">
+      <Filter>m4a</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

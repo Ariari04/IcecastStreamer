@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DecoderAdapter.h"
-#include <extra/faadecoder.h>
+#include <interface/interface.h>
 #include <vector>
 #include "Progress.h"
 

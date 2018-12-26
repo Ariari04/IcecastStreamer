@@ -34,7 +34,8 @@ public:
 	{
 		Invalid,
 		WAV,
-		MP3
+		MP3,
+		M4A
 	};
 
 	std::string addres;

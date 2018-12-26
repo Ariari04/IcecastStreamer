@@ -1,9 +1,8 @@
 #pragma once
 
 #include <cstdio>
-#include <AudioFile.h>
-
 #include <wave/WaveFile.h>
+#include <AudioFile.h>
 
 namespace Decoding
 {

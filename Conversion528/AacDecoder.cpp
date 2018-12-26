@@ -1,5 +1,4 @@
 #include "AacDecoder.h"
-#include <extra/faadecoder.h>
 #include <cstring>
 #include <stdexcept>
 

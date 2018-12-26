@@ -75,6 +75,7 @@ void StreamFile()
 	std::cout << "Choose a file:" << std::endl;
 	std::cout << "1) test/original.wav" << std::endl;
 	std::cout << "2) test/original.mp3" << std::endl;
+	std::cout << "3) test/original.aac" << std::endl;
 
 	char key = _getwch();
 
@@ -82,6 +83,7 @@ void StreamFile()
 	{
 	case '1': streamFile("test/original.wav"); break;
 	case '2': streamFile("test/original.mp3"); break;
+	case '3': streamFile("test/original.aac"); break;
 	}
 }
 
@@ -90,6 +92,7 @@ void WrapFile()
 	std::cout << "Choose a file:" << std::endl;
 	std::cout << "1) test/streamed.wav -> test/wrapped.wav" << std::endl;
 	std::cout << "2) test/streamed.wav -> test/wrapped.mp3" << std::endl;
+	std::cout << "3) test/streamed.wav -> test/wrapped.aac" << std::endl;
 
 	char key = _getwch();
 
@@ -97,6 +100,7 @@ void WrapFile()
 	{
 	case '1': streamer.saveSound("test/streamed.wav", "test/wrapped.wav"); break;
 	case '2': streamer.saveSound("test/streamed.wav", "test/wrapped.mp3"); break;
+	case '3': streamer.saveSound("test/streamed.wav", "test/wrapped.aac"); break;
 	}
 }
 
@@ -113,8 +117,8 @@ int main(int argc, char* argv[])
 	do
 	{
 		std::cout << "Choose an action:" << std::endl;
-		std::cout << "1) stream sound from a file" << std::endl;
-		std::cout << "2) wrap downloaded streamed sound into a file" << std::endl;
+		std::cout << "1) stream raw PCM sound from a file" << std::endl;
+		std::cout << "2) wrap downloaded streamed raw PCM sound into a file" << std::endl;
 
 		key = _getwch();
 

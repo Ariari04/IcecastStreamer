@@ -43,7 +43,7 @@
 #include <faad.h>
 #include "../mp4ff/mp4ff.h"
 
-#include "faadecoder.h"
+#include "interface.h"
 
 #ifndef min
 #define min(a,b) ( (a) < (b) ? (a) : (b) )

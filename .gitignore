@@ -9,7 +9,11 @@
 *.userosscache
 *.sln.docstates
 *.props
+*.pdb
+*.bsc
+*.idb
 Conversion528/test
+faad2-vs/build/msvc
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

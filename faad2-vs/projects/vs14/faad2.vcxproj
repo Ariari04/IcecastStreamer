@@ -125,7 +125,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>lib$(ProjectName)d</TargetName>
-    <OutDir Condition="'$(ConfigurationType)'=='StaticLibrary'">$(ProjectDir)..\..\..\..\build\msvc\lib\$(PlatformTarget)\</OutDir>
+    <OutDir Condition="'$(ConfigurationType)'=='StaticLibrary'">$(ProjectDir)..\..\build\msvc\lib\$(PlatformTarget)\</OutDir>
     <OutDir Condition="'$(ConfigurationType)'=='DynamicLibrary'">$(ProjectDir)..\..\..\..\build\msvc\bin\$(PlatformTarget)\</OutDir>
     <IntDir>$(OutDir)..\..\obj\$(PlatformTarget)\$(Configuration)\$(ConfigurationType)\$(ProjectName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
@@ -185,7 +185,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libfaad;$(ProjectDir)..\..\include;$(OutDir)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)libfaad;$(ProjectDir)..\..\include;$(ProjectDir)..\..\common\faad;$(ProjectDir)..\..\common\mp4ff;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ProgramDataBaseFileName>$(OutDir)..\..\lib\$(PlatformTarget)\$(TargetName).pdb</ProgramDataBaseFileName>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WINDOWS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformationFile>$(IntDir)bsc\</BrowseInformationFile>
@@ -213,13 +213,6 @@ IF EXIST "$(OutDir)..\..\licenses\$(ProjectName).txt" (
 
 IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
-)
-
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
 )
 
 ENDLOCAL
@@ -278,13 +271,6 @@ IF EXIST "$(OutDir)..\..\licenses\$(ProjectName).txt" (
 
 IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
-)
-
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
 )
 
 ENDLOCAL
@@ -348,13 +334,6 @@ IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
 )
 
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
-)
-
 ENDLOCAL
       </Command>
     </PreBuildEvent>
@@ -413,13 +392,6 @@ IF EXIST "$(OutDir)..\..\licenses\$(ProjectName).txt" (
 
 IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
-)
-
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
 )
 
 ENDLOCAL
@@ -486,13 +458,6 @@ IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
 )
 
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
-)
-
 ENDLOCAL
       </Command>
     </PreBuildEvent>
@@ -554,13 +519,6 @@ IF EXIST "$(OutDir)..\..\licenses\$(ProjectName).txt" (
 
 IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
-)
-
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
 )
 
 ENDLOCAL
@@ -631,13 +589,6 @@ IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
 )
 
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
-)
-
 ENDLOCAL
       </Command>
     </PreBuildEvent>
@@ -705,13 +656,6 @@ IF EXIST "$(OutDir)..\..\include\$(ProjectName)\" (
   RD /q /s "$(OutDir)..\..\include\$(ProjectName)\"
 )
 
-FOR %%H IN (config.h libfaad\common.h) DO (
-  SET "_HEADER=%%H"
-  IF EXIST "$(ProjectDir)..\..\!_HEADER!" (
-    DEL /f /q "$(ProjectDir)..\..\!_HEADER!"
-  )
-)
-
 ENDLOCAL
       </Command>
     </PreBuildEvent>
@@ -736,6 +680,9 @@ ENDLOCAL
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\frontend\audio.c" />
+    <ClCompile Include="..\..\frontend\main.c" />
+    <ClCompile Include="..\..\interface\interface.c" />
     <ClCompile Include="..\..\libfaad\bits.c" />
     <ClCompile Include="..\..\libfaad\cfft.c" />
     <ClCompile Include="..\..\libfaad\common.c" />
@@ -776,10 +723,13 @@ ENDLOCAL
     <ClCompile Include="..\..\libfaad\tns.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\frontend\audio.h" />
+    <ClInclude Include="..\..\interface\interface.h" />
     <ClInclude Include="..\..\libfaad\analysis.h" />
     <ClInclude Include="..\..\libfaad\bits.h" />
     <ClInclude Include="..\..\libfaad\cfft.h" />
     <ClInclude Include="..\..\libfaad\codebook\hcb.h" />
+    <ClInclude Include="..\..\libfaad\common.h" />
     <ClInclude Include="..\..\libfaad\drc.h" />
     <ClInclude Include="..\..\libfaad\error.h" />
     <ClInclude Include="..\..\libfaad\filtbank.h" />
@@ -800,7 +750,6 @@ ENDLOCAL
     <ClInclude Include="..\..\libfaad\syntax.h" />
     <ClInclude Include="..\..\libfaad\Tns.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="libfaad\common.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="faad2.def" />

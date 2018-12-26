@@ -173,7 +173,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\blade\BladeMP3Enc.c" />
-    <ClCompile Include="..\faad2-vs\extra\main.c" />
     <ClCompile Include="..\lame-3.100\frontend\console.c" />
     <ClCompile Include="AacDecoder.cpp" />
     <ClCompile Include="ConsoleHelpers.cpp" />
@@ -190,6 +189,8 @@
     <ClCompile Include="lame_imported\get_audio_imported.c" />
     <ClCompile Include="lame_imported\imported.c" />
     <ClCompile Include="lame_imported\parse_imported.c" />
+    <ClCompile Include="m4a\M4aDecoder.cpp" />
+    <ClCompile Include="m4a\M4aEncoder.cpp" />
     <ClCompile Include="mp3\Mp3Decoder.cpp" />
     <ClCompile Include="mp3\Mp3Encoder.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -200,7 +201,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\blade\BladeMP3Enc.h" />
-    <ClInclude Include="..\faad2-vs\extra\faadecoder.h" />
     <ClInclude Include="..\lame-3.100\frontend\console.h" />
     <ClInclude Include="AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
@@ -218,11 +218,12 @@
     <ClInclude Include="lame_imported\get_audio_imported.h" />
     <ClInclude Include="lame_imported\imported.h" />
     <ClInclude Include="lame_imported\parse_imported.h" />
+    <ClInclude Include="m4a\M4aDecoder.h" />
+    <ClInclude Include="m4a\M4aEncoder.h" />
     <ClInclude Include="mp3\Mp3Decoder.h" />
     <ClInclude Include="mp3\Mp3Encoder.h" />
     <ClInclude Include="StaticAssertion.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileAdapter.h" />
     <ClInclude Include="wave\WaveDecoder.h" />
     <ClInclude Include="wave\WaveEncoder.h" />
