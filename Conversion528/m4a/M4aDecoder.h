@@ -1,6 +1,6 @@
 #pragma once
 
-#include <interface/interface.h>
+//#include <interface/interface.h>
 #include <cstdio>
 #include <AudioFile.h>
 
@@ -11,7 +11,7 @@ namespace Decoding
 	{
 	public:
 		void* m_hFile = NULL;
-		aacheaderInfo  m_fileInfo;
+		//aacheaderInfo  m_fileInfo;
 
 		M4aDecoder();
 		~M4aDecoder();

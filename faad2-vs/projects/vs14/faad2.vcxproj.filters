@@ -16,9 +16,6 @@
     <Filter Include="frontend">
       <UniqueIdentifier>{abc489af-afb6-41c0-ae85-d7cb4a3b1fd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="interface">
-      <UniqueIdentifier>{1fea2299-6a19-47bd-81f8-2cebd9312972}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\libfaad\bits.c">
@@ -141,9 +138,6 @@
     <ClCompile Include="..\..\frontend\main.c">
       <Filter>frontend</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\interface\interface.c">
-      <Filter>interface</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libfaad\analysis.h">
@@ -215,14 +209,8 @@
     <ClInclude Include="..\..\libfaad\Tns.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\frontend\audio.h">
       <Filter>frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\interface\interface.h">
-      <Filter>interface</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libfaad\common.h">
       <Filter>Header Files</Filter>

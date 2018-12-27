@@ -92,7 +92,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>.;../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include;../id3lib-3.8.3/include;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/mp4ff;../blade</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../boost_1_68_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include;../id3lib-3.8.3/include;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;../blade;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -173,6 +173,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\blade\BladeMP3Enc.c" />
+    <ClCompile Include="..\faad2-vs\common\faad\getopt.c" />
+    <ClCompile Include="..\faad2-vs\frontend\audio.c" />
     <ClCompile Include="..\lame-3.100\frontend\console.c" />
     <ClCompile Include="AacDecoder.cpp" />
     <ClCompile Include="ConsoleHelpers.cpp" />
@@ -183,6 +185,7 @@
     <ClCompile Include="DecoderAdapter.cpp" />
     <ClCompile Include="EncoderAdapter.cpp" />
     <ClCompile Include="ExperimentalConverter.cpp" />
+    <ClCompile Include="faad_imported\main_imported.c" />
     <ClCompile Include="FlatConverter.cpp" />
     <ClCompile Include="icecast\IcecastStreamer.cpp" />
     <ClCompile Include="KString.cpp" />
@@ -201,6 +204,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\blade\BladeMP3Enc.h" />
+    <ClInclude Include="..\faad2-vs\common\faad\getopt.h" />
+    <ClInclude Include="..\faad2-vs\frontend\audio.h" />
     <ClInclude Include="..\lame-3.100\frontend\console.h" />
     <ClInclude Include="AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
@@ -211,6 +216,7 @@
     <ClInclude Include="DecoderAdapter.h" />
     <ClInclude Include="EncoderAdapter.h" />
     <ClInclude Include="ExperimentalConverter.h" />
+    <ClInclude Include="faad_imported\main_imported.h" />
     <ClInclude Include="FlatConverter.h" />
     <ClInclude Include="icecast\IcecastStreamer.h" />
     <ClInclude Include="IntegerTypes.h" />

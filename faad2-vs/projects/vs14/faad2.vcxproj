@@ -682,7 +682,6 @@ ENDLOCAL
   <ItemGroup>
     <ClCompile Include="..\..\frontend\audio.c" />
     <ClCompile Include="..\..\frontend\main.c" />
-    <ClCompile Include="..\..\interface\interface.c" />
     <ClCompile Include="..\..\libfaad\bits.c" />
     <ClCompile Include="..\..\libfaad\cfft.c" />
     <ClCompile Include="..\..\libfaad\common.c" />
@@ -724,7 +723,6 @@ ENDLOCAL
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\frontend\audio.h" />
-    <ClInclude Include="..\..\interface\interface.h" />
     <ClInclude Include="..\..\libfaad\analysis.h" />
     <ClInclude Include="..\..\libfaad\bits.h" />
     <ClInclude Include="..\..\libfaad\cfft.h" />
@@ -749,7 +747,6 @@ ENDLOCAL
     <ClInclude Include="..\..\libfaad\ssr.h" />
     <ClInclude Include="..\..\libfaad\syntax.h" />
     <ClInclude Include="..\..\libfaad\Tns.h" />
-    <ClInclude Include="config.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="faad2.def" />

@@ -3,6 +3,8 @@
 #include <string.h>
 #include <cstdlib>
 
+#include <faad_imported/main_imported.h>
+
 namespace Decoding
 {
 	M4aDecoder::M4aDecoder()
@@ -11,43 +13,33 @@ namespace Decoding
 
 	M4aDecoder::~M4aDecoder()
 	{
-		if (m_hFile)
-		{
-			FAADUnInit(m_hFile);
-			m_hFile = NULL;
-		}
 	}
 
 	int M4aDecoder::open(const char* fileName)
 	{
-#ifndef WIN32
-		FAADCHAR* faadFileName = (FAADCHAR*)fileName
-#else
-		const size_t cSize = strlen(fileName) + 1;
-		FAADCHAR* faadFileName = new FAADCHAR[cSize];
-		std::mbstowcs(faadFileName, fileName, cSize);
-#endif
+		//std::string additionalOutputFile = std::string(fileName) + ".wav";
+		int argc = 3;
+		char* argv[3] = { "", "-f 2", (char*)fileName };
 
-		m_hFile = FAADInit(faadFileName, &m_fileInfo);
-		return m_hFile != NULL;
+		faad_open_decoding(argc, argv);
+
+		while (true)
+		{
+			int iread = decodeAacfile_iteration();
+
+			if (iread < 1)
+			{
+				decodeAacfile_closing();
+				break;
+				return -1;
+			}
+		}
+
+		return 0;
 	}
 
 	int M4aDecoder::read(char* Buffer, size_t Count)
 	{
-		int intBufferLength = 0;
-		long nCurrentTime = 0;
-
-		char* dynamicBuffer;
-
-		if (FAADGetNextSample(m_hFile, &dynamicBuffer, &intBufferLength, &nCurrentTime) != -1)
-		{
-			memcpy(Buffer, dynamicBuffer, intBufferLength);
-			//delete dynamicBuffer;
-			return intBufferLength;
-		}
-		else
-		{
-			return -1;
-		}
+		return 0;
 	}
 }

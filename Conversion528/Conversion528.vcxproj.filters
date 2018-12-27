@@ -27,6 +27,9 @@
     <Filter Include="m4a">
       <UniqueIdentifier>{38121723-0d54-4a54-8fec-8328aae5fc06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="faad">
+      <UniqueIdentifier>{f1a9c772-4b2e-4331-9841-a56ca6687e57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleHelpers.cpp">
@@ -106,6 +109,15 @@
     </ClCompile>
     <ClCompile Include="m4a\M4aEncoder.cpp">
       <Filter>m4a</Filter>
+    </ClCompile>
+    <ClCompile Include="faad_imported\main_imported.c">
+      <Filter>faad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\faad2-vs\frontend\audio.c">
+      <Filter>faad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\faad2-vs\common\faad\getopt.c">
+      <Filter>faad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +204,15 @@
     </ClInclude>
     <ClInclude Include="m4a\M4aEncoder.h">
       <Filter>m4a</Filter>
+    </ClInclude>
+    <ClInclude Include="faad_imported\main_imported.h">
+      <Filter>faad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\faad2-vs\frontend\audio.h">
+      <Filter>faad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\faad2-vs\common\faad\getopt.h">
+      <Filter>faad</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
