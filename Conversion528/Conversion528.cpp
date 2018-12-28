@@ -77,6 +77,7 @@ void StreamFile()
 	std::cout << "2) test/original.mp3" << std::endl;
 	std::cout << "3) test/original.aac" << std::endl;
 	std::cout << "4) test/original.m4a" << std::endl;
+	std::cout << "5) test/original.mp4" << std::endl;
 
 	char key = _getwch();
 
@@ -85,7 +86,8 @@ void StreamFile()
 	case '1': streamFile("test/original.wav"); break;
 	case '2': streamFile("test/original.mp3"); break;
 	case '3': streamFile("test/original.aac"); break;
-	case '4': streamFile("test/original.aac"); break;
+	case '4': streamFile("test/original.m4a"); break;
+	case '5': streamFile("test/original.mp4"); break;
 	}
 }
 

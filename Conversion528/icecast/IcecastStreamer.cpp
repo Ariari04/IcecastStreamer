@@ -175,7 +175,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	std::cout << "IcecastStreamer: press any key to start streaming" << std::endl;
 	_getch();
 
-	char Buffer[2 * 1152 * 2];
+	char Buffer[2 * 1152 * 2 * 10];
 
 	int packet = 0;
 
@@ -183,7 +183,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 	while (true)
 	{
-		int byteCount = reader->read(Buffer, 2 * 1152 * 2);
+		int byteCount = reader->read(Buffer, 2 * 1152 * 2 * 10);
 
 		if (byteCount < 1)
 		{

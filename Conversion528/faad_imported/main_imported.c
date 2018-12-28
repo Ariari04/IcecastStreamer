@@ -1324,7 +1324,7 @@ struct Global
 
 struct Global global;
 
-int faad_open_decoding(int argc, char *argv[])
+int faad_open_decoding(int argc, char *argv[], int* mp4SampleCount)
 {
 	int result;
 	int infoOnly = 0;
@@ -1534,16 +1534,17 @@ int faad_open_decoding(int argc, char *argv[])
 	global.to_stdout = writeToStdio;
 	global.outputFormat = outputFormat;
 	global.fileType = format;
-	global.noGapless = audioFileName;
+	global.noGapless = noGapless;
 	global.adts_out = adts_out;
 	global.old_format = old_format;
 
 	if (global.is_mp4file)
 	{
-		result = decodeMP4file_opening(aacFileName, adtsFileName, outputFormat, downMatrix, infoOnly, adts_out, &length);
+		result = decodeMP4file_opening(mp4SampleCount, aacFileName, adtsFileName, outputFormat, downMatrix, infoOnly, adts_out, &length);
 	}
 	else
 	{
+		*mp4SampleCount = -1;
 		result = decodeAACfile_opening(aacFileName, adtsFileName, def_srate, object_type, outputFormat, downMatrix, infoOnly, adts_out, &length);
 	}
 
@@ -1560,9 +1561,11 @@ void setInitialMp4Global()
 
 	/* initialise the callback structure */
 	global.mp4cb = malloc(sizeof(mp4ff_callback_t));
+
+	global.sampleId = 0;
 }
 
-static int decodeMP4file_opening(char *mp4file, char *adts_fn, int outputFormat,
+static int decodeMP4file_opening(int* mp4SampleCount, char *mp4file, char *adts_fn, int outputFormat,
 	int downMatrix, int infoOnly, int adts_out, float *song_length)
 {
 	unsigned char channels;
@@ -1693,6 +1696,7 @@ static int decodeMP4file_opening(char *mp4file, char *adts_fn, int outputFormat,
 	}
 
 	global.numSamples = mp4ff_num_samples(global.infile, global.track);
+	*mp4SampleCount = global.numSamples;
 
 	return global.frameInfo.error;
 }
@@ -1874,6 +1878,11 @@ int faad_iteration_decoding(char* Buffer, size_t Size)
 
 static int decodeMP4file_iteration(char* Buffer, size_t Size)
 {
+	if (global.sampleId == global.numSamples)
+	{
+		return -1;
+	}
+
 	int rc;
 	long dur;
 	unsigned int sample_count;
@@ -1971,10 +1980,17 @@ static int decodeMP4file_iteration(char* Buffer, size_t Size)
 
 	if (sample_count > 0) global.initial = 0;
 
+	int byteCount = 0;
+
 	if ((global.frameInfo.error == 0) && (sample_count > 0) && (!global.adts_out))
 	{
-		if (write_audio_file(global.aufile, global.sample_buffer, sample_count, delay) == 0)
-			return 0;
+		if (global.frameInfo.samples * global.aufile->bits_per_sample * sizeof(char) / 8 > Size)
+		{
+			printf("Buffer for samples is too small.");
+			return -1;
+		}
+
+		byteCount = write_audio_buffer(Buffer, global.aufile, global.sample_buffer, sample_count, delay);
 	}
 
 	if (global.frameInfo.error > 0)
@@ -1983,7 +1999,9 @@ static int decodeMP4file_iteration(char* Buffer, size_t Size)
 			NeAACDecGetErrorMessage(global.frameInfo.error));
 	}
 
-	return 100;
+	++global.sampleId;
+
+	return global.frameInfo.error ? -1 : byteCount;
 }
 
 static int decodeAacfile_iteration(char* Buffer, size_t Size)
@@ -2067,7 +2085,7 @@ static int decodeAacfile_iteration(char* Buffer, size_t Size)
 	if (global.b.bytes_into_buffer == 0)
 		global.sample_buffer = NULL; /* to make sure it stops now */
 
-	return  global.sample_buffer != NULL ? byteCount : -1;
+	return   global.sample_buffer != NULL ? (global.frameInfo.error ? -1 : byteCount) : -1;
 }
 
 int faad_close_decoding()
@@ -2094,7 +2112,7 @@ static int decodeMP4file_closing()
 	mp4ff_close(global.infile);
 
 	if (!global.first_time && !global.adts_out)
-		close_audio_file(global.aufile);
+		close_audio_file_imported(global.aufile);
 
 	free(global.mp4cb);
 	fclose(global.mp4File);

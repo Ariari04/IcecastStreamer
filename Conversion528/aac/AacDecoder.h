@@ -10,6 +10,7 @@ namespace Decoding
 	{
 	public:
 		bool firstZero;
+		int mp4SampleCount;
 
 		AacDecoder();
 		~AacDecoder();

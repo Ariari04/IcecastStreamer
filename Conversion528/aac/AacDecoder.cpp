@@ -23,7 +23,7 @@ namespace Decoding
 		int argc = 3;
 		char* argv[3] = { "", "-f 2", (char*)fileName };
 
-		int ret = faad_open_decoding(argc, argv);
+		int ret = faad_open_decoding(argc, argv, &mp4SampleCount);
 
 		firstZero = true;
 
