@@ -17,7 +17,7 @@ namespace Encoding
 		Mp3Encoder();
 		~Mp3Encoder();
 
-		int open(const char* fileName) override;
+		int open(const char* inFileName, const char* outFileName) override;
 		int write(char* Buffer, size_t Count) override;
 	};
 

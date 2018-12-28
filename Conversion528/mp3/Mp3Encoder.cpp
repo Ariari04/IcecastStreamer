@@ -24,7 +24,7 @@ namespace Encoding
 		lame_close(gf);
 	}
 
-	int Mp3Encoder::open(const char* fileName)
+	int Mp3Encoder::open(const char* inFileName, const char* outFileName)
 	{
 		if (outFile)
 		{
@@ -32,9 +32,8 @@ namespace Encoding
 			outFile = NULL;
 		}
 
-		std::string additionalOutputFile = std::string(fileName) + ".mp3";
 		int argc = 4;
-		char* argv[4] = { "", "-r",  (char*)fileName, (char*)additionalOutputFile.c_str() };
+		char* argv[4] = { "", "-r",  (char*)inFileName, (char*)outFileName };
 		if (lame_main_imported(gf, argc, argv, &outFile, 1))
 		{
 			return 0;

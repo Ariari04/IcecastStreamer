@@ -10,14 +10,15 @@ namespace Encoding
 	class WaveEncoder : public AudioEncoder
 	{
 	public:
-		FILE * file = NULL;
+		FILE * inFile = NULL;
+		FILE * outFile = NULL;
 		WaveFileChunks::WaveFileHeader Header;
 
 		~WaveEncoder();
 
 		void close();
 
-		int open(const char* fileName);
+		int open(const char* inFileName, const char* outFileName);
 		int write(char* Buffer, size_t Count);
 	};
 }

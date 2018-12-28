@@ -7,33 +7,30 @@ namespace Encoding
 {
 	WaveEncoder::~WaveEncoder()
 	{
-		if (file)
-		{
-			close();
-		}
+		close();
 	}
 
 	void WaveEncoder::close()
 	{
-		fclose(file);
-		file = NULL;
+		if (inFile) fclose(inFile);
+		inFile = NULL;
+		if (outFile) fclose(outFile);
+		outFile = NULL;
 	}
 
-	int WaveEncoder::open(const char* fileName)
+	int WaveEncoder::open(const char* inFileName, const char* outFileName)
 	{
-		if (file)
-		{
-			close();
-		}
+		close();
 
-		file = fopen(fileName, "wb");
+		inFile = fopen(inFileName, "rb");
+		outFile = fopen(outFileName, "wb");
 
-		if (!file)
+		if (!inFile || !outFile)
 		{
 			return 0;
 		}
 
-		if (sizeof(Header) != fwrite(&Header, 1, sizeof(Header), file))
+		if (sizeof(Header) != fwrite(&Header, 1, sizeof(Header), outFile))
 		{
 			close();
 			return false;
@@ -44,7 +41,8 @@ namespace Encoding
 
 	int WaveEncoder::write(char* Buffer, size_t Count)
 	{
-		int count = fwrite(Buffer, 1, Count, file);
+		int readCount = fread(Buffer, 1, Count, inFile);
+		int count = fwrite(Buffer, 1, readCount, outFile);
 
 		if (count < 1)
 		{

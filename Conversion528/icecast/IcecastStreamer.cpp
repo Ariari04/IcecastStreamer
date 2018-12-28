@@ -235,7 +235,7 @@ void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::s
 		writer = std::make_shared<Encoding::Mp3Encoder>();
 	}
 
-	writer->open(binarySoundFile.c_str());
+	writer->open(binarySoundFile.c_str(), savedFile.c_str());
 
 	do
 	{

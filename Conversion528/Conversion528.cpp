@@ -73,7 +73,7 @@ void streamFile(const std::string& fileName)
 void StreamFile()
 {
 	std::cout << "Choose a file:" << std::endl;
-	std::cout << "1) test/original.wav" << std::endl;
+	std::cout << "1) test/original.wav (BROKEN)" << std::endl;
 	std::cout << "2) test/original.mp3" << std::endl;
 	std::cout << "3) test/original.aac" << std::endl;
 	std::cout << "4) test/original.m4a" << std::endl;
