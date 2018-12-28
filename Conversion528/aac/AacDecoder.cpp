@@ -19,7 +19,6 @@ namespace Decoding
 
 	int AacDecoder::open(const char* fileName)
 	{
-		//std::string additionalOutputFile = std::string(fileName) + ".wav";
 		int argc = 3;
 		char* argv[3] = { "", "-f 2", (char*)fileName };
 

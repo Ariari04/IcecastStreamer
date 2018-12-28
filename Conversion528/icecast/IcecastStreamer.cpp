@@ -179,7 +179,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 	int packet = 0;
 
-	std::ofstream ofs("test/fff.wav", std::ios::binary);
+	//std::ofstream ofs("test/streamed.wav", std::ios::binary); // decomment for testing
 
 	while (true)
 	{
@@ -190,10 +190,10 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 			break;
 		}
 
-		if (byteCount > 0)
-		{
-			ofs.write(Buffer, byteCount);
-		}
+		//if (byteCount > 0)
+		//{
+		//	ofs.write(Buffer, byteCount);  // decomment for testing
+		//}
 
 		auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
 
