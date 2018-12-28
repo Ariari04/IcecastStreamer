@@ -35,6 +35,7 @@ public:
 		Invalid,
 		WAV,
 		MP3,
+		AAC,
 		M4A
 	};
 

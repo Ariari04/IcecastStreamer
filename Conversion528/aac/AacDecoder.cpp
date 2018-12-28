@@ -1,4 +1,4 @@
-#include <m4a/M4aDecoder.h>
+#include <aac/AacDecoder.h>
 
 #include <string.h>
 #include <cstdlib>
@@ -9,15 +9,15 @@
 
 namespace Decoding
 {
-	M4aDecoder::M4aDecoder()
+	AacDecoder::AacDecoder()
 	{
 	}
 
-	M4aDecoder::~M4aDecoder()
+	AacDecoder::~AacDecoder()
 	{
 	}
 
-	int M4aDecoder::open(const char* fileName)
+	int AacDecoder::open(const char* fileName)
 	{
 		//std::string additionalOutputFile = std::string(fileName) + ".wav";
 		int argc = 3;
@@ -30,18 +30,18 @@ namespace Decoding
 		return 1 - ret;
 	}
 
-	int M4aDecoder::read(char* Buffer, size_t Count)
+	int AacDecoder::read(char* Buffer, size_t Count)
 	{
-		int iread = decodeAacfile_iteration(Buffer, Count);
+		int iread = faad_iteration_decoding(Buffer, Count);
 
 		if (firstZero && iread == 0)
 		{
-			iread = decodeAacfile_iteration(Buffer, Count);
+			iread = faad_iteration_decoding(Buffer, Count);
 		}
 
 		if (iread < 1)
 		{
-			decodeAacfile_closing();
+			faad_close_decoding();
 			return -1;
 		}
 

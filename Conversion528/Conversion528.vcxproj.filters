@@ -24,11 +24,11 @@
     <Filter Include="wave">
       <UniqueIdentifier>{8069661c-1e6a-4286-8683-294b170351fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="m4a">
-      <UniqueIdentifier>{38121723-0d54-4a54-8fec-8328aae5fc06}</UniqueIdentifier>
-    </Filter>
     <Filter Include="faad">
       <UniqueIdentifier>{f1a9c772-4b2e-4331-9841-a56ca6687e57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="aac">
+      <UniqueIdentifier>{38121723-0d54-4a54-8fec-8328aae5fc06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,9 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EncoderAdapter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AacDecoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ConvException.cpp">
@@ -104,12 +101,6 @@
     <ClCompile Include="wave\WaveFile.cpp">
       <Filter>wave</Filter>
     </ClCompile>
-    <ClCompile Include="m4a\M4aDecoder.cpp">
-      <Filter>m4a</Filter>
-    </ClCompile>
-    <ClCompile Include="m4a\M4aEncoder.cpp">
-      <Filter>m4a</Filter>
-    </ClCompile>
     <ClCompile Include="faad_imported\main_imported.c">
       <Filter>faad</Filter>
     </ClCompile>
@@ -118,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="faad_imported\audio_imported.c">
       <Filter>faad</Filter>
+    </ClCompile>
+    <ClCompile Include="aac\AacDecoder.cpp">
+      <Filter>aac</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,9 +154,6 @@
     <ClInclude Include="EncoderAdapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AacDecoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConvException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -199,12 +190,6 @@
     <ClInclude Include="wave\WaveFile.h">
       <Filter>wave</Filter>
     </ClInclude>
-    <ClInclude Include="m4a\M4aDecoder.h">
-      <Filter>m4a</Filter>
-    </ClInclude>
-    <ClInclude Include="m4a\M4aEncoder.h">
-      <Filter>m4a</Filter>
-    </ClInclude>
     <ClInclude Include="faad_imported\main_imported.h">
       <Filter>faad</Filter>
     </ClInclude>
@@ -213,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="faad_imported\audio_imported.h">
       <Filter>faad</Filter>
+    </ClInclude>
+    <ClInclude Include="aac\AacDecoder.h">
+      <Filter>aac</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

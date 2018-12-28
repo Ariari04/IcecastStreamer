@@ -98,6 +98,69 @@ audio_file *open_audio_file(char *infile, int samplerate, int channels,
     return aufile;
 }
 
+
+
+audio_file *open_audio_file_imported(int samplerate, int channels,
+	int outputFormat, int fileType, long channelMask)
+{
+	audio_file *aufile = malloc(sizeof(audio_file));
+
+	aufile->outputFormat = outputFormat;
+
+	aufile->samplerate = samplerate;
+	aufile->channels = channels;
+	aufile->total_samples = 0;
+	aufile->fileType = fileType;
+	aufile->channelMask = channelMask;
+
+	switch (outputFormat)
+	{
+	case FAAD_FMT_16BIT:
+		aufile->bits_per_sample = 16;
+		break;
+	case FAAD_FMT_24BIT:
+		aufile->bits_per_sample = 24;
+		break;
+	case FAAD_FMT_32BIT:
+	case FAAD_FMT_FLOAT:
+		aufile->bits_per_sample = 32;
+		break;
+	default:
+		if (aufile) free(aufile);
+		return NULL;
+	}
+
+//	if (infile[0] == '-')
+//	{
+//#ifdef _WIN32
+//		setmode(fileno(stdout), O_BINARY);
+//#endif
+//		aufile->sndfile = stdout;
+//		aufile->toStdio = 1;
+//	}
+//	else 
+	{
+		aufile->toStdio = 0;
+		aufile->sndfile = NULL; // fopen(infile, "wb");
+	}
+
+	//if (aufile->sndfile == NULL)
+	//{
+	//	if (aufile) free(aufile);
+	//	return NULL;
+	//}
+
+	if (aufile->fileType == OUTPUT_WAV)
+	{
+		if (aufile->channelMask)
+			write_wav_extensible_header(aufile, aufile->channelMask);
+		else
+			write_wav_header(aufile);
+	}
+
+	return aufile;
+}
+
 int write_audio_file(audio_file *aufile, void *sample_buffer, int samples, int offset)
 {
     char *buf = (char *)sample_buffer;
@@ -138,7 +201,7 @@ int write_audio_buffer(char* Buffer, audio_file *aufile, void *sample_buffer, in
 	return 0;
 }
 
-void close_audio_file(audio_file *aufile)
+void close_audio_file_imported(audio_file *aufile)
 {
     if ((aufile->fileType == OUTPUT_WAV) && (aufile->toStdio == 0))
     {
@@ -150,10 +213,28 @@ void close_audio_file(audio_file *aufile)
             write_wav_header(aufile);
     }
 
-    if (aufile->toStdio == 0)
-        fclose(aufile->sndfile);
+    //if (aufile->toStdio == 0)
+    //    fclose(aufile->sndfile);
 
     if (aufile) free(aufile);
+}
+
+void close_audio_file(audio_file *aufile)
+{
+	if ((aufile->fileType == OUTPUT_WAV) && (aufile->toStdio == 0))
+	{
+		fseek(aufile->sndfile, 0, SEEK_SET);
+
+		if (aufile->channelMask)
+			write_wav_extensible_header(aufile, aufile->channelMask);
+		else
+			write_wav_header(aufile);
+	}
+
+	if (aufile->toStdio == 0)
+		fclose(aufile->sndfile);
+
+	if (aufile) free(aufile);
 }
 
 static int write_wav_header(audio_file *aufile)

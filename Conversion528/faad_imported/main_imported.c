@@ -1318,6 +1318,8 @@ struct Global
 
 	aac_buffer b;
 	int old_format;
+
+	int is_mp4file;
 };
 
 struct Global global;
@@ -1336,7 +1338,6 @@ int faad_open_decoding(int argc, char *argv[])
 	int adts_out = 0;
 	int old_format = 0;
 	int showHelp = 0;
-	int mp4file = 0;
 	int noGapless = 0;
 	char *fnp;
 	char aacFileName[255];
@@ -1346,7 +1347,12 @@ int faad_open_decoding(int argc, char *argv[])
 	float length = 0;
 	FILE *hMP4File;
 
+	optarg = NULL;
+	optind = 0;
+
 	unsigned long cap = NeAACDecGetCapabilities();
+
+	//setInitialMp4Global();
 
 	/* begin process command line */
 	progName = argv[0];
@@ -1513,7 +1519,7 @@ int faad_open_decoding(int argc, char *argv[])
 	}
 
 	/* check for mp4 file */
-	mp4file = 0;
+	global.is_mp4file = 0;
 	hMP4File = fopen(aacFileName, "rb");
 	if (!hMP4File)
 	{
@@ -1522,7 +1528,7 @@ int faad_open_decoding(int argc, char *argv[])
 	fread(header, 1, 8, hMP4File);
 	fclose(hMP4File);
 	if (header[4] == 'f' && header[5] == 't' && header[6] == 'y' && header[7] == 'p')
-		mp4file = 1;
+		global.is_mp4file = 1;
 
 	strcpy(global.sndfile, audioFileName);
 	global.to_stdout = writeToStdio;
@@ -1532,7 +1538,7 @@ int faad_open_decoding(int argc, char *argv[])
 	global.adts_out = adts_out;
 	global.old_format = old_format;
 
-	if (mp4file)
+	if (global.is_mp4file)
 	{
 		result = decodeMP4file_opening(aacFileName, adtsFileName, outputFormat, downMatrix, infoOnly, adts_out, &length);
 	}
@@ -1698,6 +1704,8 @@ static int decodeAACfile_opening(char *aacfile, char *adts_fn, int def_srate, in
 
 	NeAACDecConfigurationPtr config;
 
+	setInitialMp4Global();
+
 	int bread, fileread;
 	int header_type = 0;
 	int bitrate = 0;
@@ -1852,7 +1860,19 @@ static int decodeAACfile_opening(char *aacfile, char *adts_fn, int def_srate, in
 	return global.frameInfo.error;
 }
 
-int decodeMP4file_iteration()
+int faad_iteration_decoding(char* Buffer, size_t Size)
+{
+	if (global.is_mp4file)
+	{
+		return decodeMP4file_iteration(Buffer, Size);
+	}
+	else
+	{
+		return decodeAacfile_iteration(Buffer, Size);
+	}
+}
+
+static int decodeMP4file_iteration(char* Buffer, size_t Size)
 {
 	int rc;
 	long dur;
@@ -1927,24 +1947,24 @@ int decodeMP4file_iteration()
 			/* open output file */
 			if (!global.to_stdout)
 			{
-				global.aufile = open_audio_file(global.sndfile, global.frameInfo.samplerate, global.frameInfo.channels,
+				global.aufile = open_audio_file_imported(global.frameInfo.samplerate, global.frameInfo.channels,
 					global.outputFormat, global.fileType, aacChannelConfig2wavexChannelMask(&global.frameInfo));
 			}
-			else {
-#ifdef _WIN32
-				setmode(fileno(stdout), O_BINARY);
-#endif
-				global.aufile = open_audio_file("-", global.frameInfo.samplerate, global.frameInfo.channels,
-					global.outputFormat, global.fileType, aacChannelConfig2wavexChannelMask(&global.frameInfo));
-			}
-			if (global.aufile == NULL)
-			{
-				NeAACDecClose(global.hDecoder);
-				mp4ff_close(global.infile);
-				free(global.mp4cb);
-				fclose(global.mp4File);
-				return 0;
-			}
+//			else {
+//#ifdef _WIN32
+//				setmode(fileno(stdout), O_BINARY);
+//#endif
+//				global.aufile = open_audio_file("-", global.frameInfo.samplerate, global.frameInfo.channels,
+//					global.outputFormat, global.fileType, aacChannelConfig2wavexChannelMask(&global.frameInfo));
+//			}
+			//if (global.aufile == NULL)
+			//{
+			//	NeAACDecClose(global.hDecoder);
+			//	mp4ff_close(global.infile);
+			//	free(global.mp4cb);
+			//	fclose(global.mp4File);
+			//	return 0;
+			//}
 		}
 		global.first_time = 0;
 	}
@@ -1966,7 +1986,7 @@ int decodeMP4file_iteration()
 	return 100;
 }
 
-int decodeAacfile_iteration(char* Buffer, size_t Size)
+static int decodeAacfile_iteration(char* Buffer, size_t Size)
 {
 	global.sample_buffer = NeAACDecDecode(global.hDecoder, &global.frameInfo,
 		global.b.buffer, global.b.bytes_into_buffer);
@@ -2006,21 +2026,21 @@ int decodeAacfile_iteration(char* Buffer, size_t Size)
 			/* open output file */
 			if (!global.to_stdout)
 			{
-				global.aufile = open_audio_file(global.sndfile, global.frameInfo.samplerate, global.frameInfo.channels,
+				global.aufile = open_audio_file_imported(global.frameInfo.samplerate, global.frameInfo.channels,
 					global.outputFormat, global.fileType, aacChannelConfig2wavexChannelMask(&global.frameInfo));
 			}
-			else {
-				global.aufile = open_audio_file("-", global.frameInfo.samplerate, global.frameInfo.channels,
-					global.outputFormat, global.fileType, aacChannelConfig2wavexChannelMask(&global.frameInfo));
-			}
-			if (global.aufile == NULL)
-			{
-				if (global.b.buffer)
-					free(global.b.buffer);
-				NeAACDecClose(global.hDecoder);
-				fclose(global.b.infile);
-				return -1;
-			}
+			//else {
+			//	global.aufile = open_audio_file("-", global.frameInfo.samplerate, global.frameInfo.channels,
+			//		global.outputFormat, global.fileType, aacChannelConfig2wavexChannelMask(&global.frameInfo));
+			//}
+			//if (global.aufile == NULL)
+			//{
+			//	if (global.b.buffer)
+			//		free(global.b.buffer);
+			//	NeAACDecClose(global.hDecoder);
+			//	fclose(global.b.infile);
+			//	return -1;
+			//}
 		}
 		else {
 			faad_fprintf(stderr, "Writing output MPEG-4 AAC ADTS file.\n\n");
@@ -2050,7 +2070,19 @@ int decodeAacfile_iteration(char* Buffer, size_t Size)
 	return  global.sample_buffer != NULL ? byteCount : -1;
 }
 
-int decodeMP4file_closing()
+int faad_close_decoding()
+{
+	if (global.is_mp4file)
+	{
+		return decodeMP4file_closing();
+	}
+	else
+	{
+		return decodeAacfile_closing();
+	}
+}
+
+static int decodeMP4file_closing()
 {
 	NeAACDecClose(global.hDecoder);
 
@@ -2070,7 +2102,7 @@ int decodeMP4file_closing()
 	return global.frameInfo.error;
 }
 
-int decodeAacfile_closing()
+static int decodeAacfile_closing()
 {
 
 	NeAACDecClose(global.hDecoder);
@@ -2083,7 +2115,7 @@ int decodeAacfile_closing()
 	fclose(global.b.infile);
 
 	if (!global.first_time && !global.adts_out)
-		close_audio_file(global.aufile);
+		close_audio_file_imported(global.aufile);
 
 	if (global.b.buffer)
 		free(global.b.buffer);

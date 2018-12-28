@@ -1,21 +1,18 @@
 #pragma once
 
-//#include <interface/interface.h>
 #include <cstdio>
 #include <AudioFile.h>
 
 namespace Decoding
 {
 
-	class M4aDecoder : public AudioDecoder // public BufferedProducerBase
+	class AacDecoder : public AudioDecoder // public BufferedProducerBase
 	{
 	public:
-		void* m_hFile = NULL;
 		bool firstZero;
-		//aacheaderInfo  m_fileInfo;
 
-		M4aDecoder();
-		~M4aDecoder();
+		AacDecoder();
+		~AacDecoder();
 
 		int open(const char* fileName) override;
 

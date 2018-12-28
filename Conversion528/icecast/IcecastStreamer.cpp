@@ -8,8 +8,7 @@
 #include <wave/WaveEncoder.h>
 #include <mp3/Mp3Decoder.h>
 #include <mp3/Mp3Encoder.h>
-#include <m4a/M4aDecoder.h>
-#include <m4a/M4aEncoder.h>
+#include <aac/AacDecoder.h>
 
 const long long MAX_UPLOADED_FILE_SIZE = 1024 * 1024 * 400;
 
@@ -156,10 +155,10 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 		format = IcecastStreamer::AudioFormat::MP3;
 		reader = std::make_shared<Decoding::Mp3Decoder>();
 	}
-	else if (ext == ".aac")
+	else if (ext == ".aac" || ext == ".m4a" || ext == ".mp4")
 	{
-		format = IcecastStreamer::AudioFormat::M4A;
-		reader = std::make_shared<Decoding::M4aDecoder>();
+		format = IcecastStreamer::AudioFormat::AAC;
+		reader = std::make_shared<Decoding::AacDecoder>();
 	}
 
 	if (format == IcecastStreamer::AudioFormat::Invalid)
@@ -180,7 +179,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 	int packet = 0;
 
-	//std::ofstream ofs("test/fff.wav", std::ios::binary);
+	std::ofstream ofs("test/fff.wav", std::ios::binary);
 
 	while (true)
 	{
@@ -191,10 +190,10 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 			break;
 		}
 
-		//if (byteCount > 0)
-		//{
-		//	ofs.write(Buffer, byteCount);
-		//}
+		if (byteCount > 0)
+		{
+			ofs.write(Buffer, byteCount);
+		}
 
 		auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
 
@@ -235,11 +234,6 @@ void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::s
 		format = IcecastStreamer::AudioFormat::MP3;
 		writer = std::make_shared<Encoding::Mp3Encoder>();
 	}
-	//else if (ext == ".m4a")
-	//{
-	//	format = IcecastStreamer::AudioFormat::M4A;
-	//	writer = std::make_shared<Encoding::M4aEncoder>();
-	//}
 
 	writer->open(binarySoundFile.c_str());
 

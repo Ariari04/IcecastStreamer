@@ -6,11 +6,9 @@ extern "C" {
 
 	int faad_open_decoding(int argc, char *argv[]);
 
-	int decodeAacfile_iteration(char* Buffer, size_t Size);
-	int decodeMP4file_iteration();
+	int faad_iteration_decoding(char* Buffer, size_t Size);
 
-	int decodeAacfile_closing();
-	int decodeMP4file_closing();
+	int faad_close_decoding();
 
 #if defined(__cplusplus)
 }

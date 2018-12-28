@@ -175,7 +175,7 @@
     <ClCompile Include="..\blade\BladeMP3Enc.c" />
     <ClCompile Include="..\faad2-vs\common\faad\getopt.c" />
     <ClCompile Include="..\lame-3.100\frontend\console.c" />
-    <ClCompile Include="AacDecoder.cpp" />
+    <ClCompile Include="aac\AacDecoder.cpp" />
     <ClCompile Include="ConsoleHelpers.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Conversion528.cpp" />
@@ -192,8 +192,6 @@
     <ClCompile Include="lame_imported\get_audio_imported.c" />
     <ClCompile Include="lame_imported\imported.c" />
     <ClCompile Include="lame_imported\parse_imported.c" />
-    <ClCompile Include="m4a\M4aDecoder.cpp" />
-    <ClCompile Include="m4a\M4aEncoder.cpp" />
     <ClCompile Include="mp3\Mp3Decoder.cpp" />
     <ClCompile Include="mp3\Mp3Encoder.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -206,7 +204,7 @@
     <ClInclude Include="..\blade\BladeMP3Enc.h" />
     <ClInclude Include="..\faad2-vs\common\faad\getopt.h" />
     <ClInclude Include="..\lame-3.100\frontend\console.h" />
-    <ClInclude Include="AacDecoder.h" />
+    <ClInclude Include="aac\AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
     <ClInclude Include="ConsoleHelpers.h" />
     <ClInclude Include="Conversion.h" />
@@ -224,8 +222,6 @@
     <ClInclude Include="lame_imported\get_audio_imported.h" />
     <ClInclude Include="lame_imported\imported.h" />
     <ClInclude Include="lame_imported\parse_imported.h" />
-    <ClInclude Include="m4a\M4aDecoder.h" />
-    <ClInclude Include="m4a\M4aEncoder.h" />
     <ClInclude Include="mp3\Mp3Decoder.h" />
     <ClInclude Include="mp3\Mp3Encoder.h" />
     <ClInclude Include="StaticAssertion.h" />

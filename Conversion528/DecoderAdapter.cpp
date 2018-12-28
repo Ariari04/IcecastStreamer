@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
-#include "AacDecoder.h"
+#include "aac/AacDecoder.h"
 #include "ConvException.h"
 #include "PathOperations.h"
 
