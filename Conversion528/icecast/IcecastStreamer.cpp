@@ -169,7 +169,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 	if (!reader->open(uploading.fileName.c_str()))
 	{
-		std::cout << "IcecastStreamer: couldn't open the file to be streamed";
+		std::cout << "IcecastStreamer: couldn't open the file to be streamed" << std::endl;
 		return false;
 	}
 
@@ -180,17 +180,21 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 
 	int packet = 0;
 
-	std::ofstream ofs("fff.wav");
+	//std::ofstream ofs("test/fff.wav", std::ios::binary);
 
 	while (true)
 	{
 		int byteCount = reader->read(Buffer, 2 * 1152 * 2);
-		ofs.write(Buffer, byteCount);
 
 		if (byteCount < 1)
 		{
 			break;
 		}
+
+		//if (byteCount > 0)
+		//{
+		//	ofs.write(Buffer, byteCount);
+		//}
 
 		auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
 

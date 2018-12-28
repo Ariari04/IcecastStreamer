@@ -2,6 +2,8 @@
 
 #include <string.h>
 #include <cstdlib>
+#include <fstream>
+#include <iostream>
 
 #include <faad_imported/main_imported.h>
 
@@ -21,25 +23,30 @@ namespace Decoding
 		int argc = 3;
 		char* argv[3] = { "", "-f 2", (char*)fileName };
 
-		faad_open_decoding(argc, argv);
+		int ret = faad_open_decoding(argc, argv);
 
-		while (true)
-		{
-			int iread = decodeAacfile_iteration();
+		firstZero = true;
 
-			if (iread < 1)
-			{
-				decodeAacfile_closing();
-				break;
-				return -1;
-			}
-		}
-
-		return 0;
+		return 1 - ret;
 	}
 
 	int M4aDecoder::read(char* Buffer, size_t Count)
 	{
-		return 0;
+		int iread = decodeAacfile_iteration(Buffer, Count);
+
+		if (firstZero && iread == 0)
+		{
+			iread = decodeAacfile_iteration(Buffer, Count);
+		}
+
+		if (iread < 1)
+		{
+			decodeAacfile_closing();
+			return -1;
+		}
+
+		firstZero = false;
+
+		return iread;
 	}
 }

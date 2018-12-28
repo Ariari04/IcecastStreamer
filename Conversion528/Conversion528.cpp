@@ -89,10 +89,10 @@ void StreamFile()
 
 void WrapFile()
 {
-	std::cout << "Choose a file:" << std::endl;
+	std::cout << "Choose a RAW PCM file (it is a WAV file but without the WAV header in the beginning):" << std::endl;
 	std::cout << "1) test/streamed.wav -> test/wrapped.wav" << std::endl;
 	std::cout << "2) test/streamed.wav -> test/wrapped.mp3" << std::endl;
-	std::cout << "3) test/streamed.wav -> test/wrapped.aac" << std::endl;
+	//std::cout << "3) test/streamed.wav -> test/wrapped.aac" << std::endl;
 
 	char key = _getwch();
 
@@ -100,7 +100,7 @@ void WrapFile()
 	{
 	case '1': streamer.saveSound("test/streamed.wav", "test/wrapped.wav"); break;
 	case '2': streamer.saveSound("test/streamed.wav", "test/wrapped.mp3"); break;
-	case '3': streamer.saveSound("test/streamed.wav", "test/wrapped.aac"); break;
+	//case '3': streamer.saveSound("test/streamed.wav", "test/wrapped.aac"); break;
 	}
 }
 

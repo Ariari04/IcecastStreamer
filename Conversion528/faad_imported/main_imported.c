@@ -46,7 +46,7 @@
 #include <neaacdec.h>
 #include <mp4ff.h>
 
-#include "audio.h"
+#include "audio_imported.h"
 
 #include <conio.h>
 
@@ -1541,7 +1541,7 @@ int faad_open_decoding(int argc, char *argv[])
 		result = decodeAACfile_opening(aacFileName, adtsFileName, def_srate, object_type, outputFormat, downMatrix, infoOnly, adts_out, &length);
 	}
 
-	return 0;
+	return result;
 }
 
 void setInitialMp4Global()
@@ -1732,7 +1732,7 @@ static int decodeAACfile_opening(char *aacfile, char *adts_fn, int def_srate, in
 	if (!(global.b.buffer = (unsigned char*)malloc(FAAD_MIN_STREAMSIZE*MAX_CHANNELS)))
 	{
 		faad_fprintf(stderr, "Memory allocation error\n");
-		return 0;
+		return 1;
 	}
 	memset(global.b.buffer, 0, FAAD_MIN_STREAMSIZE*MAX_CHANNELS);
 
@@ -1846,7 +1846,7 @@ static int decodeAACfile_opening(char *aacfile, char *adts_fn, int def_srate, in
 		fclose(global.b.infile);
 		if (global.b.buffer)
 			free(global.b.buffer);
-		return 0;
+		return 1;
 	}
 
 	return global.frameInfo.error;
@@ -1966,7 +1966,7 @@ int decodeMP4file_iteration()
 	return 100;
 }
 
-int decodeAacfile_iteration()
+int decodeAacfile_iteration(char* Buffer, size_t Size)
 {
 	global.sample_buffer = NeAACDecDecode(global.hDecoder, &global.frameInfo,
 		global.b.buffer, global.b.bytes_into_buffer);
@@ -2019,7 +2019,7 @@ int decodeAacfile_iteration()
 					free(global.b.buffer);
 				NeAACDecClose(global.hDecoder);
 				fclose(global.b.infile);
-				return 0;
+				return -1;
 			}
 		}
 		else {
@@ -2028,10 +2028,17 @@ int decodeAacfile_iteration()
 		global.first_time = 0;
 	}
 
+	int byteCount = 0;
+
 	if ((global.frameInfo.error == 0) && (global.frameInfo.samples > 0) && (!global.adts_out))
 	{
-		if (write_audio_file(global.aufile, global.sample_buffer, global.frameInfo.samples, 0) == 0)
-			return 100;
+		if (global.frameInfo.samples * global.aufile->bits_per_sample * sizeof(char) / 8 > Size)
+		{
+			printf("Buffer for samples is too small.");
+			return -1;
+		}
+
+		byteCount = write_audio_buffer(Buffer, global.aufile, global.sample_buffer, global.frameInfo.samples, 0);
 	}
 
 	/* fill buffer */
@@ -2040,7 +2047,7 @@ int decodeAacfile_iteration()
 	if (global.b.bytes_into_buffer == 0)
 		global.sample_buffer = NULL; /* to make sure it stops now */
 
-	return global.sample_buffer != NULL;
+	return  global.sample_buffer != NULL ? byteCount : -1;
 }
 
 int decodeMP4file_closing()

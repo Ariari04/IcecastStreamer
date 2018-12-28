@@ -11,6 +11,7 @@ namespace Decoding
 	{
 	public:
 		void* m_hFile = NULL;
+		bool firstZero;
 		//aacheaderInfo  m_fileInfo;
 
 		M4aDecoder();

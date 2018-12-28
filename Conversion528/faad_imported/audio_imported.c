@@ -36,7 +36,7 @@
 #include <fcntl.h>
 #include <math.h>
 #include <neaacdec.h>
-#include "audio.h"
+#include "audio_imported.h"
 
 
 audio_file *open_audio_file(char *infile, int samplerate, int channels,
@@ -116,6 +116,26 @@ int write_audio_file(audio_file *aufile, void *sample_buffer, int samples, int o
     }
 
     return 0;
+}
+
+int write_audio_buffer(char* Buffer, audio_file *aufile, void *sample_buffer, int samples, int offset)
+{
+	char *buf = (char *)sample_buffer;
+	switch (aufile->outputFormat)
+	{
+	case FAAD_FMT_16BIT:
+		return write_audio_16bit_buffer(Buffer, aufile, buf + offset * 2, samples);
+	case FAAD_FMT_24BIT:
+		return write_audio_24bit_buffer(Buffer, aufile, buf + offset * 4, samples);
+	case FAAD_FMT_32BIT:
+		return write_audio_32bit_buffer(Buffer, aufile, buf + offset * 4, samples);
+	case FAAD_FMT_FLOAT:
+		return write_audio_float_buffer(Buffer, aufile, buf + offset * 4, samples);
+	default:
+		return 0;
+	}
+
+	return 0;
 }
 
 void close_audio_file(audio_file *aufile)
@@ -497,4 +517,204 @@ static int write_audio_float(audio_file *aufile, void *sample_buffer,
     if (data) free(data);
 
     return ret;
+}
+
+static int write_audio_16bit_buffer(char* Buffer, audio_file *aufile, void *sample_buffer,
+	unsigned int samples)
+{
+	int ret;
+	unsigned int i;
+	short *sample_buffer16 = (short*)sample_buffer;
+	//char *data = malloc(samples*aufile->bits_per_sample * sizeof(char) / 8);
+
+	aufile->total_samples += samples;
+
+	if (aufile->channels == 6 && aufile->channelMask)
+	{
+		for (i = 0; i < samples; i += aufile->channels)
+		{
+			short r1, r2, r3, r4, r5, r6;
+			r1 = sample_buffer16[i];
+			r2 = sample_buffer16[i + 1];
+			r3 = sample_buffer16[i + 2];
+			r4 = sample_buffer16[i + 3];
+			r5 = sample_buffer16[i + 4];
+			r6 = sample_buffer16[i + 5];
+			sample_buffer16[i] = r2;
+			sample_buffer16[i + 1] = r3;
+			sample_buffer16[i + 2] = r1;
+			sample_buffer16[i + 3] = r6;
+			sample_buffer16[i + 4] = r4;
+			sample_buffer16[i + 5] = r5;
+		}
+	}
+
+	for (i = 0; i < samples; i++)
+	{
+		Buffer[i * 2] = (char)(sample_buffer16[i] & 0xFF);
+		Buffer[i * 2 + 1] = (char)((sample_buffer16[i] >> 8) & 0xFF);
+	}
+
+	//ret = fwrite(data, samples, aufile->bits_per_sample / 8, aufile->sndfile);
+
+	//if (data) free(data);
+
+	return samples * aufile->bits_per_sample * sizeof(char) / 8;
+}
+
+static int write_audio_24bit_buffer(char* Buffer, audio_file *aufile, void *sample_buffer,
+	unsigned int samples)
+{
+	int ret;
+	unsigned int i;
+	long *sample_buffer24 = (long*)sample_buffer;
+	//char *data = malloc(samples*aufile->bits_per_sample * sizeof(char) / 8);
+
+	aufile->total_samples += samples;
+
+	if (aufile->channels == 6 && aufile->channelMask)
+	{
+		for (i = 0; i < samples; i += aufile->channels)
+		{
+			long r1, r2, r3, r4, r5, r6;
+			r1 = sample_buffer24[i];
+			r2 = sample_buffer24[i + 1];
+			r3 = sample_buffer24[i + 2];
+			r4 = sample_buffer24[i + 3];
+			r5 = sample_buffer24[i + 4];
+			r6 = sample_buffer24[i + 5];
+			sample_buffer24[i] = r2;
+			sample_buffer24[i + 1] = r3;
+			sample_buffer24[i + 2] = r1;
+			sample_buffer24[i + 3] = r6;
+			sample_buffer24[i + 4] = r4;
+			sample_buffer24[i + 5] = r5;
+		}
+	}
+
+	for (i = 0; i < samples; i++)
+	{
+		Buffer[i * 3] = (char)(sample_buffer24[i] & 0xFF);
+		Buffer[i * 3 + 1] = (char)((sample_buffer24[i] >> 8) & 0xFF);
+		Buffer[i * 3 + 2] = (char)((sample_buffer24[i] >> 16) & 0xFF);
+	}
+
+	//ret = fwrite(data, samples, aufile->bits_per_sample / 8, aufile->sndfile);
+
+	//if (data) free(data);
+
+	return samples * aufile->bits_per_sample * sizeof(char) / 8;
+}
+
+static int write_audio_32bit_buffer(char* Buffer, audio_file *aufile, void *sample_buffer,
+	unsigned int samples)
+{
+	int ret;
+	unsigned int i;
+	long *sample_buffer32 = (long*)sample_buffer;
+	//char *data = malloc(samples*aufile->bits_per_sample * sizeof(char) / 8);
+
+	aufile->total_samples += samples;
+
+	if (aufile->channels == 6 && aufile->channelMask)
+	{
+		for (i = 0; i < samples; i += aufile->channels)
+		{
+			long r1, r2, r3, r4, r5, r6;
+			r1 = sample_buffer32[i];
+			r2 = sample_buffer32[i + 1];
+			r3 = sample_buffer32[i + 2];
+			r4 = sample_buffer32[i + 3];
+			r5 = sample_buffer32[i + 4];
+			r6 = sample_buffer32[i + 5];
+			sample_buffer32[i] = r2;
+			sample_buffer32[i + 1] = r3;
+			sample_buffer32[i + 2] = r1;
+			sample_buffer32[i + 3] = r6;
+			sample_buffer32[i + 4] = r4;
+			sample_buffer32[i + 5] = r5;
+		}
+	}
+
+	for (i = 0; i < samples; i++)
+	{
+		Buffer[i * 4] = (char)(sample_buffer32[i] & 0xFF);
+		Buffer[i * 4 + 1] = (char)((sample_buffer32[i] >> 8) & 0xFF);
+		Buffer[i * 4 + 2] = (char)((sample_buffer32[i] >> 16) & 0xFF);
+		Buffer[i * 4 + 3] = (char)((sample_buffer32[i] >> 24) & 0xFF);
+	}
+
+	//ret = fwrite(data, samples, aufile->bits_per_sample / 8, aufile->sndfile);
+
+	//if (data) free(data);
+
+	return samples * aufile->bits_per_sample * sizeof(char) / 8;
+}
+
+static int write_audio_float_buffer(char* Buffer, audio_file *aufile, void *sample_buffer,
+	unsigned int samples)
+{
+	int ret;
+	unsigned int i;
+	float *sample_buffer_f = (float*)sample_buffer;
+	//unsigned char *data = malloc(samples*aufile->bits_per_sample * sizeof(char) / 8);
+
+	aufile->total_samples += samples;
+
+	if (aufile->channels == 6 && aufile->channelMask)
+	{
+		for (i = 0; i < samples; i += aufile->channels)
+		{
+			float r1, r2, r3, r4, r5, r6;
+			r1 = sample_buffer_f[i];
+			r2 = sample_buffer_f[i + 1];
+			r3 = sample_buffer_f[i + 2];
+			r4 = sample_buffer_f[i + 3];
+			r5 = sample_buffer_f[i + 4];
+			r6 = sample_buffer_f[i + 5];
+			sample_buffer_f[i] = r2;
+			sample_buffer_f[i + 1] = r3;
+			sample_buffer_f[i + 2] = r1;
+			sample_buffer_f[i + 3] = r6;
+			sample_buffer_f[i + 4] = r4;
+			sample_buffer_f[i + 5] = r5;
+		}
+	}
+
+	for (i = 0; i < samples; i++)
+	{
+		int exponent, mantissa, negative = 0;
+		float in = sample_buffer_f[i];
+
+		Buffer[i * 4] = 0; Buffer[i * 4 + 1] = 0; Buffer[i * 4 + 2] = 0; Buffer[i * 4 + 3] = 0;
+		if (in == 0.0)
+			continue;
+
+		if (in < 0.0)
+		{
+			in *= -1.0;
+			negative = 1;
+		}
+		in = (float)frexp(in, &exponent);
+		exponent += 126;
+		in *= (float)0x1000000;
+		mantissa = (((int)in) & 0x7FFFFF);
+
+		if (negative)
+			Buffer[i * 4 + 3] |= 0x80;
+
+		if (exponent & 0x01)
+			Buffer[i * 4 + 2] |= 0x80;
+
+		Buffer[i * 4] = mantissa & 0xFF;
+		Buffer[i * 4 + 1] = (mantissa >> 8) & 0xFF;
+		Buffer[i * 4 + 2] |= (mantissa >> 16) & 0x7F;
+		Buffer[i * 4 + 3] |= (exponent >> 1) & 0x7F;
+	}
+
+	//ret = fwrite(data, samples, aufile->bits_per_sample / 8, aufile->sndfile);
+
+	//if (data) free(data);
+
+	return samples * aufile->bits_per_sample * sizeof(char) / 8;
 }

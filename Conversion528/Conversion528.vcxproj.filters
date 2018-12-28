@@ -113,10 +113,10 @@
     <ClCompile Include="faad_imported\main_imported.c">
       <Filter>faad</Filter>
     </ClCompile>
-    <ClCompile Include="..\faad2-vs\frontend\audio.c">
+    <ClCompile Include="..\faad2-vs\common\faad\getopt.c">
       <Filter>faad</Filter>
     </ClCompile>
-    <ClCompile Include="..\faad2-vs\common\faad\getopt.c">
+    <ClCompile Include="faad_imported\audio_imported.c">
       <Filter>faad</Filter>
     </ClCompile>
   </ItemGroup>
@@ -208,10 +208,10 @@
     <ClInclude Include="faad_imported\main_imported.h">
       <Filter>faad</Filter>
     </ClInclude>
-    <ClInclude Include="..\faad2-vs\frontend\audio.h">
+    <ClInclude Include="..\faad2-vs\common\faad\getopt.h">
       <Filter>faad</Filter>
     </ClInclude>
-    <ClInclude Include="..\faad2-vs\common\faad\getopt.h">
+    <ClInclude Include="faad_imported\audio_imported.h">
       <Filter>faad</Filter>
     </ClInclude>
   </ItemGroup>
