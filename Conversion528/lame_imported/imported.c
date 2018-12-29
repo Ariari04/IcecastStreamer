@@ -330,6 +330,8 @@ lame_main_imported(lame_t gf, int argc, char **argv, FILE** outf, int addOutputT
 	int     i;
 	*outf = NULL;
 
+	global_reader.input_format = sf_unknown;
+
 	lame_set_msgf(gf, &frontend_msgf);
 	lame_set_errorf(gf, &frontend_errorf);
 	lame_set_debugf(gf, &frontend_debugf);
