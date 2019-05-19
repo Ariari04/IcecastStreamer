@@ -8,8 +8,8 @@
 
 #include <unsupported/Eigen/FFT>
 
-#include <opencv2/opencv.hpp>
-using namespace cv;
+//#include <opencv2/opencv.hpp>
+//using namespace cv;
 
 
 using namespace Conversion;

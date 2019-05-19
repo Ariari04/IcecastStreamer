@@ -103,11 +103,12 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	std::istream response_stream(&response);
 
 	{
-		request_stream << "PUT /test HTTP/1.1" << NEWLINE;
+		request_stream << "PUT /test.mp3 HTTP/1.1" << NEWLINE;
 		request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
 		request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
 		request_stream << "Transfer-Encoding: chunked" << NEWLINE;
-		request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
+		request_stream << "Content-Type: audio/mpeg" << NEWLINE;
+		//request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
 		request_stream << "Expect: 100-continue" << NEWLINE;
 		request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
 
@@ -148,12 +149,13 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	if (ext == ".wav")
 	{
 		format = IcecastStreamer::AudioFormat::WAV;
-		reader = std::make_shared<Decoding::WaveDecoder>();
+		//reader = std::make_shared<Decoding::WaveDecoder>();
+		reader = std::make_shared<Decoding::WaveToMp3Decoder>();
 	}
 	else if (ext == ".mp3")
 	{
 		format = IcecastStreamer::AudioFormat::MP3;
-		reader = std::make_shared<Decoding::Mp3Decoder>();
+		reader = std::make_shared<Decoding::Mp3WaveMp3Decoder>();
 	}
 	else if (ext == ".aac" || ext == ".m4a" || ext == ".mp4")
 	{
@@ -175,25 +177,58 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	std::cout << "IcecastStreamer: press any key to start streaming" << std::endl;
 	_getch();
 
-	char Buffer[2 * 1152 * 2 * 10];
+	//char Buffer[2 * 1152 * 2 * 10];
+
+	//std::array<char, 1024 * 1024> Buffer;
+	std::vector<char> Buffer;
+	Buffer.resize(1024 * 1024);
 
 	int packet = 0;
 
-	//std::ofstream ofs("test/streamed.wav", std::ios::binary); // decomment for testing
+	//std::ofstream ofs("D:/Work/temp/streamed.wav", std::ios::binary); // decomment for testing
 
+	int byteCount;
+	//Get first 3 seconds buffer
+	/*
+	byteCount = reader->readDuration(&Buffer[0], Buffer.size(), std::chrono::seconds(3));
+
+	if (byteCount < 1)
+	{
+		return true;
+	}
+
+	auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
+
+	try
+	{
+		socket->send(asioBuffer);
+		std::cout << "IcecastStreamer: streaming... " << ++packet << " : " << byteCount << std::endl;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "IcecastStreamer: connection issues, retry..." << std::endl;
+		return false;
+	}
+
+	*/
 	while (true)
 	{
-		int byteCount = reader->read(Buffer, 2 * 1152 * 2 * 10);
+
+		std::chrono::time_point<std::chrono::system_clock> nowBefore = std::chrono::system_clock::now();
+
+		byteCount = reader->readDuration(&Buffer[0], Buffer.size(), std::chrono::seconds(3));
 
 		if (byteCount < 1)
 		{
 			break;
 		}
 
-		//if (byteCount > 0)
-		//{
-		//	ofs.write(Buffer, byteCount);  // decomment for testing
-		//}
+		/*
+		if (byteCount > 0)
+		{
+			ofs.write(&Buffer[0], byteCount);  // decomment for testing
+			ofs.flush();
+		}*/
 
 		auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
 
@@ -208,7 +243,11 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 			return false;
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(2));
+		std::chrono::time_point<std::chrono::system_clock> nowAfter = std::chrono::system_clock::now();
+		
+		auto duration = std::chrono::seconds(3) - (nowAfter - nowBefore);
+
+		std::this_thread::sleep_for(duration);
 	}
 
 	std::cout << "IcecastStreamer: stream is finished" << std::endl;

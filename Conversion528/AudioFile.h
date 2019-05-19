@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <chrono>
 
 class AudioDecoder
 {
@@ -9,6 +10,7 @@ public:
 
 	virtual int open(const char* fileName) = 0;
 	virtual int read(char* Buffer, size_t Count) = 0;
+	virtual int readDuration(char* Buffer, size_t Count, std::chrono::seconds duration) { return 0; }
 };
 
 class AudioEncoder

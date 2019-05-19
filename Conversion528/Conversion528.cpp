@@ -1,4 +1,4 @@
-// Conversion528.cpp : Defines the entry point for the console application.
+﻿// Conversion528.cpp : Defines the entry point for the console application.
 //
 
 #include <conio.h>
@@ -73,7 +73,7 @@ void streamFile(const std::string& fileName)
 void StreamFile()
 {
 	std::cout << "Choose a file:" << std::endl;
-	std::cout << "1) test/original.wav (BROKEN)" << std::endl;
+	std::cout << "1) Special" << std::endl;
 	std::cout << "2) test/original.mp3" << std::endl;
 	std::cout << "3) test/original.aac" << std::endl;
 	std::cout << "4) test/original.m4a" << std::endl;
@@ -83,7 +83,9 @@ void StreamFile()
 
 	switch (key)
 	{
-	case '1': streamFile("test/original.wav"); break;
+	//case '1': streamFile("D:/music/BAAM.wav"); break;
+	//case '1': streamFile("D:/music/GTA Vice City - Flash FM.mp3"); break;
+	case '1': streamFile("D:/music/PRISTIN V - Get It.mp3"); break;
 	case '2': streamFile("test/original.mp3"); break;
 	case '3': streamFile("test/original.aac"); break;
 	case '4': streamFile("test/original.m4a"); break;
