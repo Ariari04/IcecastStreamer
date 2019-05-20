@@ -160,7 +160,7 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	else if (ext == ".aac" || ext == ".m4a" || ext == ".mp4")
 	{
 		format = IcecastStreamer::AudioFormat::AAC;
-		reader = std::make_shared<Decoding::AacDecoder>();
+		reader = std::make_shared<Decoding::AacToMp3Decoder>();
 	}
 
 	if (format == IcecastStreamer::AudioFormat::Invalid)
