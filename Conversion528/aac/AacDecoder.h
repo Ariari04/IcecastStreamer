@@ -14,26 +14,10 @@
 namespace Decoding
 {
 
-	class AacDecoder : public AudioDecoder // public BufferedProducerBase
+
+	class AacToMp3Decoder : public AudioDecoder 
 	{
 	public:
-		bool firstZero;
-		int mp4SampleCount;
-
-		AacDecoder();
-		~AacDecoder();
-
-		int open(const char* fileName) override;
-
-		int read(char* Buffer, size_t Count) override;
-	};
-
-
-	class AacToMp3Decoder : public AudioDecoder // public BufferedProducerBase
-	{
-	public:
-		
-		//size_t input_size = 0;
 
 		std::ifstream f;
 
@@ -45,15 +29,11 @@ namespace Decoding
 		std::array<short, 1024 * 1024*8> pcmBuffer;
 
 		bool aacInited = false;
-		//std::array<short, 266240> pcmBuffer;
-
-		
 
 		NeAACDecHandle hAac = NeAACDecOpen();
 
 		unsigned long samplerate = 0;
 		unsigned char channels = 0;
-		
 
 		lame_t lame = nullptr;
 
@@ -63,8 +43,6 @@ namespace Decoding
 		~AacToMp3Decoder();
 
 		int open(const char* fileName) override;
-
-		int read(char* Buffer, size_t Count) override;
 
 		int readDuration(char* Buffer, size_t Count, std::chrono::seconds duration) override;
 

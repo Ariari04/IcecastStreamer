@@ -4,20 +4,13 @@
 #include <conio.h>
 #include "stdafx.h"
 #include "wave/WaveFile.h"
-#include "Conversion.h"
-#include <memory.h>
-#include "WaveFileAdapter.h"
 
-#include "Converter528.h"
-#include "FlatConverter.h"
-#include "ExperimentalConverter.h"
+#include <memory.h>
 
 #define _WRITE_ERROR_DESCR_
 #ifdef _WRITE_ERROR_DESCR_
 
 #include <fstream>
-#include "ConsoleHelpers.h"
-
 #endif
 
 #include "boost/filesystem.hpp"
@@ -94,23 +87,6 @@ void StreamFile()
 	}
 }
 
-void WrapFile()
-{
-	std::cout << "Choose a RAW PCM file (it is a WAV file but without the WAV header in the beginning):" << std::endl;
-	std::cout << "1) test/streamed.wav -> test/wrapped.wav" << std::endl;
-	std::cout << "2) test/streamed.wav -> test/wrapped.mp3" << std::endl;
-	//std::cout << "3) test/streamed.wav -> test/wrapped.aac" << std::endl;
-
-	char key = _getwch();
-
-	switch (key)
-	{
-	case '1': streamer.saveSound("test/streamed.wav", "test/wrapped.wav"); break;
-	case '2': streamer.saveSound("test/streamed.wav", "test/wrapped.mp3"); break;
-	//case '3': streamer.saveSound("test/streamed.wav", "test/wrapped.aac"); break;
-	}
-}
-
 int main(int argc, char* argv[])
 {
 	auto f = []()
@@ -125,7 +101,6 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "Choose an action:" << std::endl;
 		std::cout << "1) stream raw PCM sound from a file" << std::endl;
-		std::cout << "2) wrap downloaded streamed raw PCM sound into a file" << std::endl;
 
 		key = _getwch();
 
@@ -133,10 +108,6 @@ int main(int argc, char* argv[])
 		{
 		case '1':
 			StreamFile();
-			break;
-
-		case '2':
-			WrapFile();
 			break;
 		}
 

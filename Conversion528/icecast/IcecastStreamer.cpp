@@ -5,9 +5,7 @@
 #include <boost/filesystem.hpp>
 #include <wave/WaveFile.h>
 #include <wave/WaveDecoder.h>
-#include <wave/WaveEncoder.h>
 #include <mp3/Mp3Decoder.h>
-#include <mp3/Mp3Encoder.h>
 #include <aac/AacDecoder.h>
 
 const long long MAX_UPLOADED_FILE_SIZE = 1024 * 1024 * 400;
@@ -255,34 +253,3 @@ bool streamFileInner(std::shared_ptr<T> socket, const Uploading& uploading)
 	return true;
 }
 
-void IcecastStreamer::saveSound(const std::string& binarySoundFile, const std::string& savedFile)
-{
-	char binarySound[2 * 1152 * 4]; 
-
-	std::shared_ptr<AudioEncoder> writer;
-
-	auto ext = boost::filesystem::extension(savedFile);
-	IcecastStreamer::AudioFormat format = IcecastStreamer::AudioFormat::Invalid;
-	if (ext == ".wav")
-	{
-		format = IcecastStreamer::AudioFormat::WAV;
-		writer = std::make_shared<Encoding::WaveEncoder>();
-	}
-	else if (ext == ".mp3")
-	{
-		format = IcecastStreamer::AudioFormat::MP3;
-		writer = std::make_shared<Encoding::Mp3Encoder>();
-	}
-
-	writer->open(binarySoundFile.c_str(), savedFile.c_str());
-
-	do
-	{
-		int count = writer->write(binarySound, 2 * 1152 * 2);
-		if (count < 1)
-		{
-			break;
-		}
-	}
-	while (true);
-}

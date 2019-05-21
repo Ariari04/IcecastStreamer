@@ -9,12 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="blade">
-      <UniqueIdentifier>{732fd927-25ad-4f9c-a394-87a34cf22a96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lame">
-      <UniqueIdentifier>{6a5933a8-19aa-4d84-a9c8-ce3a8a8179b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mp3">
       <UniqueIdentifier>{d04e65a1-df8a-4faf-9e25-3e6a41e5badc}</UniqueIdentifier>
     </Filter>
@@ -24,20 +18,11 @@
     <Filter Include="wave">
       <UniqueIdentifier>{8069661c-1e6a-4286-8683-294b170351fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="faad">
-      <UniqueIdentifier>{f1a9c772-4b2e-4331-9841-a56ca6687e57}</UniqueIdentifier>
-    </Filter>
     <Filter Include="aac">
       <UniqueIdentifier>{38121723-0d54-4a54-8fec-8328aae5fc06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleHelpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Conversion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Conversion528.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,47 +32,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WaveFileAdapter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FlatConverter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Converter528.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentalConverter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DecoderAdapter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EncoderAdapter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConvException.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\blade\BladeMP3Enc.c">
-      <Filter>blade</Filter>
-    </ClCompile>
     <ClCompile Include="mp3\Mp3Decoder.cpp">
       <Filter>mp3</Filter>
-    </ClCompile>
-    <ClCompile Include="mp3\Mp3Encoder.cpp">
-      <Filter>mp3</Filter>
-    </ClCompile>
-    <ClCompile Include="lame_imported\get_audio_imported.c">
-      <Filter>lame</Filter>
-    </ClCompile>
-    <ClCompile Include="lame_imported\imported.c">
-      <Filter>lame</Filter>
-    </ClCompile>
-    <ClCompile Include="lame_imported\parse_imported.c">
-      <Filter>lame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lame-3.100\frontend\console.c">
-      <Filter>lame</Filter>
     </ClCompile>
     <ClCompile Include="icecast\IcecastStreamer.cpp">
       <Filter>icecast</Filter>
@@ -95,32 +41,14 @@
     <ClCompile Include="wave\WaveDecoder.cpp">
       <Filter>wave</Filter>
     </ClCompile>
-    <ClCompile Include="wave\WaveEncoder.cpp">
-      <Filter>wave</Filter>
-    </ClCompile>
     <ClCompile Include="wave\WaveFile.cpp">
       <Filter>wave</Filter>
-    </ClCompile>
-    <ClCompile Include="faad_imported\main_imported.c">
-      <Filter>faad</Filter>
-    </ClCompile>
-    <ClCompile Include="..\faad2-vs\common\faad\getopt.c">
-      <Filter>faad</Filter>
-    </ClCompile>
-    <ClCompile Include="faad_imported\audio_imported.c">
-      <Filter>faad</Filter>
     </ClCompile>
     <ClCompile Include="aac\AacDecoder.cpp">
       <Filter>aac</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConsoleHelpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Conversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IntegerTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -133,50 +61,14 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WaveFileAdapter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Converter528.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FlatConverter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperimentalConverter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DecoderAdapter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EncoderAdapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConvException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\blade\BladeMP3Enc.h">
-      <Filter>blade</Filter>
-    </ClInclude>
     <ClInclude Include="mp3\Mp3Decoder.h">
       <Filter>mp3</Filter>
-    </ClInclude>
-    <ClInclude Include="mp3\Mp3Encoder.h">
-      <Filter>mp3</Filter>
-    </ClInclude>
-    <ClInclude Include="lame_imported\get_audio_imported.h">
-      <Filter>lame</Filter>
-    </ClInclude>
-    <ClInclude Include="lame_imported\imported.h">
-      <Filter>lame</Filter>
-    </ClInclude>
-    <ClInclude Include="lame_imported\parse_imported.h">
-      <Filter>lame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lame-3.100\frontend\console.h">
-      <Filter>lame</Filter>
     </ClInclude>
     <ClInclude Include="icecast\IcecastStreamer.h">
       <Filter>icecast</Filter>
@@ -184,20 +76,8 @@
     <ClInclude Include="wave\WaveDecoder.h">
       <Filter>wave</Filter>
     </ClInclude>
-    <ClInclude Include="wave\WaveEncoder.h">
-      <Filter>wave</Filter>
-    </ClInclude>
     <ClInclude Include="wave\WaveFile.h">
       <Filter>wave</Filter>
-    </ClInclude>
-    <ClInclude Include="faad_imported\main_imported.h">
-      <Filter>faad</Filter>
-    </ClInclude>
-    <ClInclude Include="..\faad2-vs\common\faad\getopt.h">
-      <Filter>faad</Filter>
-    </ClInclude>
-    <ClInclude Include="faad_imported\audio_imported.h">
-      <Filter>faad</Filter>
     </ClInclude>
     <ClInclude Include="aac\AacDecoder.h">
       <Filter>aac</Filter>

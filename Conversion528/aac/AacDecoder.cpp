@@ -5,52 +5,8 @@
 #include <fstream>
 #include <iostream>
 
-#include <faad_imported/main_imported.h>
-
 namespace Decoding
 {
-	AacDecoder::AacDecoder()
-	{
-	}
-
-	AacDecoder::~AacDecoder()
-	{
-	}
-
-	int AacDecoder::open(const char* fileName)
-	{
-		int argc = 3;
-		char* argv[3] = { "", "-f 2", (char*)fileName };
-
-		int ret = faad_open_decoding(argc, argv, &mp4SampleCount);
-
-		firstZero = true;
-
-		return 1 - ret;
-	}
-
-	int AacDecoder::read(char* Buffer, size_t Count)
-	{
-		int iread = faad_iteration_decoding(Buffer, Count);
-
-		if (firstZero && iread == 0)
-		{
-			iread = faad_iteration_decoding(Buffer, Count);
-		}
-
-		if (iread < 1)
-		{
-			faad_close_decoding();
-			return -1;
-		}
-
-		firstZero = false;
-
-		return iread;
-	}
-
-
-
 	//---------------------------------------
 
 
@@ -240,28 +196,6 @@ namespace Decoding
 		f.close();
 	}
 
-	int AacToMp3Decoder::read(char* Buffer, size_t Count)
-	{
-		return 0;
-
-		/*
-		int iread = faad_iteration_decoding(Buffer, Count);
-
-		if (firstZero && iread == 0)
-		{
-			iread = faad_iteration_decoding(Buffer, Count);
-		}
-
-		if (iread < 1)
-		{
-			faad_close_decoding();
-			return -1;
-		}
-
-		firstZero = false;
-
-		return iread;*/
-	}
 
 	int AacToMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::seconds duration)
 	{

@@ -4,29 +4,11 @@
 #include <wave/WaveFile.h>
 #include <AudioFile.h>
 #include <fstream>
-
-#include <lame_imported/imported.h>
-
+#include "lame.h"
 
 namespace Decoding
 {
-
-	class WaveDecoder : public AudioDecoder
-	{
-	public:
-		FILE* file = NULL;
-		WaveFileChunks::WaveFileHeader Header;
-
-		~WaveDecoder();
-
-		void close();
-
-		int open(const char* fileName) override;
-		int read(char* Buffer, size_t Count) override;
-	};
-
-
-
+	   
 	class WaveToMp3Decoder : public AudioDecoder
 	{
 	public:
@@ -44,7 +26,6 @@ namespace Decoding
 		void close();
 
 		int open(const char* fileName) override;
-		int read(char* Buffer, size_t Count) override;
 
 		int openMp3Output();
 

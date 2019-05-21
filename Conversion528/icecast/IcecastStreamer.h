@@ -49,7 +49,6 @@ public:
 	void streamFile(const std::string& fileName, std::shared_ptr<std::promise<void>> promise);
 	void streamFile(boost::asio::ip::tcp::endpoint endpoint, const std::string& fileName, std::shared_ptr<std::promise<void>> promise);
 
-	void saveSound(const std::string& binarySoundFile, const std::string& waveFile);
 };
 
 #endif
