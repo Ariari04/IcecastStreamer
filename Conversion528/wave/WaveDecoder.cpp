@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#include <lame_imported/imported.h>
+#include "lame.h"
 
 #include <iostream>
 #include <vector>

@@ -92,17 +92,17 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>.;../../boost_1_70_0;../../eigen;../../opencv/build_windows32/install/include;../id3lib-3.8.3/include;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;../blade;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../boost_1_70_0;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff;.</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opencv_core410d.lib;opencv_imgproc410d.lib;opencv_imgcodecs410d.lib;id3lib.lib;libmp3lame-static.lib;libmpghip-static.lib;libfaad2d.lib;mp4ff.lib</AdditionalDependencies>
+      <AdditionalDependencies>libmp3lame-static.lib;libmpghip-static.lib;libfaad2d.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>../../opencv/build_windows32\install\x86\vc15\lib;../id3lib-3.8.3/Debug;../lame-3.100/output/Debug;../faad2-vs/build/x86;../faad2-vs/common/mp4ff/Debug;../../boost_1_70_0/stage/win32/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../lame-3.100/output/Debug;../faad2-vs/build/x86;../../boost_1_70_0/stage/win32/lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -173,7 +173,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aac\AacDecoder.cpp" />
-    <ClCompile Include="Conversion528.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="icecast\IcecastStreamer.cpp" />
     <ClCompile Include="mp3\Mp3Decoder.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -183,7 +183,6 @@
   <ItemGroup>
     <ClInclude Include="aac\AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
-    <ClInclude Include="ConvException.h" />
     <ClInclude Include="icecast\IcecastStreamer.h" />
     <ClInclude Include="mp3\Mp3Decoder.h" />
     <ClInclude Include="stdafx.h" />
