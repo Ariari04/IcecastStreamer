@@ -33,15 +33,18 @@ namespace Decoding
 	{
 	public:
 		
-		size_t input_size = 0;
+		//size_t input_size = 0;
 
 		std::ifstream f;
 
-		std::array<unsigned char, 1024 * 1024> input;
+		size_t bufferStartPos = 0;
+		std::array<unsigned char, 1024 * 128> buffer;
 
-		int totalRead = 0;
+		int pcmSize = 0;
 
 		std::array<short, 1024 * 1024*8> pcmBuffer;
+
+		bool aacInited = false;
 		//std::array<short, 266240> pcmBuffer;
 
 		
@@ -50,7 +53,7 @@ namespace Decoding
 
 		unsigned long samplerate = 0;
 		unsigned char channels = 0;
-		size_t curIndex = 0;
+		
 
 		lame_t lame = nullptr;
 
@@ -66,6 +69,10 @@ namespace Decoding
 		int readDuration(char* Buffer, size_t Count, std::chrono::seconds duration) override;
 
 		int openMp3Output();
+
+		int innerRead();
+
+		void close();
 	};
 
 }
