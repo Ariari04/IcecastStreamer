@@ -253,35 +253,6 @@ namespace Decoding
 		return 1;
 	}
 
-
-
-	int WaveToMp3Decoder::readDurationOld(char* Buffer, size_t Count, std::chrono::seconds duration)
-	{
-		if (f.eof())
-		{
-			close();
-			return 0;
-		}
-
-		auto readCount = duration.count() * this->Header.m_cFormatChunk.m_nChannels * this->Header.m_cFormatChunk.m_nSamplesPerSec * this->Header.m_cFormatChunk.m_nBitsPerSample / 8;
-
-		std::cout << "f.tellg() before = " << f.tellg() << std::endl;
-
-		f.read(Buffer, readCount);
-
-		std::cout << "f.tellg() after = " << f.tellg() << std::endl;
-
-		auto result = f.gcount();
-
-		if (result != readCount)
-		{
-			close();
-		}
-
-		return result;
-
-	}
-
 	int WaveToMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::seconds duration)
 	{
 		if (f.eof())

@@ -63,7 +63,7 @@ void WaveFileChunks::FormatChunk::updateASRAndBA()
 	m_nAvgBytesPerSec = (m_nSamplesPerSec*m_nChannels*(m_nBitsPerSample/8));
 	m_nBlockAlign = m_nChannels*m_nBitsPerSample/8;
 }
-bool WaveFileChunks::FormatChunk::setBitsPerSample(uint16 nBitsPerSample)
+bool WaveFileChunks::FormatChunk::setBitsPerSample(uint16_t nBitsPerSample)
 {
 	FormatChunk tmpChunk(*this);
 	tmpChunk.m_nBitsPerSample = nBitsPerSample;
@@ -79,7 +79,7 @@ bool WaveFileChunks::FormatChunk::setBitsPerSample(uint16 nBitsPerSample)
 		return false;
 	}
 }
-bool WaveFileChunks::FormatChunk::setNumberOfChannels(uint16 nChannels)
+bool WaveFileChunks::FormatChunk::setNumberOfChannels(uint16_t nChannels)
 {
 	FormatChunk tmpChunk(*this);
 	tmpChunk.m_nChannels = nChannels;
@@ -95,7 +95,7 @@ bool WaveFileChunks::FormatChunk::setNumberOfChannels(uint16 nChannels)
 		return false;
 	}
 }
-bool WaveFileChunks::FormatChunk::setSampleRate(uint32 nSamplesPerSec)
+bool WaveFileChunks::FormatChunk::setSampleRate(uint32_t nSamplesPerSec)
 {
 	FormatChunk tmpChunk(*this);
 	tmpChunk.m_nSamplesPerSec = nSamplesPerSec;
@@ -192,7 +192,7 @@ WaveFileChunks::WaveFileHeader::WaveFileHeader()
 	setSoundSizeInBytes(0);
 }
 
-void  WaveFileChunks::WaveFileHeader::setSoundSizeInBytes(uint32 nSizeOfSoundInBytes)
+void  WaveFileChunks::WaveFileHeader::setSoundSizeInBytes(uint32_t nSizeOfSoundInBytes)
 {
 	m_cDataChunk.m_nChunkSize = nSizeOfSoundInBytes;
 	m_cIFFHeader.m_nChunkSize = sizeof(WaveFileHeader)	\
@@ -202,7 +202,7 @@ void  WaveFileChunks::WaveFileHeader::setSoundSizeInBytes(uint32 nSizeOfSoundInB
 }
 
 
-uint32 WaveFileChunks::WaveFileHeader::getSoundSizeInBytes() const
+uint32_t WaveFileChunks::WaveFileHeader::getSoundSizeInBytes() const
 {
 	return m_cDataChunk.m_nChunkSize;
 }

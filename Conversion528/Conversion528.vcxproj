@@ -175,7 +175,6 @@
     <ClCompile Include="aac\AacDecoder.cpp" />
     <ClCompile Include="Conversion528.cpp" />
     <ClCompile Include="icecast\IcecastStreamer.cpp" />
-    <ClCompile Include="KString.cpp" />
     <ClCompile Include="mp3\Mp3Decoder.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="wave\WaveDecoder.cpp" />
@@ -186,10 +185,7 @@
     <ClInclude Include="AudioFile.h" />
     <ClInclude Include="ConvException.h" />
     <ClInclude Include="icecast\IcecastStreamer.h" />
-    <ClInclude Include="IntegerTypes.h" />
-    <ClInclude Include="KString.h" />
     <ClInclude Include="mp3\Mp3Decoder.h" />
-    <ClInclude Include="StaticAssertion.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="wave\WaveDecoder.h" />
     <ClInclude Include="wave\WaveFile.h" />
