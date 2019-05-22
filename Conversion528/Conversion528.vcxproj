@@ -85,24 +85,24 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WIN32;_WIN32_WINNT=0x0601;_CONSOLE;ID3LIB_LINKOPTION=1;_WINDOWS;HAVE_MPGLIB;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WIN32;_WIN32_WINNT=0x0601;_CONSOLE;ID3LIB_LINKOPTION=1;_WINDOWS;HAVE_MPGLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../boost_1_70_0;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff;.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../boost_1_70_0;../lame-3.100;../lame-3.100/frontend;../lame-3.100/include;../lame-3.100/libmp3lame;../lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff;.;../id3lib-3.8.3/include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libmp3lame-static.lib;libmpghip-static.lib;libfaad2d.lib</AdditionalDependencies>
+      <AdditionalDependencies>libmp3lame-static.lib;libmpghip-static.lib;libfaad2d.lib;id3lib.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>../lame-3.100/output/Debug;../faad2-vs/build/x86;../../boost_1_70_0/stage/win32/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../lame-3.100/output/Debug;../faad2-vs/build/x86;../../boost_1_70_0/stage/win32/lib;../id3lib-3.8.3/Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -173,19 +173,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aac\AacDecoder.cpp" />
+    <ClCompile Include="ConvertUTF.c" />
+    <ClCompile Include="KString.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="icecast\IcecastStreamer.cpp" />
     <ClCompile Include="mp3\Mp3Decoder.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="tags\ID3Tags.cpp" />
+    <ClCompile Include="tags\Tags.cpp" />
     <ClCompile Include="wave\WaveDecoder.cpp" />
     <ClCompile Include="wave\WaveFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aac\AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
+    <ClInclude Include="ConvertUTF.h" />
     <ClInclude Include="icecast\IcecastStreamer.h" />
+    <ClInclude Include="KString.h" />
     <ClInclude Include="mp3\Mp3Decoder.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="tags\ID3Tags.h" />
+    <ClInclude Include="tags\Tags.h" />
     <ClInclude Include="wave\WaveDecoder.h" />
     <ClInclude Include="wave\WaveFile.h" />
   </ItemGroup>

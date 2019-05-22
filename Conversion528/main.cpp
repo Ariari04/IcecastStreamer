@@ -19,6 +19,12 @@
 
 #include <icecast/IcecastStreamer.h>
 
+#include <random>
+#include <algorithm>
+#include <iterator>
+#include <iostream>
+
+
 boost::asio::io_service ioService;
 boost::asio::io_service::work work(ioService);
 boost::thread_group threadPool;
@@ -55,13 +61,30 @@ void streamFile(const std::string& fileName)
 {
 	auto promise = std::make_shared<std::promise<void>>();
 
-	ioService.post([fileName, promise]()
+	ContentToStream contentToStream(fileName);
+
+	ioService.post([contentToStream, promise]()
 	{
-		streamer.streamFile(fileName, promise);
+		streamer.streamFile(contentToStream, promise);
 	});
 
 	promise->get_future().wait();
 }
+
+void streamPlaylist(const std::vector<std::string>& playlist)
+{
+	auto promise = std::make_shared<std::promise<void>>();
+
+	ContentToStream contentToStream(playlist);
+
+	ioService.post([contentToStream, promise]()
+	{
+		streamer.streamFile(contentToStream, promise);
+	});
+
+	promise->get_future().wait();
+}
+
 
 void StreamFile()
 {
@@ -96,6 +119,23 @@ int main(int argc, char* argv[])
 
 	threadPool.create_thread(f);
 
+	//std::vector<std::string> listOfFiles = { "BAAM.wav", "PRISTIN V - Get It.mp3", "168446101.aac", "not_existing_file.mp3" };
+
+	std::vector<std::string> listOfFiles = { "PRISTIN V - Get It.mp3" };
+
+	auto playlist = listOfFiles;
+
+	std::cout << "Press any key to start playing:" << std::endl;
+
+	_getwch();
+
+	do
+	{
+		streamPlaylist(listOfFiles);
+
+
+	} while (true);
+	/*
 	char key;
 	do
 	{
@@ -111,7 +151,7 @@ int main(int argc, char* argv[])
 			break;
 		}
 
-	} while (true);
+	} while (true);*/
 
 	ioService.stop();
 	threadPool.join_all();
