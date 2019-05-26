@@ -6,6 +6,8 @@
 #include <mutex>
 #include "boost/asio.hpp"
 #include "boost/filesystem.hpp"
+#include <vector>
+#include <string>
 
 //OpenSSL stuff -- Vladislav Khorev vladislav.khorev@fishrungames.com
 //#define SSL_R_SHORT_READ 219
@@ -69,6 +71,8 @@ public:
 	void streamFile(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
 
 	bool streamFileInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading);
+
+	std::vector<std::string> downloadPlaylist();
 };
 
 #endif

@@ -539,50 +539,17 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 			return false;
 		}
 	
-/*
-	auto ext = boost::filesystem::extension(uploading.fileName);
-
-	std::shared_ptr<AudioDecoder> reader;
-
-	IcecastStreamer::AudioFormat format = IcecastStreamer::AudioFormat::Invalid;
-	if (ext == ".wav")
-	{
-		format = IcecastStreamer::AudioFormat::WAV;
-		reader = std::make_shared<Decoding::WaveToMp3Decoder>();
-	}
-	else if (ext == ".mp3")
-	{
-		format = IcecastStreamer::AudioFormat::MP3;
-		reader = std::make_shared<Decoding::Mp3WaveMp3Decoder>();
-	}
-	else if (ext == ".aac" || ext == ".m4a" || ext == ".mp4")
-	{
-		format = IcecastStreamer::AudioFormat::AAC;
-		reader = std::make_shared<Decoding::AacToMp3Decoder>();
-	}
-
-	if (format == IcecastStreamer::AudioFormat::Invalid)
-	{
-		return false;
-	}
-
-	if (!reader->open(uploading.fileName.c_str()))
-	{
-		std::cout << "IcecastStreamer: couldn't open the file to be streamed" << std::endl;
-		return false;
-	}
-	*/
-
-
 
 	while (true)
 	{
-		auto shuffledPlaylist = uploading.contentToStream.playlist;
-		
-
 		std::random_device rd;
 		std::mt19937 g(rd());
 
+#ifdef _WIN32
+		auto shuffledPlaylist = uploading.contentToStream.playlist;
+		
+
+		
 		std::shuffle(shuffledPlaylist.begin(), shuffledPlaylist.end(), g);
 		
 		for (size_t i = 0; i < shuffledPlaylist.size(); i++)
@@ -613,6 +580,42 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 				}
 			}
 		}
+#else
+
+		auto playlist = downloadPlaylist();
+
+		std::uniform_int_distribution<> dis(0, playlist.size()-1);
+
+		size_t i = dis(g);
+
+
+		std::string prefix = "D:/music/";
+		std::string fileName = prefix + playlist[i];
+		auto reader = createReader(fileName);
+
+		ID3Metadata metadata = getMetadata(fileName);
+
+		updateMetadata(io_service, this->addres, this->port, uploading, metadata);
+
+		if (!reader)
+		{
+			std::cout << "File can't be played: " << playlist[i] << std::endl;
+		}
+		else
+		{
+			std::cout << "Start playing: " << playlist[i] << std::endl;
+
+			if (streamOneReader(socket, reader))
+			{
+				std::cout << "File played successfully: " << playlist[i] << std::endl;
+			}
+			else
+			{
+				std::cout << "Error when playing file: " << playlist[i] << std::endl;
+			}
+		}
+
+#endif
 	}
 
 	std::cout << "IcecastStreamer: stream is finished" << std::endl;
@@ -620,3 +623,118 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 	return true;
 }
 
+
+std::vector<std::string> IcecastStreamer::downloadPlaylist()
+{
+	boost::asio::ip::tcp::resolver resolver(io_service);
+	boost::asio::ip::tcp::resolver::query query("localhost", "80");
+	//boost::asio::ip::tcp::resolver::query query("id3lib.sourceforge.net", "80");
+
+	boost::system::error_code errcode;
+	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query, errcode);
+
+	std::shared_ptr<boost::asio::ip::tcp::socket> httpSocket = std::make_shared<boost::asio::ip::tcp::socket>(io_service);
+
+	httpSocket->connect(endpoint, errcode);
+
+	if (errcode)
+	{
+		std::cout << "IcecastStreamer::downloadPlaylist: couldn't connect to the server" << std::endl;
+		httpSocket->lowest_layer().close();
+		return {};
+	}
+
+	const std::string NEWLINE = "\r\n";
+
+	boost::asio::streambuf request;
+	std::ostream request_stream(&request);
+
+	boost::asio::streambuf response;
+	std::istream response_stream(&response);
+
+	//boost::asio::streambuf response2;
+	//std::istream response_stream2(&response2);
+
+	//std::string metadataString = metadata.artist + " - " + metadata.title;
+	//std::string metadataString = url_encode(metadata.artist + " - " + metadata.title);
+
+
+	//boost::erase_all(metadataString, "\n");
+	//boost::erase_all(metadataString, "\r");
+
+	request_stream << "GET /radio/api/qjuvfzlpcjmfvful11fk/main/9 HTTP/1.1" << NEWLINE;
+	//request_stream << "GET / HTTP/1.1" << NEWLINE;
+	//request_stream << "Host: id3lib.sourceforge.net:80" << NEWLINE;
+	request_stream << "Host: localhost:80" << NEWLINE;
+	request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
+
+	request_stream << NEWLINE;
+
+	int byteCount = 0;
+
+	std::array<char, 1024> charbuf;
+
+	std::string playlistString;
+
+	try
+	{
+		httpSocket->send(buffer(request.data(), request.size()));
+
+		/*
+		byteCount = boost::asio::read_until(*httpSocket, response, '\r');
+
+		//playlistString += std::string(charbuf.begin(), charbuf.begin() + byteCount);
+
+		playlistString.resize(byteCount, ' ');
+		//std::string responseCode(byteCount, ' ');
+		response_stream.read(&playlistString[0], byteCount);
+
+		std::cout << "Icecast Server Response: " << playlistString << std::endl;
+
+		if (playlistString.find("200 OK") == std::string::npos)
+		{
+			return {};
+		}
+		*/
+		boost::system::error_code c;
+
+		byteCount = 0;
+
+		do
+		{
+			byteCount = boost::asio::read(*httpSocket, boost::asio::buffer(charbuf), c);
+			playlistString += std::string(charbuf.begin(), charbuf.begin() + byteCount);
+		} while (!c);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "IcecastStreamer: connection issues" << std::endl;
+		return {};
+	}
+
+	std::string httpOk = "HTTP/1.1 200 OK\r\n";
+
+	if (playlistString.substr(0, httpOk.size()) != httpOk)
+	{
+		return {};
+	}
+	
+	
+	std::size_t found = playlistString.find("\r\n\r\n");
+
+	if (found == std::string::npos)
+	{
+		return {};
+	}
+
+
+	playlistString.erase(playlistString.begin(), playlistString.begin() + found + 4);
+
+	boost::trim(playlistString);
+
+	std::vector<std::string> strs;
+	boost::split(strs, playlistString, boost::is_any_of(" "));
+
+
+	return strs;
+}
