@@ -1,7 +1,9 @@
 ﻿// Conversion528.cpp : Defines the entry point for the console application.
 //
 
+#ifdef _WIN32
 #include <conio.h>
+#endif
 #include "stdafx.h"
 #include "wave/WaveFile.h"
 
@@ -119,6 +121,7 @@ int main(int argc, char* argv[])
 
 	threadPool.create_thread(f);
 
+
 	//std::vector<std::string> listOfFiles = { "BAAM.wav", "PRISTIN V - Get It.mp3", "168446101.aac", "not_existing_file.mp3" };
 
 	//std::vector<std::string> listOfFiles = { "b5c751d94e8b[1].mp3" };
@@ -145,17 +148,12 @@ int main(int argc, char* argv[])
 		"K-pop old/Yanghwajin (OST City hunter Городской охотник, 2011) - It's Alright.mp3"
     };
 	
-	
-	/*
-	std::vector<std::string> listOfFiles = {
-		"K-pop old/AOA - Good Luck.mp3"
-	};*/
-	
-	auto playlist = listOfFiles;
+	std::cout << "Streamed created" << std::endl;
 
+#ifdef _WIN32
 	std::cout << "Press any key to start playing:" << std::endl;
-
 	_getwch();
+#endif
 
 	do
 	{
@@ -163,24 +161,7 @@ int main(int argc, char* argv[])
 
 
 	} while (true);
-	/*
-	char key;
-	do
-	{
-		std::cout << "Choose an action:" << std::endl;
-		std::cout << "1) stream raw PCM sound from a file" << std::endl;
-
-		key = _getwch();
-
-		switch (key)
-		{
-		case '1':
-			StreamFile();
-			break;
-		}
-
-	} while (true);*/
-
+	
 	ioService.stop();
 	threadPool.join_all();
 
