@@ -121,8 +121,36 @@ int main(int argc, char* argv[])
 
 	//std::vector<std::string> listOfFiles = { "BAAM.wav", "PRISTIN V - Get It.mp3", "168446101.aac", "not_existing_file.mp3" };
 
-	std::vector<std::string> listOfFiles = { "PRISTIN V - Get It.mp3" };
-
+	//std::vector<std::string> listOfFiles = { "b5c751d94e8b[1].mp3" };
+	
+	std::vector<std::string> listOfFiles = { "K-pop old/(CNBLUE) - Black Flower.mp3",
+		"K-pop old/(CNBLUE) - LOVE GIRL.mp3",
+		"K-pop old/09. Day By Day (데이바이데이) (Japanese ver.).mp3",
+		"K-pop old/10. TTL (Time To Love).mp3",
+		"K-pop old/11. Cry Cry (크라이 크라이) (Japanese Version).mp3",
+		"K-pop old/11. Cry Cry (크라이 크라이).mp3",
+		"K-pop old/13. Day By Day (데이바이데이).mp3",
+		"K-pop old/AOA - Good Luck.mp3",
+		"K-pop old/CNBLUE - Blind love [korean version].mp3",
+		"K-pop old/CNBLUE [    ] - (I'm a loner).mp3",
+		"K-pop old/f(x) - Beautiful Stranger.mp3",
+		"K-pop old/INFINITE - Paradise.mp3",
+		"K-pop old/Kim Hyun Joong (SS501-OST Boys over flowers) - Nae meoriga nabbaseo ( Because I'm Stupid).mp3",
+		"K-pop old/miss A (    ) - (Come On Over).mp3",
+		"K-pop old/NS Yoon-G feat. Jay Park - If You Love Me.mp3",
+		"K-pop old/Ost my girlfriend Kumiho - No Min Woo-Trap.mp3",
+		"K-pop old/SNSD (Girls' Generation) - Mr.Taxi (Korean Ver.).mp3",
+		"K-pop old/SNSD (Girls' Generation) - The Boys.mp3",
+		"K-pop old/T-ARA - Holiday.mp3",
+		"K-pop old/Yanghwajin (OST City hunter Городской охотник, 2011) - It's Alright.mp3"
+    };
+	
+	
+	/*
+	std::vector<std::string> listOfFiles = {
+		"K-pop old/AOA - Good Luck.mp3"
+	};*/
+	
 	auto playlist = listOfFiles;
 
 	std::cout << "Press any key to start playing:" << std::endl;

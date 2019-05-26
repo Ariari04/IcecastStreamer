@@ -47,18 +47,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tags\ID3Tags.cpp">
-      <Filter>tags</Filter>
-    </ClCompile>
-    <ClCompile Include="tags\Tags.cpp">
-      <Filter>tags</Filter>
-    </ClCompile>
-    <ClCompile Include="KString.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConvertUTF.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -81,18 +69,6 @@
     </ClInclude>
     <ClInclude Include="aac\AacDecoder.h">
       <Filter>aac</Filter>
-    </ClInclude>
-    <ClInclude Include="tags\Tags.h">
-      <Filter>tags</Filter>
-    </ClInclude>
-    <ClInclude Include="tags\ID3Tags.h">
-      <Filter>tags</Filter>
-    </ClInclude>
-    <ClInclude Include="KString.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConvertUTF.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

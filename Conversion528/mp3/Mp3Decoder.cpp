@@ -4,6 +4,9 @@
 
 #include <iostream>
 
+size_t getID3TagSize(const char* filename);
+
+
 namespace Decoding
 {
 	
@@ -22,6 +25,10 @@ namespace Decoding
 		f.close();
 	}
 
+	void reportf(const char *format, va_list ap)
+	{
+		std::cout << format << std::endl;
+	}
 
 	int Mp3WaveMp3Decoder::innerRead()
 	{
@@ -43,6 +50,8 @@ namespace Decoding
 
 		fileIsOver = f.eof();
 
+		hip_set_errorf(lameInput, reportf);
+
 		int decodeResult = hip_decode_headers(lameInput, reinterpret_cast<unsigned char*>(&buffer[0]), count, &pcm_l[pcmSize], &pcm_r[pcmSize], &mp3data);
 
 		while ((decodeResult == 0) && (fileIsOver == false))
@@ -55,9 +64,17 @@ namespace Decoding
 
 		}
 
-		pcmSize += decodeResult;
+		if (decodeResult == -1)
+		{
+			std::cout << "decodeResult error: " << decodeResult << std::endl;
+		}
+		else
+		{
+			pcmSize += decodeResult;
 
-		std::cout << "decodeResult: " << decodeResult << std::endl;
+			std::cout << "decodeResult: " << decodeResult << std::endl;
+
+		}
 
 		return 0;
 	}
@@ -67,7 +84,11 @@ namespace Decoding
 
 		f.close();
 
+		size_t mp3TagSize = getID3TagSize(fileName);
+
 		f.open(fileName, std::ios::binary);
+
+		f.seekg(mp3TagSize);
 
 		innerRead();
 

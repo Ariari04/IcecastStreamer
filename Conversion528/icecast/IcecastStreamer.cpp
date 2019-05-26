@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include <wave/WaveFile.h>
 #include <wave/WaveDecoder.h>
 #include <mp3/Mp3Decoder.h>
@@ -17,14 +18,28 @@
 
 #include <id3/tag.h>
 
-#include "tags/Tags.h"
-
-
 
 #include <cctype>
 #include <iomanip>
 #include <sstream>
 #include <string>
+
+#include <codecvt>
+#include <string>
+
+// convert UTF-8 string to wstring
+std::wstring utf8_to_wstring(const std::string& str)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+	return myconv.from_bytes(str);
+}
+
+// convert wstring to UTF-8 string
+std::string wstring_to_utf8(const std::wstring& str)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+	return myconv.to_bytes(str);
+}
 
 std::string url_encode(const std::string &value) {
 
@@ -38,7 +53,8 @@ std::string url_encode(const std::string &value) {
 		string::value_type c = (*i);
 
 		// Keep alphanumeric and other accepted characters intact
-		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+		//if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+		if (c == '-' || c == '_' || c == '.' || c == '~' || (c >= '0' && c <= '9')) {
 			escaped << c;
 			continue;
 		}
@@ -59,22 +75,196 @@ struct ID3Metadata {
 
 };
 
+
+unicode_t* ReverseEndian(unicode_t* pStr)
+{
+	for (int i = 0; pStr[i] != 0; ++i)
+	{
+		unicode_t tmp = (pStr[i] << 8) & 0xff00;
+		tmp |= (pStr[i] >> 8) & 0x00ff;
+		pStr[i] = tmp;
+	}
+	return pStr;
+}
+
+typedef unsigned short UTF16;
+
+static size_t utf16strlen(const UTF16* szString)
+{
+	size_t len = 0;
+	for (; szString[len] != 0; ++len);
+	return len;
+}
+
+
+std::wstring ConvertUtf16ToKString(const UTF16* szString)
+{
+	if (sizeof(UTF16) == sizeof(wchar_t))
+	{
+		return std::wstring((const wchar_t*)szString);
+	}
+	else if (sizeof(UTF16) < sizeof(wchar_t))
+	{
+		const size_t len = utf16strlen(szString) + 1;
+		std::vector<wchar_t> tmpStr(len);
+		std::copy(szString, szString + len, tmpStr.begin());
+		return std::wstring(&tmpStr.front());
+	}
+	return std::wstring();
+}
+
+std::wstring ConvertLatin1ToKString(const char* szString)
+{
+	size_t nSrcLen = strlen(szString);
+	wchar_t* wszBuffer = new wchar_t[nSrcLen + 1];
+
+	wszBuffer[nSrcLen] = 0;
+
+	for (size_t i = 0; i < nSrcLen + 1; ++i)
+		wszBuffer[i] = (unsigned char)szString[i];
+
+	std::wstring result(wszBuffer);
+	delete[] wszBuffer;
+	return result;
+}
+
+std::wstring GetStringFromFrame(const ID3_Frame* pcFr, ID3_FieldID WantedId = ID3FN_TEXT)
+{
+	std::wstring res = L"";
+	ID3_Frame::ConstIterator* it = pcFr->CreateIterator();
+	const ID3_Field* f;
+	while (NULL != (f = it->GetNext()))
+	{
+		ID3_TextEnc enc = f->GetEncoding();
+		ID3_FieldID id = f->GetID();
+
+		if (WantedId != id)
+		{
+			continue;
+		}
+
+		if (f->GetType() == ID3FTY_INTEGER)
+		{
+			//res.Format(_T("%d"), f->Get());
+			res = boost::lexical_cast<std::wstring>(f->Get());
+			break;
+		}
+		else
+		{
+			switch (enc)
+			{
+			case ID3TE_ISO8859_1:
+			{
+				const size_t nSize = f->Size() + 1;
+				char* pStr = new char[nSize];
+				f->Get(pStr, nSize);
+				res += ConvertLatin1ToKString(pStr);
+				delete[] pStr;
+			}
+			break;
+			case ID3TE_UTF16:
+			case ID3TE_UTF16BE:
+			{
+				const size_t nSizeInbytes = f->Size();
+				// length of string in characters + trailing zero
+				const size_t nLengthOfString = nSizeInbytes / sizeof(unicode_t) + 1;
+				unicode_t* pStr = new unicode_t[nLengthOfString];
+				f->Get(pStr, nLengthOfString);
+				pStr[nLengthOfString - 1] = 0;
+				if (enc == ID3TE_UTF16)
+					pStr = ReverseEndian(pStr);
+				res += ConvertUtf16ToKString(pStr);
+				delete[] pStr;
+			}
+			break;
+			}
+		}
+	}
+
+	return res;
+}
+
+size_t getID3TagSize(const char* filename)
+{
+	ID3_Tag myTag(filename);
+	
+	return myTag.Size();
+}
+
 ID3Metadata getMetadata(const std::string& filename)
 {
 	ID3Metadata result{ "Unknown", "Unknown" };
 
-	/*
-	KTags tags;
-	TelError err = ReadTagsFromFile(filename.c_str(), tags);
-	if (err != TEL_ERR_OK)
-	{
-		
-		return result;
-	}
-	result.title = tags.GetTag(TAG_TITLE).GetAsUtf8();
+	
+	ID3_Tag myTag(filename.c_str());
 
-	result.artist = tags.GetTag(TAG_ARTIST).GetAsUtf8();
+	
+	/*
+	ID3_Tag::Iterator* iter = myTag.CreateIterator();
+	ID3_Frame* myFrame = NULL;
+	while (NULL != (myFrame = iter->GetNext()))
+	{
+
+		
+		std::cout << myFrame->GetTextID() << std::endl;
+
+		ID3_Frame::Iterator* iter2 = myFrame->CreateIterator();
+		ID3_Field* myField = NULL;
+		while (NULL != (myField = iter2->GetNext()))
+		{
+			std::cout << ">" << myField->GetType() << std::endl;
+
+			if (myField->GetType() == 2)
+			{
+
+				std::wstring r = GetStringFromFrame(myFrame);
+
+				std::cout << wstring_to_utf8(r) << std::endl;
+				
+			}
+		}
+		//delete iter2;
+	}
+	//delete iter;
 	*/
+
+	ID3_Frame* titleFrame = myTag.Find(ID3FID_TITLE);
+	if (NULL != titleFrame)
+	{
+		std::wstring r = GetStringFromFrame(titleFrame);
+
+		if (r != L"")
+		{
+			result.title = wstring_to_utf8(r);
+		}
+	}
+
+	ID3_Frame* artistFrame = myTag.Find(ID3FID_BAND);
+	if (NULL != artistFrame)
+	{
+		std::wstring r = GetStringFromFrame(artistFrame);
+
+		if (r != L"")
+		{
+			//ID3FID_LEADARTIST
+			result.artist = wstring_to_utf8(r);
+		}
+	}
+
+	if (result.artist == "Unknown" || result.artist == "")
+	{
+		ID3_Frame* leadArtistFrame = myTag.Find(ID3FID_LEADARTIST);
+		if (NULL != leadArtistFrame)
+		{
+			std::wstring r = GetStringFromFrame(leadArtistFrame);
+
+			if (r != L"")
+			{
+				result.artist = wstring_to_utf8(r);
+			}
+		}
+	}
+
 	return result;
 }
 
@@ -411,6 +601,7 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 			}
 			else
 			{
+				std::cout << "Start playing: " << shuffledPlaylist[i] << std::endl;
 
 				if (streamOneReader(socket, reader))
 				{
