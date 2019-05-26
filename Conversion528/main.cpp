@@ -88,31 +88,6 @@ void streamPlaylist(const std::vector<std::string>& playlist)
 	promise->get_future().wait();
 }
 
-
-void StreamFile()
-{
-	std::cout << "Choose a file:" << std::endl;
-	std::cout << "1) Special" << std::endl;
-	std::cout << "2) test/original.mp3" << std::endl;
-	std::cout << "3) test/original.aac" << std::endl;
-	std::cout << "4) test/original.m4a" << std::endl;
-	std::cout << "5) test/original.mp4" << std::endl;
-
-	char key = _getwch();
-
-	switch (key)
-	{
-	case '1': streamFile("D:/music/BAAM.wav"); break;
-	//case '1': streamFile("D:/music/GTA Vice City - Flash FM.mp3"); break;
-	//case '1': streamFile("D:/music/PRISTIN V - Get It.mp3"); break;
-	//case '1': streamFile("D:/music/168446101.aac"); break;
-	case '2': streamFile("test/original.mp3"); break;
-	case '3': streamFile("test/original.aac"); break;
-	case '4': streamFile("test/original.m4a"); break;
-	case '5': streamFile("test/original.mp4"); break;
-	}
-}
-
 int main(int argc, char* argv[])
 {
 	auto f = []()
