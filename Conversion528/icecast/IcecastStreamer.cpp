@@ -627,7 +627,7 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 std::vector<std::string> IcecastStreamer::downloadPlaylist()
 {
 	boost::asio::ip::tcp::resolver resolver(io_service);
-	boost::asio::ip::tcp::resolver::query query("localhost", "80");
+	boost::asio::ip::tcp::resolver::query query("528records.com", "80");
 	//boost::asio::ip::tcp::resolver::query query("id3lib.sourceforge.net", "80");
 
 	boost::system::error_code errcode;
@@ -665,7 +665,7 @@ std::vector<std::string> IcecastStreamer::downloadPlaylist()
 	request_stream << "GET /radio/api/qjuvfzlpcjmfvful11fk/main/9 HTTP/1.1" << NEWLINE;
 	//request_stream << "GET / HTTP/1.1" << NEWLINE;
 	//request_stream << "Host: id3lib.sourceforge.net:80" << NEWLINE;
-	request_stream << "Host: localhost:80" << NEWLINE;
+	request_stream << "Host: 528records.com:80" << NEWLINE;
 	request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
 
 	request_stream << NEWLINE;

@@ -10,32 +10,20 @@ LDFLAGS=-L./../lame-3.100/mpglib/.libs \
 -L./../id3lib-3.8.3/src/.libs \
 -L./../libmp4v2-1.5.0.1/Compile/.libs \
 -L./../lame-3.100/libmp3lame/.libs \
--L./3rd/libs -l:libmpgdecoder.a -l:libmp3lame.a -lz -lmysqlpp -l:libid3.a -l:libfaad.a -lstdc++  -lm -l:libmp4v2.a
+-L./3rd/libs -l:libmpgdecoder.a -l:libmp3lame.a -lz -l:libid3.a -l:libfaad.a -lstdc++  -lm -l:libmp4v2.a
 
 EXECUTABLE=conv
 
 SOURCES_CPP=main.cpp \
-	AacDecoder.cpp \
-	ConsoleHelpers.cpp \
-	Conversion.cpp \
-	Converter528.cpp \
-	ConverterApp.cpp \
-	ConvException.cpp \
-	DecoderAdapter.cpp \
-	EncoderAdapter.cpp \
-	FlatConverter.cpp \
-	KString.cpp \
-	Mp3Decoder.cpp \
-	Mp3Encoder.cpp \
-	Settings.cpp \
-	WaveFileAdapter.cpp \
-	WaveFile.cpp \
-	tags/ID3Tags.cpp \
-	tags/Tags.cpp \
-	tags/TagsUsingMP4v2.cpp \
+	aac/AacDecoder.cpp \
+	icecast/IcecastStreamer.cpp \
+	mp3/Mp3Decoder.cpp \
+	wave/WaveDecoder.cpp \
+	wave/WaveFile.cpp \
+	main.cpp \
+	stdafx.cpp \
 	
-SOURCES_C=ConvertUTF.c \
-	  3rd/blade/BladeMP3Enc.c \
+SOURCES_C=3rd/blade/BladeMP3Enc.c \
 	  3rd/mp4ff/drms.c \
 	  3rd/mp4ff/mp4atom.c \
 	  3rd/mp4ff/mp4ff.c \
