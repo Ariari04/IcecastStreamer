@@ -20,8 +20,7 @@ SOURCES_CPP=main.cpp \
 	mp3/Mp3Decoder.cpp \
 	wave/WaveDecoder.cpp \
 	wave/WaveFile.cpp \
-	main.cpp \
-	stdafx.cpp \
+	main.cpp
 	
 SOURCES_C=3rd/blade/BladeMP3Enc.c \
 	  3rd/mp4ff/drms.c \

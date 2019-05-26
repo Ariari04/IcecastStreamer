@@ -3,8 +3,9 @@
 
 #ifdef _WIN32
 #include <conio.h>
-#endif
+
 #include "stdafx.h"
+#endif
 #include "wave/WaveFile.h"
 
 #include <memory.h>
