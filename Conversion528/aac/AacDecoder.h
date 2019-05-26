@@ -9,7 +9,7 @@
 #include <fstream>
 
 #include <neaacdec.h>
-
+#include <cstring>
 
 namespace Decoding
 {

@@ -6,11 +6,11 @@ DEFINES=-D_FILE_OFFSET_BITS=64 -DUSE_TAGGING
 CPPFLAGS=-Wall -O2 -I. -std=c++14 $(DEFINES) 
 CFLAGS=$(CPPFLAGS)
 LDFLAGS=-L./../lame-3.100/mpglib/.libs \
--L./../faad2-2.8.8/libfaad/.libs \
+-L./../faad2-vs/libfaad/.libs \
 -L./../id3lib-3.8.3/src/.libs \
 -L./../libmp4v2-1.5.0.1/Compile/.libs \
 -L./../lame-3.100/libmp3lame/.libs \
--L./3rd/libs -l:libmpgdecoder.a -l:libmp3lame.a -lz -l:libid3.a -l:libfaad.a -lstdc++  -lm -l:libmp4v2.a
+-L./3rd/libs -l:libmpgdecoder.a -l:libmp3lame.a -lz -l:libid3.a -l:libfaad.a -lstdc++  -lm -lboost_system -lboost_filesystem -lboost_thread -lpthread 
 
 EXECUTABLE=conv
 
@@ -19,18 +19,9 @@ SOURCES_CPP=main.cpp \
 	icecast/IcecastStreamer.cpp \
 	mp3/Mp3Decoder.cpp \
 	wave/WaveDecoder.cpp \
-	wave/WaveFile.cpp \
-	main.cpp
+	wave/WaveFile.cpp
 	
-SOURCES_C=3rd/blade/BladeMP3Enc.c \
-	  3rd/mp4ff/drms.c \
-	  3rd/mp4ff/mp4atom.c \
-	  3rd/mp4ff/mp4ff.c \
-	  3rd/mp4ff/mp4meta.c \
-	  3rd/mp4ff/mp4sample.c \
-	  3rd/mp4ff/mp4tagupdate.c \
-	  3rd/mp4ff/mp4util.c \
-	  3rd/faad/main.c 
+SOURCES_C=
 
 OBJECTS_CPP=$(SOURCES_CPP:.cpp=.o)
 OBJECTS_C=$(SOURCES_C:.c=.o)

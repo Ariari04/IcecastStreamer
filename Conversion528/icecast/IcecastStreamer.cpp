@@ -1,6 +1,6 @@
 ﻿#include "IcecastStreamer.h"
 
-#include <conio.h>
+//#include <conio.h>
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
@@ -365,7 +365,7 @@ std::shared_ptr<AudioDecoder> createReader(const std::string& fileName)
 
 	if (format == IcecastStreamer::AudioFormat::Invalid)
 	{
-		return false;
+		return nullptr;
 	}
 
 	if (!reader->open(fileName.c_str()))
