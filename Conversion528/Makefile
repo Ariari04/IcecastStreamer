@@ -3,7 +3,7 @@ CPP=g++
 DEFINES=-D_FILE_OFFSET_BITS=64 -DUSE_TAGGING
 
 # -O2 - optimize for speed
-CPPFLAGS=-Wall -O2 $(DEFINES) 
+CPPFLAGS=-Wall -O2 -I. -std=c++14 $(DEFINES) 
 CFLAGS=$(CPPFLAGS)
 LDFLAGS=-L./../lame-3.100/mpglib/.libs \
 -L./../faad2-2.8.8/libfaad/.libs \
