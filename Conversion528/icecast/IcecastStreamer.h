@@ -8,6 +8,7 @@
 #include "boost/filesystem.hpp"
 #include <vector>
 #include <string>
+#include <future>
 
 //OpenSSL stuff -- Vladislav Khorev vladislav.khorev@fishrungames.com
 //#define SSL_R_SHORT_READ 219
