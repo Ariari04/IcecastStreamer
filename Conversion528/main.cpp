@@ -32,7 +32,8 @@ boost::asio::io_service ioService;
 boost::asio::io_service::work work(ioService);
 boost::thread_group threadPool;
 
-IcecastStreamer streamer{ ioService, "vm493.vmware.nano.lv", "80" };
+//IcecastStreamer streamer{ ioService, "vm493.vmware.nano.lv", "80" };
+IcecastStreamer streamer{ ioService, "528records.com", "8000" };
 
 std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 {

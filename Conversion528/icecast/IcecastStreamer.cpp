@@ -459,11 +459,13 @@ bool updateMetadata(boost::asio::io_service& io_service, const std::string& addr
 	boost::erase_all(metadataString, "\n");
 	boost::erase_all(metadataString, "\r");
 
-	request_stream << "GET /admin/metadata?mount=/test.mp3&mode=updinfo&song=" + metadataString + " HTTP/1.1" << NEWLINE;
+	//request_stream << "GET /admin/metadata?mount=/test.mp3&mode=updinfo&song=" + metadataString + " HTTP/1.1" << NEWLINE;
+	request_stream << "GET /admin/metadata?mount=/main_station_premium_2&mode=updinfo&song=" + metadataString + " HTTP/1.1" << NEWLINE;
 	request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
 	request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
-	request_stream << "Authorization: Basic YWRtaW46aGFja21l" << NEWLINE;
-
+	//request_stream << "Authorization: Basic YWRtaW46aGFja21l" << NEWLINE;
+	request_stream << "Authorization: Basic YWRtaW46Z3lFTUhDcDI5SGtVb1pyYmt4cWc=" << NEWLINE;
+	
 	request_stream << NEWLINE;
 
 	try
@@ -504,14 +506,16 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 	std::istream response_stream(&response);
 
 	
-		request_stream << "PUT /test.mp3 HTTP/1.1" << NEWLINE;
+		//request_stream << "PUT /test.mp3 HTTP/1.1" << NEWLINE;
+		request_stream << "PUT /main_station_premium_2 HTTP/1.1" << NEWLINE;
 		request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
 		request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
 		request_stream << "Transfer-Encoding: chunked" << NEWLINE;
 		request_stream << "Content-Type: audio/mpeg" << NEWLINE;
 		//request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
 		request_stream << "Expect: 100-continue" << NEWLINE;
-		request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
+		//request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
+		request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
 
 		request_stream << "Ice-Public: 1" << NEWLINE;
 		request_stream << "Ice-Name: test_stream" << NEWLINE;
