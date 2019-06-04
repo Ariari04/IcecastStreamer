@@ -644,7 +644,7 @@ std::vector<std::string> IcecastStreamer::loadPlaylistFromFile()
 	boost::trim(playlistString);
 
 	std::vector<std::string> strs;
-	boost::split(strs, playlistString, boost::is_any_of(" "));
+	boost::split(strs, playlistString, boost::is_any_of(" \n"));
 	
 	return strs;
 }
