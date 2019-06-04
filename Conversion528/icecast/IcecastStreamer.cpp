@@ -584,9 +584,10 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 		}
 #else
 
-		std::cout << "Download playlist before" << std::endl;
-		auto playlist = downloadPlaylist();
-		std::cout << "Download playlist after" << std::endl;
+		//std::cout << "Download playlist before" << std::endl;
+		//auto playlist = downloadPlaylist();
+		auto playlist = loadPlaylistFromFile();
+		//std::cout << "Download playlist after" << std::endl;
 
 		//auto playlist = uploading.contentToStream.playlist;
 
@@ -631,6 +632,21 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 	std::cout << "IcecastStreamer: stream is finished" << std::endl;
 
 	return true;
+}
+
+
+std::vector<std::string> IcecastStreamer::loadPlaylistFromFile()
+{
+	std::ifstream t("/home/ubuntu/playlist.txt");
+	std::string playlistString((std::istreambuf_iterator<char>(t)),
+					 std::istreambuf_iterator<char>());
+				 
+	boost::trim(playlistString);
+
+	std::vector<std::string> strs;
+	boost::split(strs, playlistString, boost::is_any_of(" "));
+	
+	return strs;
 }
 
 
