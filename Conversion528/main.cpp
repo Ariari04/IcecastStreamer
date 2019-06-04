@@ -32,7 +32,7 @@ boost::asio::io_service ioService;
 boost::asio::io_service::work work(ioService);
 boost::thread_group threadPool;
 
-IcecastStreamer streamer{ ioService, "127.0.0.1", "8000" };
+IcecastStreamer streamer{ ioService, "vm493.vmware.nano.lv", "80" };
 
 std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 {
@@ -82,6 +82,7 @@ void streamPlaylist(const std::vector<std::string>& playlist)
 
 	ioService.post([contentToStream, promise]()
 	{
+		std::cout << "StreamPlaylist inner 1" << std::endl;
 		streamer.streamFile(contentToStream, promise);
 	});
 
@@ -100,8 +101,9 @@ int main(int argc, char* argv[])
 
 	//std::vector<std::string> listOfFiles = { "BAAM.wav", "PRISTIN V - Get It.mp3", "168446101.aac", "not_existing_file.mp3" };
 
-	//std::vector<std::string> listOfFiles = { "b5c751d94e8b[1].mp3" };
+	std::vector<std::string> listOfFiles = { "b5c751d94e8b[1].mp3" };
 	
+/*
 	std::vector<std::string> listOfFiles = { "K-pop old/(CNBLUE) - Black Flower.mp3",
 		"K-pop old/(CNBLUE) - LOVE GIRL.mp3",
 		"K-pop old/09. Day By Day (데이바이데이) (Japanese ver.).mp3",
@@ -122,7 +124,7 @@ int main(int argc, char* argv[])
 		"K-pop old/SNSD (Girls' Generation) - The Boys.mp3",
 		"K-pop old/T-ARA - Holiday.mp3",
 		"K-pop old/Yanghwajin (OST City hunter Городской охотник, 2011) - It's Alright.mp3"
-    };
+    };*/
 	
 	std::cout << "Streamed created" << std::endl;
 

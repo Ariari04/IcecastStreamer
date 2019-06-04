@@ -284,6 +284,7 @@ IcecastStreamer::IcecastStreamer(boost::asio::io_service& ioService, std::string
 
 void IcecastStreamer::streamFile(const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise)
 {
+	std::cout << "Streamer streamFile 1" << std::endl;
 	boost::asio::ip::tcp::resolver resolver(io_service);
 	boost::asio::ip::tcp::resolver::query query(addres, port);
 	
@@ -309,11 +310,12 @@ void IcecastStreamer::streamFile(const ContentToStream& contentToStream, std::sh
 
 void IcecastStreamer::streamFile(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise)
 {
+	std::cout << "Streamer streamFile 2" << std::endl;
 	std::shared_ptr<boost::asio::ip::tcp::socket> httpSocket = std::make_shared<boost::asio::ip::tcp::socket>(io_service);
 
 	boost::system::error_code errcode;
 	httpSocket->connect(endpoint, errcode);
-
+	std::cout << "Streamer streamFile 2.1" << std::endl;
 	if (errcode)
 	{
 		std::cout << "IcecastStreamer::streamFile: couldn't connect to the server, retry..." << std::endl;
@@ -327,7 +329,7 @@ void IcecastStreamer::streamFile(boost::asio::ip::tcp::endpoint endpoint, const 
 	uploading.addres = addres;
 	uploading.port = port;
 	uploading.contentToStream = contentToStream;
-
+	std::cout << "Streamer streamFile 2.2" << std::endl;
 	if (!streamFileInner(httpSocket, uploading))
 	{
 		httpSocket->lowest_layer().close();
@@ -582,15 +584,23 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 		}
 #else
 
+		std::cout << "Download playlist before" << std::endl;
 		auto playlist = downloadPlaylist();
+		std::cout << "Download playlist after" << std::endl;
+
+		//auto playlist = uploading.contentToStream.playlist;
+
+		std::cout << "Playlist size: " << playlist.size() << std::endl;
 
 		std::uniform_int_distribution<> dis(0, playlist.size()-1);
 
 		size_t i = dis(g);
 
 
-		std::string prefix = "D:/music/";
+		//std::string prefix = "/home/ubuntu/";
+		std::string prefix = "/home/ubuntu";
 		std::string fileName = prefix + playlist[i];
+		std::cout << "Filename is: " << fileName << std::endl;
 		auto reader = createReader(fileName);
 
 		ID3Metadata metadata = getMetadata(fileName);
@@ -713,6 +723,9 @@ std::vector<std::string> IcecastStreamer::downloadPlaylist()
 	}
 
 	std::string httpOk = "HTTP/1.1 200 OK\r\n";
+
+	std::cout << "Playlist string: >>>" << std::endl;
+	std::cout << playlistString << std::endl;
 
 	if (playlistString.substr(0, httpOk.size()) != httpOk)
 	{
