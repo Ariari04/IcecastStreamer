@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include <iostream>
+#include <cstring>
 
 size_t getID3TagSize(const char* filename);
 
