@@ -545,9 +545,12 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 		request_stream << "Content-Type: audio/mpeg" << NEWLINE;
 		//request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
 		request_stream << "Expect: 100-continue" << NEWLINE;
-		request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
-		//request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
+#ifdef _WIN32
 
+		request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
+#else
+		request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
+#endif
 		request_stream << "Ice-Public: 1" << NEWLINE;
 		request_stream << "Ice-Name: test_stream" << NEWLINE;
 		request_stream << "Ice-Description: Hello, World!" << NEWLINE;
