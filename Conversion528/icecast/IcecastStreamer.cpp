@@ -383,19 +383,50 @@ std::shared_ptr<AudioDecoder> createReader(const std::string& fileName)
 bool streamOneReader(std::shared_ptr<boost::asio::ip::tcp::socket> socket, std::shared_ptr<AudioDecoder> reader)
 {
 
-	std::vector<char> Buffer;
-	Buffer.resize(1024 * 1024);
+	static std::array<char, 64 * 1024> Buffer;
+	//std::vector<char> Buffer;
+	//Buffer.resize(1024 * 1024);
 
 	int packet = 0;
 
 	int byteCount;
+
+	constexpr auto defaultDuration = std::chrono::milliseconds(300);
+
+	//First duration a little bit more than usual:
+	/*
+	for (size_t i = 0; i < 5; i++)
+	{
+
+		byteCount = reader->readDuration(&Buffer[0], Buffer.size(), defaultDuration);
+
+		if (byteCount < 1)
+		{
+			return true;
+		}
+
+		auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
+
+		try
+		{
+			socket->send(asioBuffer);
+			std::cout << "IcecastStreamer: streaming... " << ++packet << " : " << byteCount << std::endl;
+		}
+		catch (std::exception &e)
+		{
+			std::cout << "IcecastStreamer: connection issues, retry..." << std::endl;
+			return false;
+		}
+	}*/
+
+	//Then in loop, regular duration:
 
 	while (true)
 	{
 
 		std::chrono::time_point<std::chrono::system_clock> nowBefore = std::chrono::system_clock::now();
 
-		byteCount = reader->readDuration(&Buffer[0], Buffer.size(), std::chrono::seconds(3));
+		byteCount = reader->readDuration(&Buffer[0], Buffer.size(), defaultDuration);
 
 		if (byteCount < 1)
 		{
@@ -417,7 +448,7 @@ bool streamOneReader(std::shared_ptr<boost::asio::ip::tcp::socket> socket, std::
 
 		std::chrono::time_point<std::chrono::system_clock> nowAfter = std::chrono::system_clock::now();
 
-		auto duration = std::chrono::seconds(3) - (nowAfter - nowBefore);
+		auto duration = defaultDuration - (nowAfter - nowBefore);
 
 		std::this_thread::sleep_for(duration);
 	}
@@ -514,8 +545,8 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 		request_stream << "Content-Type: audio/mpeg" << NEWLINE;
 		//request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
 		request_stream << "Expect: 100-continue" << NEWLINE;
-		//request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
-		request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
+		request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
+		//request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
 
 		request_stream << "Ice-Public: 1" << NEWLINE;
 		request_stream << "Ice-Name: test_stream" << NEWLINE;

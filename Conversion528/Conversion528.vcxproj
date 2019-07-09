@@ -92,7 +92,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../boost_1_70_0;C:\Users\MACHENIKE\Downloads\lame-3.100.tar\lame-3.100;C:\Users\MACHENIKE\Downloads\lame-3.100.tar\lame-3.100/frontend;C:\Users\MACHENIKE\Downloads\lame-3.100.tar\lame-3.100/include;C:\Users\MACHENIKE\Downloads\lame-3.100.tar\lame-3.100/libmp3lame;C:\Users\MACHENIKE\Downloads\lame-3.100.tar\lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff;.;../id3lib-3.8.3/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../boost_1_70_0;D:/Work/TorchProjects/converter/lame-3.100/;D:/Work/TorchProjects/converter/lame-3.100/frontend;D:/Work/TorchProjects/converter/lame-3.100//include;D:/Work/TorchProjects/converter/lame-3.100//libmp3lame;D:/Work/TorchProjects/converter/lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff;.;../id3lib-3.8.3/include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -102,7 +102,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Users\MACHENIKE\Downloads\lame-3.100.tar\lame-3.100/output/Debug;../faad2-vs/build/x86;../../boost_1_70_0/stage/win32/lib;../id3lib-3.8.3/Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:/Work/TorchProjects/converter/lame-3.100/output/Debug;../faad2-vs/build/x86;../../boost_1_70_0/stage/win32/lib;../id3lib-3.8.3/Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

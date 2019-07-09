@@ -13,6 +13,12 @@
 
 namespace Decoding
 {
+	extern std::array<char, BLOCK_SIZE> buffer;
+
+	extern std::array<short, BLOCK_SIZE * 64> pcm_l;
+	extern std::array<short, BLOCK_SIZE * 64> pcm_r;
+
+	extern std::array<short, BLOCK_SIZE * 64> tempBuf;
 
 
 	class AacToMp3Decoder : public AudioDecoder 
@@ -22,11 +28,11 @@ namespace Decoding
 		std::ifstream f;
 
 		size_t bufferStartPos = 0;
-		std::array<unsigned char, 1024 * 128> buffer;
+		//std::array<unsigned char, 1024 * 128> buffer;
 
 		int pcmSize = 0;
 
-		std::array<short, 1024 * 1024*8> pcmBuffer;
+		//std::array<short, 1024 * 1024*8> pcmBuffer;
 
 		bool aacInited = false;
 
@@ -44,7 +50,7 @@ namespace Decoding
 
 		int open(const char* fileName) override;
 
-		int readDuration(char* Buffer, size_t Count, std::chrono::seconds duration) override;
+		int readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration) override;
 
 		int openMp3Output();
 

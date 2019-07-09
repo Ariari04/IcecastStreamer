@@ -75,7 +75,7 @@ namespace Decoding
 		if (!aacInited)
 		{
 		
-			char err = NeAACDecInit(hAac, &buffer[0], count, &samplerate, &channels);
+			char err = NeAACDecInit(hAac, reinterpret_cast<unsigned char*>(&buffer[0]), count, &samplerate, &channels);
 			if (err != 0) {
 				// Handle error
 				//fprintf(stderr, "NeAACDecInit error: %d\n", err);
@@ -95,7 +95,7 @@ namespace Decoding
 		while (!processedAll)
 		{
 
-			auto output = NeAACDecDecode(hAac, &hInfo, &buffer[curIndex], count);
+			auto output = NeAACDecDecode(hAac, &hInfo, reinterpret_cast<unsigned char*>(&buffer[curIndex]), count);
 
 			if ((hInfo.error == 0) && (hInfo.samples > 0)) {
 				// do what you need to do with the decoded samples
@@ -124,8 +124,7 @@ namespace Decoding
 				if (readBytes != 0)
 				{
 
-					//std::memcpy(&pcmBuffer[totalRead], output, readBytes);
-					std::memcpy(reinterpret_cast<char*>(&pcmBuffer[0]) + pcmSize, output, readBytes);
+					std::memcpy(reinterpret_cast<char*>(&pcm_l[0]) + pcmSize, output, readBytes);
 
 				}
 
@@ -172,8 +171,8 @@ namespace Decoding
 			{
 				processedAll = true;
 
-				std::vector<short> tempBuf;
-				tempBuf.resize(count);
+				//std::vector<short> tempBuf;
+				//tempBuf.resize(count);
 
 				std::memcpy(reinterpret_cast<char*>(&tempBuf[0]), reinterpret_cast<char*>(&buffer[0]) + curIndex, count);
 
@@ -197,10 +196,10 @@ namespace Decoding
 	}
 
 
-	int AacToMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::seconds duration)
+	int AacToMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration)
 	{
 		
-		auto readCount = duration.count() * samplerate*channels*2;
+		auto readCount = duration.count() * samplerate*channels*2 / 1000;
 
 
 		if (pcmSize < readCount)
@@ -229,19 +228,19 @@ namespace Decoding
 			}
 		}
 
-	    int write = lame_encode_buffer_interleaved(lame, &pcmBuffer[0], readCount/(channels*2), reinterpret_cast<unsigned char*>(Buffer), Count);
+	    int write = lame_encode_buffer_interleaved(lame, &pcm_l[0], readCount/(channels*2), reinterpret_cast<unsigned char*>(Buffer), Count);
 		
 		auto leftoverCount = pcmSize - readCount;
 
 		if (leftoverCount > 0)
 		{
 
-			std::vector<short> tempBuf;
-			tempBuf.resize(leftoverCount);
+			//std::vector<short> tempBuf;
+			//tempBuf.resize(leftoverCount);
 
-			std::memcpy(reinterpret_cast<char*>(&tempBuf[0]), reinterpret_cast<char*>(&pcmBuffer[0]) + readCount, leftoverCount * sizeof(short));
+			std::memcpy(reinterpret_cast<char*>(&tempBuf[0]), reinterpret_cast<char*>(&pcm_l[0]) + readCount, leftoverCount * sizeof(short));
 
-			std::memcpy(reinterpret_cast<char*>(&pcmBuffer[0]), reinterpret_cast<char*>(&tempBuf[0]), leftoverCount * sizeof(short));
+			std::memcpy(reinterpret_cast<char*>(&pcm_l[0]), reinterpret_cast<char*>(&tempBuf[0]), leftoverCount * sizeof(short));
 
 		}
 
