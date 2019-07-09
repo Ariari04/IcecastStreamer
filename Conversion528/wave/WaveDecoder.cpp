@@ -254,7 +254,7 @@ namespace Decoding
 		return 1;
 	}
 
-	int WaveToMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::seconds duration)
+	int WaveToMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration)
 	{
 		if (f.eof())
 		{
@@ -271,7 +271,7 @@ namespace Decoding
 			
 		}
 
-		auto readCount = duration.count() * this->Header.m_cFormatChunk.m_nChannels * this->Header.m_cFormatChunk.m_nSamplesPerSec * this->Header.m_cFormatChunk.m_nBitsPerSample / 8;
+		auto readCount = (this->Header.m_cFormatChunk.m_nChannels * this->Header.m_cFormatChunk.m_nSamplesPerSec * this->Header.m_cFormatChunk.m_nBitsPerSample * duration.count() / 1000) / 8;
 		
 		std::vector<short> buf;
 		buf.resize(readCount / sizeof(short));

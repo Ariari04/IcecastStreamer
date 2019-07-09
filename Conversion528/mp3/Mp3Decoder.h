@@ -10,8 +10,18 @@
 
 //#include <Conversion.h>
 
+
+
 namespace Decoding
 {
+	
+	extern std::array<char, BLOCK_SIZE> buffer;
+
+	extern std::array<short, BLOCK_SIZE * 64> pcm_l;
+	extern std::array<short, BLOCK_SIZE * 64> pcm_r;
+
+	extern std::array<short, BLOCK_SIZE * 64> tempBuf;
+
 
 	class Mp3WaveMp3Decoder : public AudioDecoder // public BufferedProducerBase
 	{
@@ -20,10 +30,7 @@ namespace Decoding
 
 		std::ifstream f;
 
-		std::array<char, 1024 * 1024> buffer;
-
-		std::array<short, 1024 * 1024 * 8> pcm_l;
-		std::array<short, 1024 * 1024 * 8> pcm_r;
+		
 		
 		int pcmSize = 0;
 
@@ -42,7 +49,7 @@ namespace Decoding
 
 		int innerRead();
 
-		int readDuration(char* Buffer, size_t Count, std::chrono::seconds duration) override;
+		int readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration) override;
 		int openMp3Output();
 	};
 }

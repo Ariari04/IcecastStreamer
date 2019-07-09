@@ -33,7 +33,8 @@ boost::asio::io_service::work work(ioService);
 boost::thread_group threadPool;
 
 //IcecastStreamer streamer{ ioService, "vm493.vmware.nano.lv", "80" };
-IcecastStreamer streamer{ ioService, "528records.com", "8000" };
+//IcecastStreamer streamer{ ioService, "528records.com", "8000" };
+IcecastStreamer streamer{ ioService, "127.0.0.1", "80" };
 
 std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 {
@@ -100,9 +101,9 @@ int main(int argc, char* argv[])
 	threadPool.create_thread(f);
 
 
-	//std::vector<std::string> listOfFiles = { "BAAM.wav", "PRISTIN V - Get It.mp3", "168446101.aac", "not_existing_file.mp3" };
+	std::vector<std::string> listOfFiles = { "168446101.aac", "b5c751d94e8b[1].mp3" };
 
-	std::vector<std::string> listOfFiles = { "b5c751d94e8b[1].mp3" };
+	//std::vector<std::string> listOfFiles = { "b5c751d94e8b[1].mp3" };
 	
 /*
 	std::vector<std::string> listOfFiles = { "K-pop old/(CNBLUE) - Black Flower.mp3",

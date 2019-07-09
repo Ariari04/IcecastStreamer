@@ -29,7 +29,7 @@ namespace Decoding
 
 		int openMp3Output();
 
-		int readDuration(char* Buffer, size_t Count, std::chrono::seconds duration) override;
+		int readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration) override;
 	};
 
 

@@ -10,6 +10,13 @@ size_t getID3TagSize(const char* filename);
 
 namespace Decoding
 {
+
+	std::array<char, BLOCK_SIZE> buffer;
+
+	std::array<short, BLOCK_SIZE * 64> pcm_l;
+	std::array<short, BLOCK_SIZE * 64> pcm_r;
+
+	std::array<short, BLOCK_SIZE * 64> tempBuf;
 	
 	Mp3WaveMp3Decoder::Mp3WaveMp3Decoder()
 	{
@@ -18,6 +25,11 @@ namespace Decoding
 
 	Mp3WaveMp3Decoder::~Mp3WaveMp3Decoder()
 	{
+		if (lame != nullptr)
+		{
+			lame_close(lame);
+			lame = nullptr;
+		}
 		hip_decode_exit(lameInput);
 	}
 
@@ -87,6 +99,12 @@ namespace Decoding
 
 		size_t mp3TagSize = getID3TagSize(fileName);
 
+		if (lame != nullptr)
+		{
+			lame_close(lame);
+			lame = nullptr;
+		}
+
 		f.open(fileName, std::ios::binary);
 
 		f.seekg(mp3TagSize);
@@ -108,9 +126,9 @@ namespace Decoding
 		return 1;
 	}
 
-	int Mp3WaveMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::seconds duration)
+	int Mp3WaveMp3Decoder::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration)
 	{
-		auto readCount = duration.count() * this->mp3data.samplerate;// * this->mp3data.stereo;
+		auto readCount = duration.count() * this->mp3data.samplerate / 1000;
 
 		if (pcmSize < readCount)
 		{
@@ -145,8 +163,8 @@ namespace Decoding
 		if (leftoverCount > 0)
 		{
 
-			std::vector<short> tempBuf;
-			tempBuf.resize(leftoverCount);
+			//std::vector<short> tempBuf;
+			//tempBuf.resize(leftoverCount);
 
 			std::memcpy(&tempBuf[0], &pcm_l[readCount], leftoverCount * sizeof(short));
 
@@ -162,22 +180,5 @@ namespace Decoding
 		pcmSize = leftoverCount;
 
 		return write;
-
-		/*
-
-		for (size_t i = 0; i < readCount; i++)
-		{
-			std::memcpy(&Buffer[2 * (2 * i)], &pcm_l[i], 2);
-			std::memcpy(&Buffer[2 * (2 * i + 1)], &pcm_r[i], 2);
-		}
-
-		size_t leftoverCount = pcmSize - readCount;
-
-		std::memmove(&pcm_l[0], &pcm_l[readCount], pcmSize);
-		std::memmove(&pcm_r[0], &pcm_r[readCount], pcmSize);
-
-		pcmSize = leftoverCount;
-
-		return readCount;*/
 	}
 }
