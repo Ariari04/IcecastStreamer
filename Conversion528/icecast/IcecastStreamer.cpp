@@ -491,7 +491,7 @@ bool updateMetadata(boost::asio::io_service& io_service, const std::string& addr
 	boost::erase_all(metadataString, "\r");
 
 	//request_stream << "GET /admin/metadata?mount=/test.mp3&mode=updinfo&song=" + metadataString + " HTTP/1.1" << NEWLINE;
-	request_stream << "GET /admin/metadata?mount=/main_station_premium_2&mode=updinfo&song=" + metadataString + " HTTP/1.1" << NEWLINE;
+	request_stream << "GET /admin/metadata?mount=/main_station_premium&mode=updinfo&song=" + metadataString + " HTTP/1.1" << NEWLINE;
 	request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
 	request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
 	//request_stream << "Authorization: Basic YWRtaW46aGFja21l" << NEWLINE;
@@ -538,7 +538,7 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 
 	
 		//request_stream << "PUT /test.mp3 HTTP/1.1" << NEWLINE;
-		request_stream << "PUT /main_station_premium_2 HTTP/1.1" << NEWLINE;
+		request_stream << "PUT /main_station_premium HTTP/1.1" << NEWLINE;
 		request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
 		request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
 		request_stream << "Transfer-Encoding: chunked" << NEWLINE;
