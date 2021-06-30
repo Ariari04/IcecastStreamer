@@ -132,7 +132,8 @@ int main(int argc, char* argv[])
 		"K-pop old/SNSD (Girls' Generation) - The Boys.mp3",
 		"K-pop old/T-ARA - Holiday.mp3",
 		"K-pop old/Yanghwajin (OST City hunter Городской охотник, 2011) - It's Alright.mp3"
-    };*/
+    };
+*/
 	
 	std::cout << "Streamed created" << std::endl;
 
