@@ -352,7 +352,8 @@ std::shared_ptr<AudioDecoder> createReader(const std::string& fileName)
 	if (ext == ".wav")
 	{
 		format = IcecastStreamer::AudioFormat::WAV;
-		reader = std::make_shared<Decoding::WaveToMp3Decoder>();
+		//reader = std::make_shared<Decoding::WaveToMp3Decoder>();
+		reader = std::make_shared<Decoding::WaveToOggDecoder>();
 	}
 	else if (ext == ".mp3")
 	{
@@ -537,19 +538,21 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 	std::istream response_stream(&response);
 
 	
-		//request_stream << "PUT /test.mp3 HTTP/1.1" << NEWLINE;
-		request_stream << "PUT /main_station_premium HTTP/1.1" << NEWLINE;
+		request_stream << "PUT /output HTTP/1.1" << NEWLINE;
+		//request_stream << "PUT /main_station_premium HTTP/1.1" << NEWLINE;
 		request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
 		request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
 		request_stream << "Transfer-Encoding: chunked" << NEWLINE;
-		request_stream << "Content-Type: audio/mpeg" << NEWLINE;
+		//request_stream << "Content-Type: audio/mpeg" << NEWLINE;
+		request_stream << "Content-Type: audio/ogg" << NEWLINE;
 		//request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
 		request_stream << "Expect: 100-continue" << NEWLINE;
 #ifdef _WIN32
 
 		request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
 #else
-		request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
+		//request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
+		request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
 #endif
 		request_stream << "Ice-Public: 1" << NEWLINE;
 		request_stream << "Ice-Name: test_stream" << NEWLINE;
@@ -594,13 +597,13 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 		
 		for (size_t i = 0; i < shuffledPlaylist.size(); i++)
 		{
-			std::string prefix = "D:/music/";
+			std::string prefix = "E:/music/";
 			std::string fileName = prefix + shuffledPlaylist[i];
 			auto reader = createReader(fileName);
 
 			ID3Metadata metadata = getMetadata(fileName);
 
-			updateMetadata(io_service, this->addres, this->port, uploading, metadata);
+			//updateMetadata(io_service, this->addres, this->port, uploading, metadata);
 
 			if (!reader)
 			{
@@ -644,7 +647,7 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 
 		ID3Metadata metadata = getMetadata(fileName);
 
-		updateMetadata(io_service, this->addres, this->port, uploading, metadata);
+		//updateMetadata(io_service, this->addres, this->port, uploading, metadata);
 
 		if (!reader)
 		{

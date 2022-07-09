@@ -1,18 +1,29 @@
 #pragma once
 
+/*
 #include <lame.h>
-
+*/
 #include <cstdio>
 #include <AudioFile.h>
+
 #include <array>
 #include <vector>
 #include <fstream>
 
-//#include <Conversion.h>
 
+#include "minimp3.h"
 
+struct MP3DHolder
+{
+	mp3dec_t mp3d;
 
-namespace Decoding
+	MP3DHolder()
+	{
+		mp3dec_init(&mp3d);
+	}
+};
+
+namespace DecodingX
 {
 	
 	extern std::array<char, BLOCK_SIZE> buffer;
@@ -23,25 +34,30 @@ namespace Decoding
 	extern std::array<short, BLOCK_SIZE * 64> tempBuf;
 
 
-	class Mp3WaveMp3Decoder : public AudioDecoder // public BufferedProducerBase
+	class Mp3WaveMp3DecoderNew : public AudioDecoder // public BufferedProducerBase
 	{
 	public:
-		hip_t lameInput;
+		
+		//hip_t lameInput;
 
 		std::ifstream f;
 
+
+		static MP3DHolder mp3dHolder;
+		
+
 		
 		
-		int pcmSize = 0;
+		//int pcmSize = 0;
 
-		mp3data_struct mp3data{ 0 };
+		//mp3data_struct mp3data{ 0 };
 
-		lame_t lame = nullptr;
+		//lame_t lame = nullptr;
 
-		bool flush_sent = false;
+		//bool flush_sent = false;
 
-		Mp3WaveMp3Decoder();
-		~Mp3WaveMp3Decoder();
+		Mp3WaveMp3DecoderNew();
+		~Mp3WaveMp3DecoderNew();
 
 		int open(const char* fileName) override;
 	
