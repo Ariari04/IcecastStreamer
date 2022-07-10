@@ -392,7 +392,8 @@ bool streamOneReader(std::shared_ptr<boost::asio::ip::tcp::socket> socket, std::
 
 	int byteCount;
 
-	constexpr auto defaultDuration = std::chrono::milliseconds(300);
+	//constexpr auto defaultDuration = std::chrono::milliseconds(300);
+	constexpr auto defaultDuration = std::chrono::milliseconds(1000);
 
 	//First duration a little bit more than usual:
 	/*

@@ -63,6 +63,8 @@ namespace Decoding
 		ogg_page         og; /* one Ogg bitstream page.  Vorbis packets are inside */
 		ogg_packet       op; /* one raw packet of data for decode */
 
+		int eos = 0;
+
 		std::vector<char> dataToSend;
 
 		~WaveToOggDecoder();
@@ -102,6 +104,7 @@ namespace Decoding
 
 		ogg_page         og; /* one Ogg bitstream page.  Vorbis packets are inside */
 		ogg_packet       op; /* one raw packet of data for decode */
+
 
 		std::vector<char> dataToSend;
 

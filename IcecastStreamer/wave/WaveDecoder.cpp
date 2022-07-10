@@ -603,10 +603,8 @@ namespace Decoding
 
 	int WaveToOggDecoder::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration)
 	{
-		if (f.eof())
+		if (eos == 1)
 		{
-			close();
-			fout.close();
 			return 0;
 		}
 
@@ -625,9 +623,9 @@ namespace Decoding
 
 		int readCount = (this->Header.m_cFormatChunk.m_nChannels * this->Header.m_cFormatChunk.m_nSamplesPerSec * this->Header.m_cFormatChunk.m_nBitsPerSample * duration.count() / 1000) / 8;
 
-		int eos = 0;
+		readCount = readCount / 4;
 
-		std::vector<char> buf_char;
+		static std::vector<char> buf_char;
 		buf_char.resize(readCount * 4 + 44);
 
 		std::cout << "f.tellg() before = " << f.tellg() << std::endl;
@@ -707,11 +705,20 @@ namespace Decoding
 					}
 				}
 			}
-
-
-
 		}
 
+		if (eos == 1)
+		{
+			ogg_stream_clear(&os);
+			vorbis_block_clear(&vb);
+			vorbis_dsp_clear(&vd);
+			vorbis_comment_clear(&vc);
+			vorbis_info_clear(&vi);
+			
+			close();
+			fout.close();
+			
+		}
 
 		//int write = lame_encode_buffer_interleaved(lame, &buf[0], buf.size() / this->Header.m_cFormatChunk.m_nChannels, reinterpret_cast<unsigned char*>(Buffer), Count);
 
