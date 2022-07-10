@@ -819,11 +819,12 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 	size_t nextPlaylistIndex = (playlistIndex + 1) % playlist.size();
 
 
-	std::shared_ptr<Decoding::WaveDecoder> reader = std::make_shared<Decoding::WaveDecoder>();
+	//std::shared_ptr<Decoding::WaveDecoder> reader = std::make_shared<Decoding::WaveDecoder>();
+	std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::OggDecoder>();
 
 	reader->open(playlist[playlistIndex].c_str());
 
-	std::shared_ptr<Decoding::WaveDecoder> secondReader = std::make_shared<Decoding::WaveDecoder>();
+	std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<Decoding::OggDecoder>();
 
 	secondReader->open(playlist[nextPlaylistIndex].c_str());
 

@@ -135,7 +135,9 @@ int main(int argc, char* argv[])
 	//std::vector<std::string> listOfFiles = { "GTA Vice City - Flash FM.mp3" };
 
 	//std::vector<std::string> listOfFiles = { "E:/music/BAAM.wav", "E:/music/bala.wav"};
-	std::vector<std::string> listOfFiles = { "E:/music/BAAM.wav" };
+	//std::vector<std::string> listOfFiles = { "E:/music/BAAM.wav" };
+
+	std::vector<std::string> listOfFiles = { "E:/music/death note.ogg" };
 	
 	
 	
