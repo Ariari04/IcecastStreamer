@@ -93,7 +93,9 @@ void streamPlaylist(const std::vector<std::string>& playlist)
 	ioService.post([contentToStream, promise]()
 	{
 		std::cout << "StreamPlaylist inner 1" << std::endl;
-		streamer.streamFile(contentToStream, promise);
+		//streamer.streamFile(contentToStream, promise);
+
+		streamer.streamFileLooped(contentToStream, promise);
 	});
 
 	promise->get_future().wait();

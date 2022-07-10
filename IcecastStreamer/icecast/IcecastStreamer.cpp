@@ -677,6 +677,257 @@ bool IcecastStreamer::streamFileInner(std::shared_ptr<boost::asio::ip::tcp::sock
 }
 
 
+void IcecastStreamer::streamFileLooped(const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise)
+{
+	std::cout << "Streamer streamFileLooped 1" << std::endl;
+	boost::asio::ip::tcp::resolver resolver(io_service);
+	boost::asio::ip::tcp::resolver::query query(addres, port);
+
+	boost::system::error_code errcode;
+	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query, errcode);
+
+	if (errcode)
+	{
+		std::cout << "IcecastStreamer::postUploadFileHttp: couldn't resolve addres, retry..." << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		io_service.post([contentToStream, promise, this]() { streamFile(contentToStream, promise); });
+		return;
+	}
+
+	io_service.post([endpoint, contentToStream, promise, this]()
+		{
+			streamFileLooped(endpoint, contentToStream, promise);
+		});
+}
+
+void IcecastStreamer::streamFileLooped(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise)
+{
+	std::cout << "Streamer streamFileLooped 2" << std::endl;
+	std::shared_ptr<boost::asio::ip::tcp::socket> httpSocket = std::make_shared<boost::asio::ip::tcp::socket>(io_service);
+
+	boost::system::error_code errcode;
+	httpSocket->connect(endpoint, errcode);
+	std::cout << "Streamer streamFileLooped 2.1" << std::endl;
+	if (errcode)
+	{
+		std::cout << "IcecastStreamer::streamFileLooped: couldn't connect to the server, retry..." << std::endl;
+		httpSocket->lowest_layer().close();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		io_service.post([endpoint, contentToStream, promise, this]() { streamFileLooped(endpoint, contentToStream, promise); });
+		return;
+	}
+
+	Uploading uploading;
+	uploading.addres = addres;
+	uploading.port = port;
+	uploading.contentToStream = contentToStream;
+	std::cout << "Streamer streamFileLooped 2.2" << std::endl;
+	if (!streamFileLoopedInner(httpSocket, uploading))
+	{
+		httpSocket->lowest_layer().close();
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		io_service.post([endpoint, contentToStream, promise, this]() { streamFileLooped(endpoint, contentToStream, promise); });
+	}
+	else
+	{
+		promise->set_value();
+	}
+}
+
+bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading)
+{
+	const std::string NEWLINE = "\r\n";
+
+	boost::asio::streambuf request;
+	std::ostream request_stream(&request);
+
+	boost::asio::streambuf response;
+	std::istream response_stream(&response);
+
+
+	request_stream << "PUT /output HTTP/1.1" << NEWLINE;
+	//request_stream << "PUT /main_station_premium HTTP/1.1" << NEWLINE;
+	request_stream << "Host: " << uploading.addres << ":" << uploading.port << NEWLINE;
+	request_stream << "User-Agent: IcecastTestStreamer" << NEWLINE;
+	request_stream << "Transfer-Encoding: chunked" << NEWLINE;
+	//request_stream << "Content-Type: audio/mpeg" << NEWLINE;
+	request_stream << "Content-Type: audio/ogg" << NEWLINE;
+	//request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
+	request_stream << "Expect: 100-continue" << NEWLINE;
+#ifdef _WIN32
+
+	request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
+#else
+	//request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
+	request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
+#endif
+	request_stream << "Ice-Public: 1" << NEWLINE;
+	request_stream << "Ice-Name: test_stream" << NEWLINE;
+	request_stream << "Ice-Description: Hello, World!" << NEWLINE;
+
+	request_stream << NEWLINE;
+
+	try
+	{
+		socket->send(buffer(request.data(), request.size()));
+
+		int byteCount = boost::asio::read_until(*socket, response, '\r') - 1;
+
+		std::string responseCode(byteCount, ' ');
+		response_stream.read(&responseCode[0], byteCount);
+
+		std::cout << "Icecast Server Response: " << responseCode << std::endl;
+
+		if (responseCode.find("100 Continue") == std::string::npos)
+		{
+			return false;
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "IcecastStreamer: connection issues, retry..." << std::endl;
+		return false;
+	}
+
+
+
+		
+		std::shared_ptr<Decoding::WaveDecoder> reader = std::make_shared<Decoding::WaveDecoder>();
+
+		reader->open("E:\\music\\BAAM.wav");
+
+		std::shared_ptr<Decoding::WaveDecoder> secondReader = std::make_shared<Decoding::WaveDecoder>();
+
+		secondReader->open("E:\\music\\BAAM.wav");
+
+		std::unique_ptr<Decoding::WavToOggConverter> writer = std::make_unique<Decoding::WavToOggConverter>();
+
+		writer->openOutput();
+
+
+		static std::array<char, 2 * 1024 * 1024> IntermediateBuffer; //Must fit 174,000
+		static std::array<char, 64 * 1024> Buffer;
+		//std::vector<char> Buffer;
+		//Buffer.resize(1024 * 1024);
+
+		int packet = 0;
+
+		int byteCount = 0;
+		int readByteCount = 0;
+
+		//constexpr auto defaultDuration = std::chrono::milliseconds(300);
+		constexpr auto defaultDuration = std::chrono::milliseconds(1000);
+
+		bool keepGoing = true;
+
+
+		while (keepGoing)
+		{
+			//byteCount = 0;
+
+			std::chrono::time_point<std::chrono::system_clock> nowBefore = std::chrono::system_clock::now();
+
+			std::chrono::milliseconds actualDurationRead;
+
+			readByteCount = reader->readDuration(&IntermediateBuffer[0], IntermediateBuffer.size(), defaultDuration, actualDurationRead);
+
+			if (actualDurationRead < defaultDuration)
+			{
+				reader = secondReader;
+				secondReader = std::make_unique<Decoding::WaveDecoder>();
+				secondReader->open("E:\\music\\BAAM.wav");
+
+				//Show must go on
+				//byteCount = writer->convertData(&IntermediateBuffer[0], readByteCount, &Buffer[0], Buffer.size());
+
+				//We assume that each music file is actually longer than defaultDuration
+				std::chrono::milliseconds secondActualDurationRead;
+				readByteCount += reader->readDuration(&IntermediateBuffer[readByteCount], IntermediateBuffer.size()- readByteCount, defaultDuration, secondActualDurationRead);
+
+				actualDurationRead += secondActualDurationRead;
+			}
+
+
+			if (readByteCount < 1)
+			{
+				//If this happens, we are at the end of the file
+				//If we loop, this should not happen at all
+				byteCount = writer->finishConvertData(&Buffer[0], Buffer.size());
+				keepGoing = false;
+			}
+			else
+			{
+				byteCount = writer->convertData(&IntermediateBuffer[0], readByteCount, &Buffer[0], Buffer.size());
+			}
+
+			auto asioBuffer = boost::asio::buffer(Buffer, byteCount);
+
+			try
+			{
+				socket->send(asioBuffer);
+				std::cout << "IcecastStreamer: streaming... " << ++packet << " : " << byteCount << std::endl;
+			}
+			catch (std::exception& e)
+			{
+				std::cout << "IcecastStreamer: connection issues, retry..." << std::endl;
+				return false;
+			}
+
+			std::chrono::time_point<std::chrono::system_clock> nowAfter = std::chrono::system_clock::now();
+
+			auto duration = actualDurationRead - (nowAfter - nowBefore);
+
+			std::this_thread::sleep_for(duration);
+		}
+
+
+		
+
+		/*
+		std::random_device rd;
+		std::mt19937 g(rd());
+
+		auto shuffledPlaylist = uploading.contentToStream.playlist;
+
+		std::shuffle(shuffledPlaylist.begin(), shuffledPlaylist.end(), g);
+
+		for (size_t i = 0; i < shuffledPlaylist.size(); i++)
+		{
+			std::string prefix = "E:/music/";
+			std::string fileName = prefix + shuffledPlaylist[i];
+			auto reader = createReader(fileName);
+
+			ID3Metadata metadata = getMetadata(fileName);
+
+			//updateMetadata(io_service, this->addres, this->port, uploading, metadata);
+
+			if (!reader)
+			{
+				std::cout << "File can't be played: " << shuffledPlaylist[i] << std::endl;
+			}
+			else
+			{
+				std::cout << "Start playing: " << shuffledPlaylist[i] << std::endl;
+
+				if (streamOneReader(socket, reader))
+				{
+					std::cout << "File played successfully: " << shuffledPlaylist[i] << std::endl;
+				}
+				else
+				{
+					std::cout << "Error when playing file: " << shuffledPlaylist[i] << std::endl;
+				}
+			}
+		}*/
+
+
+	std::cout << "IcecastStreamer: stream is finished" << std::endl;
+
+	return true;
+}
+
+
+
 std::vector<std::string> IcecastStreamer::loadPlaylistFromFile()
 {
 	std::ifstream t("/home/ubuntu/playlist.txt");

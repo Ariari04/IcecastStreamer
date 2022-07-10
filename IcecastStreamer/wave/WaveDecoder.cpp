@@ -1091,4 +1091,406 @@ namespace Decoding
 		return readCount;
 
 	}
+
+	//---------------------------------------------
+
+
+	WaveDecoder::~WaveDecoder()
+	{
+		close();
+	}
+
+	int WaveDecoder::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration, std::chrono::milliseconds& actualDurationRead)
+	{
+		int readCount = (this->Header.m_cFormatChunk.m_nChannels * this->Header.m_cFormatChunk.m_nSamplesPerSec * this->Header.m_cFormatChunk.m_nBitsPerSample * duration.count() / 1000) / 8;
+
+		std::cout << "f.tellg() before = " << f.tellg() << std::endl;
+
+		f.read(Buffer, readCount);
+
+		auto bytes = f.gcount();
+
+		std::cout << "f.tellg() after = " << f.tellg() << std::endl;
+
+		actualDurationRead = std::chrono::milliseconds(duration.count() * bytes / readCount);
+
+		return bytes;
+	}
+
+	void WaveDecoder::close()
+	{
+		f.close();
+	}
+
+	bool WaveDecoder::open(const char* fileName)
+	{
+
+		f.close();
+
+		f.open(fileName, std::ios::binary);
+
+		if (!f)
+		{
+			return 0;
+		}
+
+		size_t nBytesRead = 0;
+		size_t nBytesToRead = 0;
+		int nBytesToSeek = 0;
+
+
+		f.read(reinterpret_cast<char*>(&(Header.m_cIFFHeader)), sizeof(Header.m_cIFFHeader));
+
+		if (!f)
+		{
+			Header.m_cIFFHeader = WaveFileChunks::IFFHeader();
+			close();
+			return 0;
+		}
+
+		if (!Header.m_cIFFHeader.isOk())
+		{
+			Header.m_cIFFHeader = WaveFileChunks::IFFHeader();
+			close();
+			return false;
+		}
+
+
+		WaveFileChunks::ChunkHeader tmpHeader;
+
+		while (!f.eof())
+		{
+
+
+			f.read(reinterpret_cast<char*>(&(tmpHeader)), sizeof(WaveFileChunks::ChunkHeader));
+
+			if (!f)
+			{
+				break;
+			}
+
+
+			if (0 == memcmp(tmpHeader.m_id, Header.m_cFormatChunk.m_id, 4))
+			{
+				//Format header found;
+				break;
+			}
+
+
+			f.seekg(tmpHeader.m_nChunkSize, std::ios::cur);
+
+			if (!f)
+			{
+				close();
+				return false;
+			}
+
+
+		}
+
+		if (f.eof())
+		{
+			close();
+			return false;
+		}
+
+		if (tmpHeader.m_nChunkSize < 16)
+		{
+			close();
+			return false;
+		}
+
+
+		nBytesToSeek = tmpHeader.m_nChunkSize - (sizeof(Header.m_cFormatChunk) - 8);
+		nBytesToRead =
+			(nBytesToSeek > 0)
+			?
+			sizeof(Header.m_cFormatChunk) - 8
+			:
+			tmpHeader.m_nChunkSize;
+
+		f.read(reinterpret_cast<char*>(&(Header.m_cFormatChunk.m_nFormatTag)), nBytesToRead);
+
+		if (!f)
+		{
+			close();
+			return false;
+		}
+
+
+		if (nBytesToSeek > 0)
+		{
+			f.seekg(nBytesToSeek, std::ios::cur);
+
+			if (!f)
+			{
+				close();
+				return false;
+			}
+
+
+
+		}
+
+		// Chunk size is copied here.
+		Header.m_cFormatChunk << tmpHeader;
+		Header.m_cFormatChunk.m_nChunkSize = 18;
+
+		if (Header.m_cFormatChunk.isOk() == false)
+		{
+			close();
+			return false;
+		}
+
+		while (!f.eof())
+		{
+
+			f.read(reinterpret_cast<char*>(&tmpHeader), sizeof(WaveFileChunks::ChunkHeader));
+
+			if (!f)
+			{
+				close();
+				return false;
+			}
+
+			if (0 == memcmp(tmpHeader.m_id, Header.m_cDataChunk.m_id, 4))
+			{
+				break;
+			}
+
+			f.seekg(tmpHeader.m_nChunkSize, std::ios::cur);
+
+			if (!f)
+			{
+				close();
+			}
+		}
+
+		Header.m_cDataChunk << tmpHeader;
+
+		if (f.eof() && (0 != Header.m_cDataChunk.m_id))
+		{
+			close();
+			return false;
+		}
+
+
+		std::cout << "f.tellg() after open = " << f.tellg() << std::endl;
+
+		return true;
+	}
+
+	//---------------------------------------------
+
+	void WavToOggConverter::openOutput()
+	{
+		//fout = std::ofstream("oggtest.ogg", std::ios::out | std::ios::binary);
+		vorbis_info_init(&vi);
+
+		int ret;
+
+		int write = 0;
+
+		ret = vorbis_encode_init_vbr(&vi, 2, 44100, 0.1);
+
+		vorbis_comment_init(&vc);
+		vorbis_comment_add_tag(&vc, "ENCODER", "icecast streamer");
+
+		vorbis_analysis_init(&vd, &vi);
+		vorbis_block_init(&vd, &vb);
+
+		/* set up our packet->stream encoder */
+		/* pick a random serial number; that way we can more likely build
+		   chained streams just by concatenation */
+		srand(time(NULL));
+		ogg_stream_init(&os, rand());
+
+
+		
+		ogg_packet header;
+		ogg_packet header_comm;
+		ogg_packet header_code;
+
+		vorbis_analysis_headerout(&vd, &vc, &header, &header_comm, &header_code);
+		ogg_stream_packetin(&os, &header); /* automatically placed in its own
+										      page */
+		ogg_stream_packetin(&os, &header_comm);
+		ogg_stream_packetin(&os, &header_code);
+
+		/* This ensures the actual
+		 * audio data will start on a new page, as per spec
+		 */
+		while (true) {
+			int result = ogg_stream_flush(&os, &og);
+			if (result == 0) break;
+			this->dataToSend.resize(this->dataToSend.size() + og.header_len + og.body_len);
+
+			std::copy(og.header, og.header + og.header_len, &dataToSend[write]);
+			write += og.header_len;
+
+			std::copy(og.body, og.body + og.body_len, &dataToSend[write]);
+			write += og.body_len;
+		}
+	}
+
+	int WavToOggConverter::finishConvertData(char* Buffer, size_t Count)
+	{
+		int write = 0;
+
+		vorbis_analysis_wrote(&vd, 0);
+
+		while (vorbis_analysis_blockout(&vd, &vb) == 1) {
+
+			// analysis, assume we want to use bitrate management 
+			vorbis_analysis(&vb, NULL);
+			vorbis_bitrate_addblock(&vb);
+
+			while (vorbis_bitrate_flushpacket(&vd, &op)) {
+
+				// weld the packet into the bitstream 
+				ogg_stream_packetin(&os, &op);
+
+				// write out pages (if any) 
+				while (!eos) {
+					int result = ogg_stream_pageout(&os, &og);
+					if (result == 0) break;
+
+					std::copy(og.header, og.header + og.header_len, Buffer + write);
+
+					write += og.header_len;
+
+					//fout.write(reinterpret_cast<char*>(og.header), og.header_len);
+
+
+					std::copy(og.body, og.body + og.body_len, Buffer + write);
+
+					//fout.write(reinterpret_cast<char*>(og.body), og.body_len);
+
+					//fout.flush();
+
+					write += og.body_len;
+
+					// this could be set above, but for illustrative purposes, I do
+					//   it here (to show that vorbis does know where the stream ends) 
+
+					if (ogg_page_eos(&og))
+					{
+						eos = 1;
+					}
+				}
+			}
+		}
+
+		if (eos == 1)
+		{
+			ogg_stream_clear(&os);
+			vorbis_block_clear(&vb);
+			vorbis_dsp_clear(&vd);
+			vorbis_comment_clear(&vc);
+			vorbis_info_clear(&vi);
+		}
+
+		return write;
+	}
+
+	int WavToOggConverter::convertData(const char* inputBuffer, size_t inputCount, char* Buffer, size_t Count)
+	{
+		int write = 0;
+
+		int bytes = inputCount;
+
+
+		if (dataToSend.size() != 0)
+		{
+			write = dataToSend.size();
+			std::copy(dataToSend.begin(), dataToSend.end(), Buffer);
+
+			//fout.write(&dataToSend[0], dataToSend.size());
+			//fout.flush();
+
+			dataToSend.clear();
+		}
+
+		//while (!eos)
+		{
+			
+				float** buffer = vorbis_analysis_buffer(&vd, bytes);
+
+				// uninterleave samples 
+				for (int i = 0; i < bytes / 4; i++) {
+
+					buffer[0][i] = ((inputBuffer[i * 4 + 1] << 8) |
+						(0x00ff & (int)inputBuffer[i * 4])) / 32768.f;
+					buffer[1][i] = ((inputBuffer[i * 4 + 3] << 8) |
+						(0x00ff & (int)inputBuffer[i * 4 + 2])) / 32768.f;
+
+					//buffer[0][i] = 0;
+					//buffer[1][i] = 0;
+				}
+
+				// tell the library how much we actually submitted 
+				vorbis_analysis_wrote(&vd, bytes / 4);
+			
+
+			while (vorbis_analysis_blockout(&vd, &vb) == 1) {
+
+				// analysis, assume we want to use bitrate management 
+				vorbis_analysis(&vb, NULL);
+				vorbis_bitrate_addblock(&vb);
+
+				while (vorbis_bitrate_flushpacket(&vd, &op)) {
+
+					// weld the packet into the bitstream 
+					ogg_stream_packetin(&os, &op);
+
+					// write out pages (if any) 
+					while (!eos) {
+						int result = ogg_stream_pageout(&os, &og);
+						if (result == 0) break;
+
+						std::copy(og.header, og.header + og.header_len, Buffer + write);
+
+						write += og.header_len;
+
+						//fout.write(reinterpret_cast<char*>(og.header), og.header_len);
+
+
+						std::copy(og.body, og.body + og.body_len, Buffer + write);
+
+						//fout.write(reinterpret_cast<char*>(og.body), og.body_len);
+
+						//fout.flush();
+
+						write += og.body_len;
+
+						// this could be set above, but for illustrative purposes, I do
+						//   it here (to show that vorbis does know where the stream ends) 
+
+						if (ogg_page_eos(&og))
+						{
+							eos = 1;
+						}
+					}
+				}
+			}
+		}
+
+		if (eos == 1)
+		{
+			ogg_stream_clear(&os);
+			vorbis_block_clear(&vb);
+			vorbis_dsp_clear(&vd);
+			vorbis_comment_clear(&vc);
+			vorbis_info_clear(&vi);
+
+			//close();
+			//fout.close();
+
+		}
+
+		//int write = lame_encode_buffer_interleaved(lame, &buf[0], buf.size() / this->Header.m_cFormatChunk.m_nChannels, reinterpret_cast<unsigned char*>(Buffer), Count);
+
+		return write;
+
+	}
 }

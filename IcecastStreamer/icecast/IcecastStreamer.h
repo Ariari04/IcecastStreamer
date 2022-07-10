@@ -73,6 +73,11 @@ public:
 
 	bool streamFileInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading);
 
+
+	void streamFileLooped(const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
+	void streamFileLooped(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
+	bool streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading);
+
 	std::vector<std::string> downloadPlaylist();
 	std::vector<std::string> loadPlaylistFromFile();
 };
