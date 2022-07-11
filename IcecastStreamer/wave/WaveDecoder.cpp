@@ -1563,12 +1563,14 @@ namespace Decoding
 			/* have we simply run out of data?  If so, we're done. */
 			if (bytes < 4096)
 			{
+				ogg_sync_clear(&oy);
 				return false;
 			}
 
 			/* error case.  Must not be Vorbis data */
 			//fprintf(stderr, "Input does not appear to be an Ogg bitstream.\n");
 			//exit(1);
+			ogg_sync_clear(&oy);
 			return false;
 		}
 
@@ -1590,6 +1592,7 @@ namespace Decoding
 			// error; stream version mismatch perhaps 
 			//fprintf(stderr, "Error reading first page of Ogg bitstream data.\n");
 			//exit(1);
+			ogg_sync_clear(&oy);
 			return false;
 		}
 
@@ -1597,6 +1600,7 @@ namespace Decoding
 			// no page? must not be vorbis 
 			//fprintf(stderr, "Error reading initial header packet.\n");
 			//exit(1);
+			ogg_sync_clear(&oy);
 			return false;
 		}
 
@@ -1604,6 +1608,7 @@ namespace Decoding
 			// error case; not a vorbis header
 			//fprintf(stderr, "This Ogg bitstream does not contain Vorbis audio data.\n");
 			//exit(1);
+			ogg_sync_clear(&oy);
 			return false;
 		}
 
@@ -1685,6 +1690,13 @@ namespace Decoding
 
 		if (vorbis_synthesis_init(&vd, &vi) != 0) {
 			//fprintf(stderr, "Error: Corrupt header during playback initialization.\n");
+
+			ogg_stream_clear(&os);
+			vorbis_comment_clear(&vc);
+			vorbis_info_clear(&vi);  /* must be called last */
+
+			ogg_sync_clear(&oy);
+
 			return false;
 		}
 
@@ -1700,114 +1712,6 @@ namespace Decoding
 
 
 
-		/*
-		while (!eos) {
-			while (!eos) {
-				int result = ogg_sync_pageout(&oy, &og);
-				if (result == 0)break; // need more data 
-				if (result < 0) { // missing or corrupt data at this page position 
-					fprintf(stderr, "Corrupt or missing data in bitstream; "
-						"continuing...\n");
-				}
-				else {
-					ogg_stream_pagein(&os, &og); // can safely ignore errors at this point 
-
-
-					while (1) {
-						result = ogg_stream_packetout(&os, &op);
-
-						if (result == 0)break; // need more data
-						if (result < 0) { //missing or corrupt data at this page position
-						  // no reason to complain; already complained above
-						}
-						else {
-							// we have a packet.  Decode it
-							float** pcm;
-							int samples;
-
-							if (vorbis_synthesis(&vb, &op) == 0) // test for success! 
-								vorbis_synthesis_blockin(&vd, &vb);
-							
-
-							// **pcm is a multichannel float vector.  In stereo, for
-							// example, pcm[0] is left, and pcm[1] is right.  samples is
-							// the size of each channel.  Convert the float values
-							// (-1.<=range<=1.) to whatever PCM format and write it out
-
-							while ((samples = vorbis_synthesis_pcmout(&vd, &pcm)) > 0) {
-								int j;
-								int clipflag = 0;
-								int bout = (samples < convsize ? samples : convsize);
-
-								// convert floats to 16 bit signed ints (host order) and interleave 
-								for (i = 0; i < vi.channels; i++) {
-									ogg_int16_t* ptr = convbuffer + i;
-									float* mono = pcm[i];
-									for (j = 0; j < bout; j++) {
-#if 1
-										int val = floor(mono[j] * 32767.f + .5f);
-#else // optional dither 
-										int val = mono[j] * 32767.f + drand48() - 0.5f;
-#endif
-										// might as well guard against clipping 
-										if (val > 32767) {
-											val = 32767;
-											clipflag = 1;
-										}
-										if (val < -32768) {
-											val = -32768;
-											clipflag = 1;
-										}
-										*ptr = val;
-										ptr += vi.channels;
-									}
-								}
-
-								if (clipflag)
-									fprintf(stderr, "Clipping in frame %ld\n", (long)(vd.sequence));
-
-
-								fwrite(convbuffer, 2 * vi.channels, bout, stdout);
-
-								vorbis_synthesis_read(&vd, bout); // tell libvorbis how
-																  // many samples we
-																  // actually consumed 
-							}
-						}
-					}
-					if (ogg_page_eos(&og))eos = 1;
-				}
-			}
-			if (!eos) {
-				buffer = ogg_sync_buffer(&oy, 4096);
-				//bytes = fread(buffer, 1, 4096, stdin);
-				f.read(buffer, 4096);
-				bytes = f.gcount();
-
-				ogg_sync_wrote(&oy, bytes);
-				if (bytes == 0)eos = 1;
-			}
-		}
-
-		//ogg_page and ogg_packet structs always point to storage in
-		//   libvorbis.  They're never freed or manipulated directly 
-
-		vorbis_block_clear(&vb);
-		vorbis_dsp_clear(&vd);
-
-
-
-		// clean up this logical bitstream; before exit we see if we're
-		//  followed by another [chained] 
-
-		ogg_stream_clear(&os);
-		vorbis_comment_clear(&vc);
-		vorbis_info_clear(&vi); // must be called last
-
-
-	// OK, clean up the framer
-	ogg_sync_clear(&oy);
-	*/
 
 	}
 
@@ -1828,7 +1732,16 @@ namespace Decoding
 
 		int writeIndex = 0;
 
-		int maxCount = 176400;
+		//int maxCount = 176400;
+
+		int nChannels = 2;
+
+		int nSamplesPerSec = 44100;
+
+		int nBitsPerSample = 16;
+
+		int maxCount = (nChannels * nSamplesPerSec * nBitsPerSample * duration.count() / 1000) / 8;
+
 
 		int i = 0;
 
@@ -1872,7 +1785,9 @@ namespace Decoding
 							int samples;
 
 							if (vorbis_synthesis(&vb, &op) == 0) // test for success! 
+							{
 								vorbis_synthesis_blockin(&vd, &vb);
+							}
 
 
 							// **pcm is a multichannel float vector.  In stereo, for
@@ -1968,6 +1883,19 @@ namespace Decoding
 			}
 		}
 
+
+		if (eos)
+		{
+			vorbis_block_clear(&vb);
+			vorbis_dsp_clear(&vd);
+
+			ogg_stream_clear(&os);
+			vorbis_comment_clear(&vc);
+			vorbis_info_clear(&vi);  /* must be called last */
+
+			/* OK, clean up the framer */
+			ogg_sync_clear(&oy);
+		}
 
 		if (tempBuffer.size() >= maxCount)
 		{

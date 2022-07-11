@@ -26,7 +26,7 @@ struct MP3DHolder
 namespace DecodingX
 {
 	
-	extern std::array<char, BLOCK_SIZE> buffer;
+	extern std::array<char, 1024 * 1024> buffer;
 
 	extern std::array<short, BLOCK_SIZE * 64> pcm_l;
 	extern std::array<short, BLOCK_SIZE * 64> pcm_r;
@@ -34,7 +34,7 @@ namespace DecodingX
 	extern std::array<short, BLOCK_SIZE * 64> tempBuf;
 
 
-	class Mp3WaveMp3DecoderNew : public AudioDecoder // public BufferedProducerBase
+	class Mp3WaveMp3DecoderNew : public AudioDecoderInterface
 	{
 	public:
 		
@@ -56,16 +56,17 @@ namespace DecodingX
 
 		//bool flush_sent = false;
 
+		int bufferPos = 0;
+
 		Mp3WaveMp3DecoderNew();
 		~Mp3WaveMp3DecoderNew();
 
-		int open(const char* fileName) override;
+		bool open(const char* fileName) override;
 	
 		void close();
 
-		int innerRead();
+		//int innerRead();
 
-		int readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration) override;
-		int openMp3Output();
+		int readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration, std::chrono::milliseconds& actualDurationRead) override;
 	};
 }

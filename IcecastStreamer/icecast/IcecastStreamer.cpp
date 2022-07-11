@@ -8,6 +8,7 @@
 #include <wave/WaveFile.h>
 #include <wave/WaveDecoder.h>
 #include <mp3/Mp3Decoder.h>
+#include <mp3/Mp3DecoderNew.h>
 #include <aac/AacDecoder.h>
 
 #include <random>
@@ -820,15 +821,18 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 
 
 	//std::shared_ptr<Decoding::WaveDecoder> reader = std::make_shared<Decoding::WaveDecoder>();
-	std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::OggDecoder>();
+	//std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::OggDecoder>();
+	std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
 
 	reader->open(playlist[playlistIndex].c_str());
 
-	std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<Decoding::OggDecoder>();
+	//std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<Decoding::OggDecoder>();
+	std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
 
 	secondReader->open(playlist[nextPlaylistIndex].c_str());
 
 	std::unique_ptr<Decoding::WavToOggConverter> writer = std::make_unique<Decoding::WavToOggConverter>();
+
 
 	writer->openOutput();
 

@@ -15,12 +15,15 @@ size_t getID3TagSize(const char* filename);
 namespace DecodingX
 {
 
-	std::array<char, BLOCK_SIZE> buffer;
+	//std::array<char, BLOCK_SIZE> buffer;
+	std::array<char, 1024*1024> buffer;
 
 	std::array<short, BLOCK_SIZE * 64> pcm_l;
 	std::array<short, BLOCK_SIZE * 64> pcm_r;
 
 	std::array<short, BLOCK_SIZE * 64> tempBuf;
+
+	MP3DHolder Mp3WaveMp3DecoderNew::mp3dHolder;
 	
 	Mp3WaveMp3DecoderNew::Mp3WaveMp3DecoderNew()
 	{
@@ -48,70 +51,9 @@ namespace DecodingX
 		std::cout << format << std::endl;
 	}*/
 
-	int Mp3WaveMp3DecoderNew::innerRead()
-	{
-		if (!f)
-		{
-			return 0;
-		}
+	
 
-		
-		bool fileIsOver = false;
-
-		f.read(reinterpret_cast<char*>(&buffer[0]), buffer.size());
-		
-		auto count = f.gcount();
-
-		if (count != buffer.size())
-		{
-			close();
-		}
-
-		fileIsOver = f.eof();
-
-		/*
-		mp3dec_frame_info_t info;
-		short pcm[MINIMP3_MAX_SAMPLES_PER_FRAME];
-		
-		int samples = mp3dec_decode_frame(&mp3dHolder.mp3d, &buffer[0], buffer.size(), pcm, &info);
-
-		//make sure samples = 576
-		int frame_bytes = info.frame_bytes;
-		*/
-
-
-		/*
-
-		hip_set_errorf(lameInput, reportf);
-
-		int decodeResult = hip_decode_headers(lameInput, reinterpret_cast<unsigned char*>(&buffer[0]), count, &pcm_l[pcmSize], &pcm_r[pcmSize], &mp3data);
-
-		while ((decodeResult == 0) && (fileIsOver == false))
-		{
-			f.read(reinterpret_cast<char*>(&buffer[0]), buffer.size());
-
-			auto count = f.gcount();
-
-			decodeResult = hip_decode_headers(lameInput, reinterpret_cast<unsigned char*>(&buffer[0]), count, &pcm_l[pcmSize], &pcm_r[pcmSize], &mp3data);
-
-		}
-
-		if (decodeResult == -1)
-		{
-			std::cout << "decodeResult error: " << decodeResult << std::endl;
-		}
-		else
-		{
-			pcmSize += decodeResult;
-
-			std::cout << "decodeResult: " << decodeResult << std::endl;
-
-		}
-		*/
-		return 0;
-	}
-
-	int Mp3WaveMp3DecoderNew::open(const char* fileName)
+	bool Mp3WaveMp3DecoderNew::open(const char* fileName)
 	{
 
 		
@@ -129,25 +71,74 @@ namespace DecodingX
 
 		f.seekg(mp3TagSize);
 		*/
-		innerRead();
 
-		openMp3Output();
+		f.open(fileName, std::ios::binary);
+
+		f.read(reinterpret_cast<char*>(&buffer[0]), buffer.size());
+
+		auto count = f.gcount();
+
+		if (count != buffer.size())
+		{
+			close();
+			return false;
+		}
 		
-		return 1;
+		return true;
 	}
 
-	int Mp3WaveMp3DecoderNew::openMp3Output()
-	{
-		/*lame = lame_init();
-		lame_set_in_samplerate(lame, this->mp3data.samplerate);
-		lame_set_VBR(lame, vbr_default);
-		lame_init_params(lame);
-		*/
-		return 1;
-	}
 
-	int Mp3WaveMp3DecoderNew::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration)
+	int Mp3WaveMp3DecoderNew::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration, std::chrono::milliseconds& actualDurationRead)
 	{
+
+		mp3dec_frame_info_t info;
+		static short pcm[MINIMP3_MAX_SAMPLES_PER_FRAME];
+		/*unsigned char *input_buf; - input byte stream*/
+
+
+	
+
+		//fileIsOver = f.eof();
+
+
+		bool fileIsOver = false;
+
+
+		bool audioDataFound = false;
+
+		int samples = 0;
+
+		while (!audioDataFound)
+		{
+		
+			samples = mp3dec_decode_frame(&mp3dHolder.mp3d, reinterpret_cast<uint8_t*>(&buffer[bufferPos]), buffer.size() - bufferPos, pcm, &info);
+
+			if (samples > 0)
+			{
+				audioDataFound = true;
+			}
+			else if (samples == 0)
+			{
+				//Insufficient data, decode more
+			}
+
+			bufferPos += info.frame_bytes;
+
+		}
+
+
+		int write = samples * info.channels * 2;
+
+		memcpy(Buffer, &pcm[0], write);
+
+		actualDurationRead = duration;
+
+		return write;
+
+
+
+
+
 		/*
 		auto readCount = duration.count() * this->mp3data.samplerate / 1000;
 
@@ -201,8 +192,6 @@ namespace DecodingX
 		pcmSize = leftoverCount;
 		*/
 
-		int write = 0;
-
-		return write;
+		//return write;
 	}
 }
