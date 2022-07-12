@@ -796,7 +796,7 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 	
 	bool shuffle = true;
 
-	bool repeat = false;
+	bool repeat = true;
 
 	if (playlist.size() == 0)
 	{

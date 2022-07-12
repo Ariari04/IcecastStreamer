@@ -16,18 +16,23 @@ namespace DecodingX
 {
 
 	//std::array<char, BLOCK_SIZE> buffer;
-	std::array<char, 1024*1024> buffer;
+	//std::array<char, 1024*1024> buffer;
 
-	std::array<short, BLOCK_SIZE * 64> pcm_l;
-	std::array<short, BLOCK_SIZE * 64> pcm_r;
+	//std::array<short, BLOCK_SIZE * 64> pcm_l;
+	//std::array<short, BLOCK_SIZE * 64> pcm_r;
 
-	std::array<short, BLOCK_SIZE * 64> tempBuf;
+	//std::array<short, BLOCK_SIZE * 64> tempBuf;
+
+	constexpr int FILE_BUFFER_SIZE = 1024 * 32; //Must be good enough to fit at least 10 mp3 frames, so 16kb
+
 
 	MP3DHolder Mp3WaveMp3DecoderNew::mp3dHolder;
 	
 	Mp3WaveMp3DecoderNew::Mp3WaveMp3DecoderNew()
 	{
 		//lameInput = hip_decode_init();
+
+		capacityPcmBuffer.reserve(200000); //176400 is 1s, need a little bit more
 	}
 
 	Mp3WaveMp3DecoderNew::~Mp3WaveMp3DecoderNew()
@@ -74,14 +79,16 @@ namespace DecodingX
 
 		f.open(fileName, std::ios::binary);
 
-		f.read(reinterpret_cast<char*>(&buffer[0]), buffer.size());
+		fileBuffer.resize(FILE_BUFFER_SIZE);
+
+		f.read(reinterpret_cast<char*>(&fileBuffer[0]), FILE_BUFFER_SIZE);
 
 		auto count = f.gcount();
 
-		if (count != buffer.size())
+		if (count != FILE_BUFFER_SIZE)
 		{
 			close();
-			return false;
+			return 0;
 		}
 		
 		return true;
@@ -91,107 +98,164 @@ namespace DecodingX
 	int Mp3WaveMp3DecoderNew::readDuration(char* Buffer, size_t Count, std::chrono::milliseconds duration, std::chrono::milliseconds& actualDurationRead)
 	{
 
+
+		if (fileIsCompletelyOver)
+		{
+			actualDurationRead = std::chrono::milliseconds(0);
+			return 0;
+		}
+
 		mp3dec_frame_info_t info;
 		static short pcm[MINIMP3_MAX_SAMPLES_PER_FRAME];
 		/*unsigned char *input_buf; - input byte stream*/
 
 
+		int nChannels = 2;
+
+		int nSamplesPerSec = 44100;
+
+		int nBitsPerSample = 16;
+
+		int maxCount = (nChannels * nSamplesPerSec * nBitsPerSample * duration.count() / 1000) / 8;
+
+		int readPcmBytes = leftoverSize;
 	
 
 		//fileIsOver = f.eof();
 
 
-		bool fileIsOver = false;
+		//bool fileIsOver = false;
 
 
 		bool audioDataFound = false;
 
 		int samples = 0;
 
-		while (!audioDataFound)
+		while ((readPcmBytes < maxCount) && !fileIsCompletelyOver)
 		{
-		
-			samples = mp3dec_decode_frame(&mp3dHolder.mp3d, reinterpret_cast<uint8_t*>(&buffer[bufferPos]), buffer.size() - bufferPos, pcm, &info);
+			audioDataFound = false;
 
-			if (samples > 0)
+			while (!audioDataFound && !fileIsCompletelyOver)
 			{
-				audioDataFound = true;
-			}
-			else if (samples == 0)
-			{
-				//Insufficient data, decode more
-			}
+				if (bufferPos < fileBuffer.size())
+				{
+					samples = mp3dec_decode_frame(&mp3dHolder.mp3d, reinterpret_cast<uint8_t*>(&fileBuffer[bufferPos]), fileBuffer.size() - bufferPos, pcm, &info);
+				}
+				else
+				{
+					fileIsCompletelyOver = true;
+					//samples = 0;
+					//info.frame_bytes = 0;
+				}
 
-			bufferPos += info.frame_bytes;
+				if (samples > 0)
+				{
+					audioDataFound = true;
+				}
+				else if (samples == 0)
+				{
+					if (info.frame_bytes == 0)
+					{
+						//audioDataFound = true;
+						fileIsCompletelyOver = true;
+					}
+					/*
+					if (info.frame_bytes == 0)
+					{
+						int localLeftoverSize = fileBuffer.size() - bufferPos;
+
+						for (int i = 0; i < localLeftoverSize; i++)
+						{
+							fileBuffer[0 + i] = fileBuffer[bufferPos + i];
+						}
+						//capacityPcmBuffer.resize(leftoverSize);
+
+						bufferPos = 0;
+						//Insufficient data, decode more
+						f.read(reinterpret_cast<char*>(&fileBuffer[localLeftoverSize]), FILE_BUFFER_SIZE - localLeftoverSize);
+
+						auto count = f.gcount();
+
+						if (f.eof())
+						{
+							close();
+							return 0;
+						}
+
+						if (count != FILE_BUFFER_SIZE - localLeftoverSize)
+						{
+							close();
+							return 0;
+						}
+					}	*/				
+				}
+
+
+				if (!fileIsCompletelyOver)
+				{
+					bufferPos += info.frame_bytes;
+
+
+					if (!fileIsOver && (bufferPos > FILE_BUFFER_SIZE / 2)) //More than half data consumed, need to load another part
+					{
+						int localLeftoverSize = fileBuffer.size() - bufferPos;
+
+						for (int i = 0; i < localLeftoverSize; i++)
+						{
+							fileBuffer[0 + i] = fileBuffer[bufferPos + i];
+						}
+
+						f.read(reinterpret_cast<char*>(&fileBuffer[localLeftoverSize]), FILE_BUFFER_SIZE - localLeftoverSize);
+
+						auto count = f.gcount();
+
+						if (count != FILE_BUFFER_SIZE - localLeftoverSize)
+						{
+							fileBuffer.resize(localLeftoverSize + count);
+							fileIsOver = true;
+							close();
+							//return 0;
+						}
+
+						bufferPos = 0;
+					}
+
+
+					int shift = samples * info.channels * 2;
+
+					readPcmBytes += shift;
+
+					capacityPcmBuffer.insert(capacityPcmBuffer.end(), reinterpret_cast<char*>(pcm), reinterpret_cast<char*>(pcm) + shift);
+				}
+			}
 
 		}
 
 
-		int write = samples * info.channels * 2;
 
-		memcpy(Buffer, &pcm[0], write);
 
-		actualDurationRead = duration;
+		int write = std::min(readPcmBytes, maxCount); //Don't send more than requested
+
+		memcpy(Buffer, &capacityPcmBuffer[0], write);
+
+		actualDurationRead = duration * write / maxCount;
+
+		leftoverSize = std::max(readPcmBytes - maxCount, 0); //No less than 0
+
+		//If there is a little more, we move it to the beginning of the buffer:
+		if (readPcmBytes > maxCount)
+		{
+
+			for (int i = 0; i < leftoverSize; i++)
+			{
+				capacityPcmBuffer[0 + i] = capacityPcmBuffer[maxCount + i];
+			}
+			
+		}
+
+		capacityPcmBuffer.resize(leftoverSize);
 
 		return write;
 
-
-
-
-
-		/*
-		auto readCount = duration.count() * this->mp3data.samplerate / 1000;
-
-		if (pcmSize < readCount)
-		{
-			std::cout << "buffers going low, refill..." << std::endl;
-			innerRead();
-
-			if (pcmSize < readCount)
-			{
-				std::cout << "after refill buffers are still low. Closing soon" << std::endl;
-				readCount = pcmSize;
-			}
-		}
-
-
-		if (pcmSize == 0)
-		{
-			if (!flush_sent)
-			{
-				flush_sent = true;
-				return lame_encode_flush(lame, reinterpret_cast<unsigned char*>(Buffer), Count);
-			}
-			else
-			{
-				return 0;
-			}
-		}
-
-		int write = lame_encode_buffer(lame, &pcm_l[0], &pcm_r[0], readCount, reinterpret_cast<unsigned char*>(Buffer), Count);
-
-		auto leftoverCount = pcmSize - readCount;
-
-		if (leftoverCount > 0)
-		{
-
-			//std::vector<short> tempBuf;
-			//tempBuf.resize(leftoverCount);
-
-			std::memcpy(&tempBuf[0], &pcm_l[readCount], leftoverCount * sizeof(short));
-
-			std::memcpy(&pcm_l[0], &tempBuf[0], leftoverCount * sizeof(short));
-
-
-			std::memcpy(&tempBuf[0], &pcm_r[readCount], leftoverCount * sizeof(short));
-
-			std::memcpy(&pcm_r[0], &tempBuf[0], leftoverCount * sizeof(short));
-
-		}
-
-		pcmSize = leftoverCount;
-		*/
-
-		//return write;
 	}
 }
