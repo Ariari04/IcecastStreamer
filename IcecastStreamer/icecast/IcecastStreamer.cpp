@@ -822,12 +822,14 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 
 	//std::shared_ptr<Decoding::WaveDecoder> reader = std::make_shared<Decoding::WaveDecoder>();
 	//std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::OggDecoder>();
-	std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
+	//std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
+	std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::AacDecoder>();
 
 	reader->open(playlist[playlistIndex].c_str());
 
 	//std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<Decoding::OggDecoder>();
-	std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
+	//std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
+	std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<Decoding::AacDecoder>();
 
 	secondReader->open(playlist[nextPlaylistIndex].c_str());
 
