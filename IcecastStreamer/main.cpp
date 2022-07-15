@@ -142,7 +142,18 @@ int main(int argc, char* argv[])
 	//std::vector<std::string> listOfFiles = { "E:/music/GTA Vice City - Flash FM.mp3" };
 	//std::vector<std::string> listOfFiles = { "E:/music/Guano Apes - Open Your Eyes.mp3" };
 
-	std::vector<std::string> listOfFiles = { "E:/music/168446101_2channels_identical~1.aac" };
+	//std::vector<std::string> listOfFiles = { "E:/music/168446101_2channels_identical~1.aac" };
+
+	//std::vector<std::string> listOfFiles = { "E:/music/168446101.aac" };
+
+	std::vector<std::string> listOfFiles = { 
+		"E:/music/168446101.aac",
+		"E:/music/bala.wav",
+		"E:/music/Guano Apes - Open Your Eyes.mp3",
+		"E:/music/death note.ogg"
+	};
+	// !!! Pass a check that all files has extensions !!!
+
 		
 	
 	std::cout << "Streamed created" << std::endl;

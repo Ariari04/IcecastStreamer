@@ -71,14 +71,19 @@ namespace Decoding
 		int curIndex = 0;
 
 		size_t bufferStartPos = 0;
-		//std::array<unsigned char, 1024 * 128> buffer;
+		std::array<char, 1024 * 128> inputFileBuffer;
+		size_t inputFileBufferSize = inputFileBuffer.size();
 
 		int pcmSize = 0;
 		int pcmShift = 0;
 
 		//std::array<short, 1024 * 1024*8> pcmBuffer;
 
+		std::array<short, BLOCK_SIZE * 64> outputPcmBuffer;
+
 		bool aacInited = false;
+
+		bool fileIsOver = false;
 
 		NeAACDecHandle hAac = NeAACDecOpen();
 

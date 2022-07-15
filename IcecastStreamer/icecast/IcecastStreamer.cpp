@@ -735,6 +735,36 @@ void IcecastStreamer::streamFileLooped(boost::asio::ip::tcp::endpoint endpoint, 
 	}
 }
 
+std::shared_ptr<AudioDecoderInterface> selectReaderByFileName(const std::string fileName)
+{
+	std::shared_ptr<AudioDecoderInterface> reader;
+
+	size_t fileNameSize = fileName.size();
+
+	if (fileName[fileNameSize - 3] == 'm' && fileName[fileNameSize - 2] == 'p' && fileName[fileNameSize - 1] == '3')
+	{
+		reader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
+	}
+	else if (fileName[fileNameSize - 3] == 'o' && fileName[fileNameSize - 2] == 'g' && fileName[fileNameSize - 1] == 'g')
+	{
+		reader = std::make_shared<Decoding::OggDecoder>();
+	}
+	else if (fileName[fileNameSize - 3] == 'w' && fileName[fileNameSize - 2] == 'a' && fileName[fileNameSize - 1] == 'v')
+	{
+		reader = std::make_shared<Decoding::WaveDecoder>();
+	}
+	else if (fileName[fileNameSize - 3] == 'a' && fileName[fileNameSize - 2] == 'a' && fileName[fileNameSize - 1] == 'c')
+	{
+		reader = std::make_shared<Decoding::AacDecoder>();
+	}
+	else
+	{
+		throw std::exception("Unknown extension");
+	}
+
+	return reader;
+}
+
 bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading)
 {
 	const std::string NEWLINE = "\r\n";
@@ -819,25 +849,28 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 
 	size_t nextPlaylistIndex = (playlistIndex + 1) % playlist.size();
 
+	std::string& currentTrack = playlist[playlistIndex];
+
+	std::string& nextTrack = playlist[nextPlaylistIndex];
+
+	std::shared_ptr<AudioDecoderInterface> reader = selectReaderByFileName(currentTrack);
 
 	//std::shared_ptr<Decoding::WaveDecoder> reader = std::make_shared<Decoding::WaveDecoder>();
 	//std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::OggDecoder>();
 	//std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
-	std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::AacDecoder>();
+	//std::shared_ptr<AudioDecoderInterface> reader = std::make_shared<Decoding::AacDecoder>();
 
-	reader->open(playlist[playlistIndex].c_str());
+	reader->open(currentTrack.c_str());
 
 	//std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<Decoding::OggDecoder>();
 	//std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<DecodingX::Mp3WaveMp3DecoderNew>();
-	std::shared_ptr<AudioDecoderInterface> secondReader = std::make_shared<Decoding::AacDecoder>();
+	std::shared_ptr<AudioDecoderInterface> secondReader = selectReaderByFileName(nextTrack);
 
-	secondReader->open(playlist[nextPlaylistIndex].c_str());
+	secondReader->open(nextTrack.c_str());
 
 	std::unique_ptr<Decoding::WavToOggConverter> writer = std::make_unique<Decoding::WavToOggConverter>();
 
-
 	writer->openOutput();
-
 
 	static std::array<char, 2 * 1024 * 1024> IntermediateBuffer; //Must fit 174,000
 	static std::array<char, 64 * 1024> Buffer;
@@ -882,7 +915,7 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 				nextPlaylistIndex = nextPlaylistIndex % playlist.size();
 
 				reader = secondReader;
-				secondReader = std::make_unique<Decoding::WaveDecoder>();
+				secondReader = selectReaderByFileName(playlist[nextPlaylistIndex]);
 
 
 				secondReader->open(playlist[nextPlaylistIndex].c_str());

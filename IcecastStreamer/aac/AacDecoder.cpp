@@ -279,16 +279,29 @@ namespace Decoding
 	
 		pcmSize = 0;
 
-		int secondSize = 176400;
+		//int secondSize = 176400;
 
-		while (pcmSize < secondSize)
+		int nChannels = 2;
+
+		int nSamplesPerSec = 44100;
+
+		int nBitsPerSample = 16;
+
+		int maxCount = (nChannels * nSamplesPerSec * nBitsPerSample * duration.count() / 1000) / 8;
+
+		while (pcmSize < maxCount)
 		{
-			auto count = 1024 * 1024 - curIndex;
+			auto count = inputFileBufferSize - curIndex;
+
+			if (count == 0)
+			{
+				break;
+			}
 
 			NeAACDecFrameInfo hInfo;
 			memset(&hInfo, 0, sizeof hInfo);
 
-			auto output = NeAACDecDecode(hAac, &hInfo, reinterpret_cast<unsigned char*>(&aacBuffer[curIndex]), count);
+			auto output = NeAACDecDecode(hAac, &hInfo, reinterpret_cast<unsigned char*>(&inputFileBuffer[curIndex]), count);
 
 			if ((hInfo.error == 0) && (hInfo.samples > 0)) {
 				// do what you need to do with the decoded samples
@@ -362,9 +375,49 @@ namespace Decoding
 				//fprintf(stderr, "got nothing...\n");
 			}
 
+			if (fileIsOver)
+			{
+				if (curIndex == inputFileBufferSize)
+				{
+					break;
+				}
+			}
+			else
+			{
+				int newCount = inputFileBufferSize - curIndex;
+
+				if (newCount < 1024)
+				{
+					
+
+					//Move the data from right back to left
+					memcpy(&inputFileBuffer[0], &inputFileBuffer[curIndex], newCount);
+
+					int requestedAmountFromFile = inputFileBuffer.size() - newCount;
+
+					f.read(reinterpret_cast<char*>(&inputFileBuffer[newCount]), requestedAmountFromFile);
+
+					auto gcount = f.gcount();
+					inputFileBufferSize = gcount + newCount;
+
+					if (gcount < requestedAmountFromFile)
+					{
+						//fileBuffer.resize(localLeftoverSize + count);
+						//inputFileBufferSize = gcount;
+						fileIsOver = true;
+						close();
+						//return 0;
+					}
+
+					//Refill the file
+					curIndex = 0;
+				}
+			}
+
 		}
 
-		actualDurationRead = duration;
+		//actualDurationRead = duration;
+		actualDurationRead = duration * pcmSize / maxCount;
 
 		std::memcpy(Buffer, &pcm_all[0], pcmSize);
 
@@ -395,16 +448,24 @@ namespace Decoding
 
 		f.open(fileName, std::ios::binary);
 
-		auto mustReadCount = aacBuffer.size();
+		f.read(reinterpret_cast<char*>(&inputFileBuffer[0]), inputFileBuffer.size());
 
-		f.read(reinterpret_cast<char*>(&aacBuffer[0]), mustReadCount);
+		auto count = f.gcount();
+
+		inputFileBufferSize = count;
+
+		if (count != inputFileBuffer.size())
+		{
+			fileIsOver = true;
+			close();
+		}
 
 		if (!aacInited)
 		{
 
-			auto count = 1024 * 1024;
+			auto count = inputFileBuffer.size();
 
-			char err = NeAACDecInit(hAac, reinterpret_cast<unsigned char*>(&aacBuffer[0]), count, &samplerate, &channels);
+			char err = NeAACDecInit(hAac, reinterpret_cast<unsigned char*>(&inputFileBuffer[0]), count, &samplerate, &channels);
 			if (err != 0) {
 				// Handle error
 				//fprintf(stderr, "NeAACDecInit error: %d\n", err);
