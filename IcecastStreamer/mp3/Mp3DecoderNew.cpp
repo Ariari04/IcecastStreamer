@@ -9,7 +9,7 @@
 #define MINIMP3_IMPLEMENTATION
 #include "minimp3.h"
 
-size_t getID3TagSize(const char* filename);
+//size_t getID3TagSize(const char* filename);
 
 
 namespace DecodingX

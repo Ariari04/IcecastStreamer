@@ -52,6 +52,7 @@ struct Uploading
 class IcecastStreamer
 {
 public:
+	/*
 	enum class AudioFormat
 	{
 		Invalid,
@@ -59,7 +60,7 @@ public:
 		MP3,
 		AAC,
 		M4A
-	};
+	};*/
 
 	std::string addres;
 	std::string port;
@@ -68,18 +69,18 @@ public:
 
 	IcecastStreamer(boost::asio::io_service& ioService, std::string addres, std::string port);
 
-	void streamFile(const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
-	void streamFile(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
+	//void streamFile(const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
+	//void streamFile(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
 
-	bool streamFileInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading);
+	//bool streamFileInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading);
 
 
 	void streamFileLooped(const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
 	void streamFileLooped(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
 	bool streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading);
 
-	std::vector<std::string> downloadPlaylist();
-	std::vector<std::string> loadPlaylistFromFile();
+	//std::vector<std::string> downloadPlaylist();
+	//std::vector<std::string> loadPlaylistFromFile();
 };
 
 #endif

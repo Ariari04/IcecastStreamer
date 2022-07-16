@@ -93,17 +93,17 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>E:\Work\TorchProjects\libogg\include;E:\Work\TorchProjects\vorbis\include;E:\Work\TorchProjects\minimp3;C:\Boost\include\boost-1_79;E:/Work/TorchProjects/converter/lame-3.100/;E:/Work/TorchProjects/converter/lame-3.100/frontend;E:/Work/TorchProjects/converter/lame-3.100//include;E:/Work/TorchProjects/converter/lame-3.100//libmp3lame;E:/Work/TorchProjects/converter/lame-3.100/mpglib;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff;.;../id3lib-3.8.3/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Work\TorchProjects\libogg\include;E:\Work\TorchProjects\vorbis\include;E:\Work\TorchProjects\minimp3;C:\Boost\include\boost-1_79;../faad2-vs;../faad2-vs/include;../faad2-vs/common/faad;../faad2-vs/common/mp4ff;.;../id3lib-3.8.3/include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>vorbis.lib;libogg_static.lib;libmp3lame-static.lib;libmpghip-static.lib;libfaad2d.lib;id3lib.lib</AdditionalDependencies>
+      <AdditionalDependencies>vorbis.lib;libogg_static.lib;libfaad2d.lib;id3lib.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>E:\Work\TorchProjects\libogg\win32\VS2010\Win32\Debug;E:\Work\TorchProjects\vorbis-build32\lib\Debug;E:/Work/TorchProjects/converter/lame-3.100/output/Debug;../faad2-vs/build/x86;C:\Boost\lib;../id3lib-3.8.3/Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Work\TorchProjects\libogg\win32\VS2010\Win32\Debug;E:\Work\TorchProjects\vorbis-build32\lib\Debug;../faad2-vs/build/x86;C:\Boost\lib;../id3lib-3.8.3/Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,16 +116,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>.;../../boost_1_66_0;../../eigen;../id3lib-3.8.3/include;../lame-3.100/mpglib;../lame-3.100/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Work\TorchProjects\libogg\include;E:\Work\TorchProjects\vorbis\include;E:\Work\TorchProjects\minimp3;E:\Work\TorchProjects\boost_1_79_0;E:\Work\TorchProjects\faad2\include;.</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opencv_core341d.lib;opencv_imgproc341d.lib;opencv_imgcodecs341d.lib;id3lib.lib</AdditionalDependencies>
+      <AdditionalDependencies>vorbis.lib;libogg_static.lib;libfaad.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>../../opencv/build/install/x64/vc14/lib;../../../opencv/build/install/x64/vc14/lib;../../boost_1_70_0/stage/lib;../../boost_1_66_0/stage/x64/lib;../id3lib-3.8.3/Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Work\TorchProjects\libogg\win32\VS2010\x64\Debug;E:\Work\TorchProjects\vorbis-build\lib\Debug;E:\Work\TorchProjects\faad2\project\msvc\bin\Debug;E:\Work\TorchProjects\boost_1_79_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -158,10 +158,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../boost_1_66_0;../../eigen;../../../opencv/build/install/include;../../opencv/build/install/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Work\TorchProjects\libogg\include;E:\Work\TorchProjects\vorbis\include;E:\Work\TorchProjects\minimp3;E:\Work\TorchProjects\boost_1_79_0;E:\Work\TorchProjects\faad2\include;.</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opencv_core341.lib;opencv_imgproc341.lib;opencv_imgcodecs341.lib;kernel32.lib</AdditionalDependencies>
+      <AdditionalDependencies>vorbis.lib;libogg_static.lib;libfaad.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -169,14 +169,13 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>../../opencv/build/install/x64/vc14/lib;../../../opencv/build/install/x64/vc14/lib;../../boost_1_68_0/stage/lib;../../boost_1_66_0/stage/x64/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Work\TorchProjects\libogg\win32\VS2010\x64\Release;E:\Work\TorchProjects\vorbis-build\lib\Release;E:\Work\TorchProjects\faad2\project\msvc\bin\Release;E:\Work\TorchProjects\boost_1_79_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aac\AacDecoder.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="icecast\IcecastStreamer.cpp" />
-    <ClCompile Include="mp3\Mp3Decoder.cpp" />
     <ClCompile Include="mp3\Mp3DecoderNew.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="wave\WaveDecoder.cpp" />
@@ -186,7 +185,6 @@
     <ClInclude Include="aac\AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
     <ClInclude Include="icecast\IcecastStreamer.h" />
-    <ClInclude Include="mp3\Mp3Decoder.h" />
     <ClInclude Include="mp3\Mp3DecoderNew.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="wave\WaveDecoder.h" />

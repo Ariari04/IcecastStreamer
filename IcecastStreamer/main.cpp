@@ -70,19 +70,6 @@ std::vector<std::string> getFileNamesInFolder(const std::string& folder)
 	return result;
 }
 
-void streamFile(const std::string& fileName)
-{
-	auto promise = std::make_shared<std::promise<void>>();
-
-	ContentToStream contentToStream(fileName);
-
-	ioService.post([contentToStream, promise]()
-	{
-		streamer.streamFile(contentToStream, promise);
-	});
-
-	promise->get_future().wait();
-}
 
 void streamPlaylist(const std::vector<std::string>& playlist)
 {
