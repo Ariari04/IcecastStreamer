@@ -1,8 +1,0 @@
-adler32.lo: adler32.c /usr/include/stdc-predef.h ../include/zlib.h \
- ../include/zconf.h
-
-/usr/include/stdc-predef.h:
-
-../include/zlib.h:
-
-../include/zconf.h:
