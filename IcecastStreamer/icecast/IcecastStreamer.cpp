@@ -409,7 +409,7 @@ std::shared_ptr<AudioDecoderInterface> selectReaderByFileName(const std::string 
 	}
 	else
 	{
-		throw std::exception("Unknown extension");
+		throw std::runtime_error("Unknown extension");
 	}
 
 	return reader;
@@ -480,7 +480,7 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 
 	if (playlist.size() == 0)
 	{
-		throw std::exception("Playlist is empty");
+		throw std::runtime_error("Playlist is empty");
 	}
 
 	if (shuffle)

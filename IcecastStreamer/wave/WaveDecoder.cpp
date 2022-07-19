@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <cmath>
 
 
 #include <vorbis/vorbisenc.h>
