@@ -3,12 +3,12 @@ CPP=g++
 DEFINES=-D_FILE_OFFSET_BITS=64 -DUSE_TAGGING
 
 # -O2 - optimize for speed
-CPPFLAGS=-Wall -O2 -I. -I../../libfaad-output/include -I../../ogg-output/include -I../../vorbis-output/include -I../../minimp3 -std=c++14 $(DEFINES) 
+CPPFLAGS=-Wall -O0 -g -I. -I../../libfaad-output/include -I../../ogg-output/include -I../../vorbis-output/include -I../../minimp3 -std=c++14 $(DEFINES) 
 CFLAGS=$(CPPFLAGS)
 LDFLAGS=-L../../ogg-output/lib \
 -L../../vorbis-output/lib \
 -L../../libfaad-output/lib \
--logg -lvorbis -lvorbisenc -lz -lfaad -lstdc++  -lm -lboost_system -lboost_filesystem -lboost_thread -lpthread 
+-logg -lvorbis -lvorbisenc -lz -lfaad -lstdc++  -lm -lboost_system -lboost_filesystem -lboost_thread -lpthread
 
 EXECUTABLE=icecastStreamer
 
@@ -27,14 +27,14 @@ OBJECTS_C=$(SOURCES_C:.c=.o)
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS_CPP) $(OBJECTS_C)
-	$(CC) -s $(OBJECTS_CPP) $(OBJECTS_C) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS_CPP) $(OBJECTS_C) $(LDFLAGS) -o $@
 
 clean:
 	rm -f *.o $(EXECUTABLE)
-	#rm -f tags/*.o
-	#rm -f 3rd/blade/*.o
-	#rm -f 3rd/mp4ff/*.o
-	#rm -f 3rd/faad/*.o
+	rm -f wave/*.o
+	rm -f aac/*.o
+	rm -f mp3/*.o
+	rm -f icecast/*.o
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@

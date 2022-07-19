@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
 	//std::vector<std::string> listOfFiles = { "E:/music/168446101.aac" };
 
 
-#ifdef _WIN32
+#ifndef _WIN32
 	std::vector<std::string> listOfFiles = {
 		"/home/mephi1984/icecastStreamerWork/music/168446101.aac",
 		"/home/mephi1984/icecastStreamerWork/music/BAAM.wav",

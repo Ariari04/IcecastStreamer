@@ -334,3 +334,9 @@ ASALocalRun/
 *.ogg
 *.mp3
 *.aac
+
+# Binary file itself
+icecastStreamer
+
+# Log file
+log.txt
