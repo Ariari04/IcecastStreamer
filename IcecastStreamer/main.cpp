@@ -39,7 +39,7 @@ IcecastStreamer streamer{ ioService, "127.0.0.1", "80" };
 
 #else
 //IcecastStreamer streamer{ ioService, "528records.com", "8000" };
-IcecastStreamer streamer{ ioService, "127.0.0.1", "80" };
+IcecastStreamer streamer{ ioService, "127.0.0.1", "8000" };
 #endif
 //IcecastStreamer streamer{ ioService, "528records.com", "8000" };
 //IcecastStreamer streamer{ ioService, "127.0.0.1", "80" };
@@ -133,12 +133,22 @@ int main(int argc, char* argv[])
 
 	//std::vector<std::string> listOfFiles = { "E:/music/168446101.aac" };
 
+
+#ifdef _WIN32
+	std::vector<std::string> listOfFiles = {
+		"/home/mephi1984/icecastStreamerWork/music/168446101.aac",
+		"/home/mephi1984/icecastStreamerWork/music/BAAM.wav",
+		"/home/mephi1984/icecastStreamerWork/music/Guano Apes - Open Your Eyes.mp3",
+		"/home/mephi1984/icecastStreamerWork/music/death note.ogg"
+	};
+#else
 	std::vector<std::string> listOfFiles = { 
 		"E:/music/168446101.aac",
 		"E:/music/bala.wav",
 		"E:/music/Guano Apes - Open Your Eyes.mp3",
 		"E:/music/death note.ogg"
 	};
+#endif
 	// !!! Pass a check that all files has extensions !!!
 
 		
