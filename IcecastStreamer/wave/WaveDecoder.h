@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdio>
-#include <wave/WaveFile.h>
-#include <AudioFile.h>
+#include "../wave/WaveFile.h"
+#include "../AudioFile.h"
 #include <fstream>
 
 #include <vector>

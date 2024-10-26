@@ -6,8 +6,7 @@
 //#include "IntegerTypes.h"
 //#include "KString.h"
 
-#include <AudioFile.h>
-
+#include "../AudioFile.h"
 namespace WaveFileChunks
 {
 

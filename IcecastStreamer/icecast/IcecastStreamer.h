@@ -30,7 +30,7 @@ struct ContentToStream
 	ContentToStream() = default;
 
 	ContentToStream(const std::string& singleSong)
-		: playlist( { singleSong } )
+		: playlist( { singleSong })
 	{
 	}
 
@@ -46,6 +46,7 @@ struct Uploading
 	ContentToStream contentToStream;
 	std::string addres;
 	std::string port;
+	std::string password;
 };
 
 
@@ -64,10 +65,11 @@ public:
 
 	std::string addres;
 	std::string port;
+	std::string password;
 
 	boost::asio::io_service& io_service;
 
-	IcecastStreamer(boost::asio::io_service& ioService, std::string addres, std::string port);
+	IcecastStreamer(boost::asio::io_service& ioService, std::string addres, std::string port, std::string password);
 
 	//void streamFile(const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);
 	//void streamFile(boost::asio::ip::tcp::endpoint endpoint, const ContentToStream& contentToStream, std::shared_ptr<std::promise<void>> promise);

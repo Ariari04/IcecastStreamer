@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdio>
-#include <AudioFile.h>
+#include "../AudioFile.h"
 
 #include <vector>
 #include <array>

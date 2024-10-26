@@ -28,24 +28,24 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -116,16 +116,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>E:\Work\TorchProjects\libogg\include;E:\Work\TorchProjects\vorbis\include;E:\Work\TorchProjects\minimp3;E:\Work\TorchProjects\boost_1_79_0;E:\Work\TorchProjects\faad2\include;.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\work\libogg\include;C:\work\vorbis\include;C:\work\minimp3;C:\work\boost_1_86_0;C:\work\faad2\include;C:\work\libpqxx\build\install\include;C:\Program Files\PostgreSQL\17\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>vorbis.lib;libogg_static.lib;libfaad.lib</AdditionalDependencies>
+      <AdditionalDependencies>vorbis.lib;libogg_static.lib;faad.lib;pqxx.lib;libpq.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>E:\Work\TorchProjects\libogg\win32\VS2010\x64\Debug;E:\Work\TorchProjects\vorbis-build\lib\Debug;E:\Work\TorchProjects\faad2\project\msvc\bin\Debug;E:\Work\TorchProjects\boost_1_79_0\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\work\libogg\win32\VS2010\x64\Debug;C:\work\vorbis\build\lib\Debug;C:\work\faad2\build\Debug;C:\work\boost_1_86_0\stage\lib;C:\work\libpqxx\build\install\lib;C:\Program Files\PostgreSQL\17\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -174,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aac\AacDecoder.cpp" />
+    <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="icecast\IcecastStreamer.cpp" />
     <ClCompile Include="mp3\Mp3DecoderNew.cpp" />
@@ -184,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="aac\AacDecoder.h" />
     <ClInclude Include="AudioFile.h" />
+    <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="icecast\IcecastStreamer.h" />
     <ClInclude Include="mp3\Mp3DecoderNew.h" />
     <ClInclude Include="stdafx.h" />

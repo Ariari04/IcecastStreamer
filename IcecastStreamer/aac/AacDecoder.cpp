@@ -1,4 +1,4 @@
-#include <aac/AacDecoder.h>
+#include "../aac/AacDecoder.h"
 
 #include <string.h>
 #include <cstdlib>

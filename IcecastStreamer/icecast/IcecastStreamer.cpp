@@ -5,10 +5,10 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
-#include <wave/WaveFile.h>
-#include <wave/WaveDecoder.h>
-#include <mp3/Mp3DecoderNew.h>
-#include <aac/AacDecoder.h>
+#include "../wave/WaveFile.h"
+#include "../wave/WaveDecoder.h"
+#include "../mp3/Mp3DecoderNew.h"
+#include "../aac/AacDecoder.h"
 
 #include <random>
 #include <algorithm>
@@ -246,11 +246,12 @@ ID3Metadata getMetadata(const std::string& filename)
 const long long MAX_UPLOADED_FILE_SIZE = 1024 * 1024 * 400;
 
 
-IcecastStreamer::IcecastStreamer(boost::asio::io_service& ioService, std::string addres, std::string port)
+IcecastStreamer::IcecastStreamer(boost::asio::io_service& ioService, std::string addres, std::string port, std::string password)
 	: io_service(ioService)
 {
 	this->addres = addres;
 	this->port = port;
+	this->password = password;
 }
 
 
@@ -373,6 +374,7 @@ void IcecastStreamer::streamFileLooped(boost::asio::ip::tcp::endpoint endpoint, 
 	uploading.port = port;
 	uploading.contentToStream = contentToStream;
 	std::cout << "Streamer streamFileLooped 2.2" << std::endl;
+
 	if (!streamFileLoopedInner(httpSocket, uploading))
 	{
 		httpSocket->lowest_layer().close();
@@ -415,6 +417,32 @@ std::shared_ptr<AudioDecoderInterface> selectReaderByFileName(const std::string 
 	return reader;
 }
 
+std::string base64_encode(const std::string& input) {
+	const std::string base64_chars =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz"
+		"0123456789+/";
+
+	std::string encoded;
+	int val = 0, valb = -6;
+	for (unsigned char c : input) {
+		val = (val << 8) + c;
+		valb += 8;
+		while (valb >= 0) {
+			encoded.push_back(base64_chars[(val >> valb) & 0x3F]);
+			valb -= 6;
+		}
+	}
+	if (valb > -6) {
+		encoded.push_back(base64_chars[((val << 8) >> (valb + 8)) & 0x3F]);
+	}
+	while (encoded.size() % 4) {
+		encoded.push_back('=');
+	}
+	return encoded;
+}
+
+
 bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp::socket> socket, const Uploading& uploading)
 {
 	const std::string NEWLINE = "\r\n";
@@ -425,6 +453,7 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 	boost::asio::streambuf response;
 	std::istream response_stream(&response);
 
+	
 
 	request_stream << "PUT /output HTTP/1.1" << NEWLINE;
 	//request_stream << "PUT /main_station_premium HTTP/1.1" << NEWLINE;
@@ -436,8 +465,8 @@ bool IcecastStreamer::streamFileLoopedInner(std::shared_ptr<boost::asio::ip::tcp
 	//request_stream << "Content-Type: audio/vnd.wave" << NEWLINE;
 	request_stream << "Expect: 100-continue" << NEWLINE;
 #ifdef _WIN32
-
-	request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;
+	// source:abcde123
+	request_stream << "Authorization: Basic " + base64_encode("source:" + password) << NEWLINE;
 #else
 	//request_stream << "Authorization: Basic c291cmNlOkQ0a3UyUVRTR1pUbmJOQjhUMVU3" << NEWLINE;
 	request_stream << "Authorization: Basic c291cmNlOnNvdXJjZV9wYXNzd29yZA==" << NEWLINE;

@@ -4,7 +4,7 @@
 #include <lame.h>
 */
 #include <cstdio>
-#include <AudioFile.h>
+#include "../AudioFile.h"
 
 #include <array>
 #include <vector>

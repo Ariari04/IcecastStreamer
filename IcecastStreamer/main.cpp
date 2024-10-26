@@ -1,6 +1,6 @@
 ﻿// Conversion528.cpp : Defines the entry point for the console application.
 //
-
+#include <pqxx/pqxx>
 #ifdef _WIN32
 #include <conio.h>
 
@@ -9,7 +9,6 @@
 #include "wave/WaveFile.h"
 
 #include <memory.h>
-
 #define _WRITE_ERROR_DESCR_
 #ifdef _WRITE_ERROR_DESCR_
 
@@ -21,13 +20,12 @@
 #include "boost/asio.hpp"
 
 
-#include <icecast/IcecastStreamer.h>
-
+#include "icecast/IcecastStreamer.h"
 #include <random>
 #include <algorithm>
 #include <iterator>
 #include <iostream>
-
+#include "DatabaseManager.h"
 
 boost::asio::io_service ioService;
 boost::asio::io_service::work work(ioService);
@@ -35,7 +33,7 @@ boost::thread_group threadPool;
 
 //IcecastStreamer streamer{ ioService, "vm493.vmware.nano.lv", "80" };
 #ifdef _WIN32
-IcecastStreamer streamer{ ioService, "127.0.0.1", "80" };
+IcecastStreamer streamer{ ioService, "127.0.0.1", "8000", "hackme"};
 
 #else
 //IcecastStreamer streamer{ ioService, "528records.com", "8000" };
@@ -100,7 +98,6 @@ void streamPlaylist(const std::vector<std::string>& playlist)
 	return 0;
 }
 */
-
 int main(int argc, char* argv[])
 {
 	auto f = []()
@@ -142,17 +139,21 @@ int main(int argc, char* argv[])
 		"/home/mephi1984/icecastStreamerWork/music/death note.ogg"
 	};
 #else
-	std::vector<std::string> listOfFiles = { 
-		"E:/music/168446101.aac",
-		"E:/music/bala.wav",
-		"E:/music/Guano Apes - Open Your Eyes.mp3",
-		"E:/music/death note.ogg"
-	};
+
+	std::vector<std::string> listOfFiles = DatabaseManager::getInstance().getTracks();
+
+	//{
+	//	"C:/work/music/123.mp3",
+	//	"C:/work/music/123.aac",/*
+
+	//	"E:/music/168446101.aac",
+	//	"E:/music/bala.wav",
+	//	"E:/music/Guano Apes - Open Your Eyes.mp3",
+	//	"E:/music/death note.ogg"*/
+	//};
 #endif
 	// !!! Pass a check that all files has extensions !!!
 
-		
-	
 	std::cout << "Streamed created" << std::endl;
 
 #ifdef _WIN32
