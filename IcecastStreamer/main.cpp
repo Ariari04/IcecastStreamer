@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 	};
 #else
 
-	std::vector<std::string> listOfFiles = DatabaseManager::getInstance().getTracks();
+	std::vector<std::string> listOfFiles = DatabaseManager::getInstance().getTracks(2);
 
 	//{
 	//	"C:/work/music/123.mp3",
